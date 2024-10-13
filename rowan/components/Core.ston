@@ -1,0 +1,9 @@
+RwLoadComponent {
+	#name : 'Core',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan3Stub-Core'
+	],
+	#comment : ''
+}
