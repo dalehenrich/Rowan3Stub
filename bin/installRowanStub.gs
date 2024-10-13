@@ -50,7 +50,7 @@ run
 run
 	#( RwExecuteClassInitializeMethodsAfterLoadNotification RwPerformingUnpackagedEditNotification GsInteractionHandler GsInteractionRequest RwPackage RBParser RwMethodDefinition RwProject ) 
 		do: [:symbolName |
-			Globals at: symbolName put: nil ].
+			Globals at: symbolName put: symbolName ].
 %
 
 input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RowanClientServicesV3.gs
