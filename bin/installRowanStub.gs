@@ -1,3 +1,4 @@
+# as SystemUser
 login
 
 set INPUTPAUSEONERROR on
@@ -16,6 +17,7 @@ input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
 
 run
 Published at: #Rowan put: Rowan3Stub new.
+Published at: #STON put: (RowanKernel_tonel at: #STON).
 
 (Object
 	subclass: 'RwGsPlatform'
