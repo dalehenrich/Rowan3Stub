@@ -8,6 +8,7 @@ set INPUTPAUSEONERROR on
 run
 (Published at: #Rowan ifAbsent: [])
 	ifNotNil: [ self error: 'Rowan is already installed!!' ].
+Published at: #Rowan put: nil.	"make the compiler happy"
 %
 
 input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Announcements.gs
@@ -18,6 +19,24 @@ input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
 run
 Published at: #Rowan put: Rowan3Stub new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
+%
+
+# the following 4 methods can't be packaged, since they conflict with the Rowan implementation
+method: Behavior
+rowanPackageName
+	^  '(NONE)'
+%
+method: Behavior
+rowanProjectName
+	^  '(NONE)'
+%
+method: GsNMethod
+rowanPackageName
+	^  '(NONE)'
+%
+method: GsNMethod
+rowanProjectName
+	^  '(NONE)'
 %
 
 run
