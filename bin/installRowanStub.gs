@@ -18,7 +18,37 @@ input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
 run
 Published at: #Rowan put: Rowan3Stub new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
+%
 
+run
+(Object
+	subclass: 'RwGsDummy'
+	instVarNames: #(name)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #()
+)
+		category: 'Rowan-Stubs';
+		immediateInvariant.
+%
+classmethod: RwGsDummy
+named: aSymbol
+^self new name: aSymbol; yourself
+%
+
+method: RwGsDummy
+name: aSymbol
+name := aSymbol
+%
+
+method: RwGsDummy
+handles: arg
+System waitForDebug.
+%
+
+run
 (Object
 	subclass: 'RwGsPlatform'
 	instVarNames: #()
@@ -52,7 +82,7 @@ run
 run
 	#( RwExecuteClassInitializeMethodsAfterLoadNotification RwPerformingUnpackagedEditNotification GsInteractionHandler GsInteractionRequest RwPackage RBParser RwMethodDefinition RwProject RwSemanticVersionNumber RwPlatformSubcomponent RwSubcomponent RwSpecification RwClassDefinition) 
 		do: [:symbolName |
-			Globals at: symbolName put: symbolName ].
+			Globals at: symbolName put: (RwGsDummy named: symbolName) ].
 %
 
 input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RowanClientServicesV3.gs

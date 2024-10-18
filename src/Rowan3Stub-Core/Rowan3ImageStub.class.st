@@ -25,3 +25,10 @@ Rowan3ImageStub >> loadedProjects [
 Rowan3ImageStub >> packageNames [
 	^ #()
 ]
+
+{ #category : 'accessing' }
+Rowan3ImageStub >> symbolList [
+	"Answer the current session (transient) symbol list"
+
+	^ GsCurrentSession currentSession symbolList
+]

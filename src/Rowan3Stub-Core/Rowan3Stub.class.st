@@ -2,7 +2,8 @@ Class {
 	#name : 'Rowan3Stub',
 	#superclass : 'Object',
 	#instVars : [
-		'image'
+		'image',
+		'projectTools'
 	],
 	#category : 'Rowan3Stub-Core'
 }
@@ -27,6 +28,11 @@ Rowan3Stub >> jadeServerClassNamed: className [
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit35). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+]
+
+{ #category : 'accessing' }
+Rowan3Stub >> projectTools [
+	^ projectTools ifNil: [ projectTools := Rowan3ProjectToolsStub new ]
 ]
 
 { #category : 'accessing' }
