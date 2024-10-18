@@ -22,6 +22,13 @@ true.
 
 category: 'accessing'
 method: Rowan3Stub
+commandResultClass
+
+	^ GsSession currentSession objectNamed: #RowanCommandResult
+%
+
+category: 'accessing'
+method: Rowan3Stub
 jadeServerClassNamed: className
 
 	| jadeClasses |

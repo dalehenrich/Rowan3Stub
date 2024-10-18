@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : 'accessing' }
+Rowan3Stub >> commandResultClass [
+
+	^ GsSession currentSession objectNamed: #RowanCommandResult
+]
+
+{ #category : 'accessing' }
 Rowan3Stub >> jadeServerClassNamed: className [
 
 	| jadeClasses |

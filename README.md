@@ -14,7 +14,7 @@ installProject.stone file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/
 #
 product/rowan3/bin/exportRowanProjectAsTopaz.solo file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/rowan/specs/Rowan3Stub.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st /bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/Rowan3Stub.gs
 
-product/rowan3/bin/exportRowanProjectAsTopaz.solo file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/RowanClientServicesV3/rowan/specs/RowanClientServices.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st /bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/RowanClientServicesV3.gs
+product/rowan3/bin/exportRowanProjectAsTopaz.solo file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/RowanClientServicesV3/rowan/specs/RowanClientServices.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st --projectAlias=RowanClientServicesV3 /bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/RowanClientServicesV3.gs
 
 product/rowan3/bin/exportRowanProjectAsTopaz.solo file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Announcements/rowan/specs/Announcements.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st /bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/Announcements.gs
 
