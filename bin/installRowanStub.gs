@@ -135,7 +135,7 @@ executeCommand
 	"RSR -> RowanServices primary api."
 
 	self checkForDeadProcesses.
-	"self setDebugActionBlock."	"<===== patch here ====="
+	self setDebugActionBlock.	"<===== patch here ====="
 	[ 
 	Rowan commandResultClass initializeResults.
 	[ 
@@ -176,7 +176,7 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 		category: categorySymbol 
 		environmentId: 0 ]
 			on: CompileError
-			do: [:ex | System waitForDebug. ^nil -> (ex gsArguments at: 1)]]
+			do: [:ex | ^ nil -> (ex gsArguments at: 1)]]
 				on: CompileWarning
 				do: 
 					[:ex | 
