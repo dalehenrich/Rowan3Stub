@@ -3,6 +3,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'image',
+		'platform',
 		'projectTools'
 	],
 	#category : 'Rowan3Stub-Core'
@@ -23,7 +24,7 @@ Rowan3Stub >> globalNamed: aString [
 
 { #category : 'accessing' }
 Rowan3Stub >> image [
-	^ image ifNil: [ image := Rowan3ImageStub new ]
+	^ self platform image
 ]
 
 { #category : 'accessing' }
@@ -35,6 +36,11 @@ Rowan3Stub >> jadeServerClassNamed: className [
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit35). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+]
+
+{ #category : 'accessing' }
+Rowan3Stub >> platform [
+	^ platform ifNil: [ platform := Rowan3PlatformStub new ]
 ]
 
 { #category : 'accessing' }

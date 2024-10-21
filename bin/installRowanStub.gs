@@ -11,8 +11,27 @@ run
 Published at: #Rowan put: nil.	"make the compiler happy"
 %
 
+run
+| symbolList |
+symbolList := GsCurrentSession currentSession symbolList.
+#( #RowanKernel) "needed by GemStoneInteractions"
+  do: [:symbolName | 
+    (symbolList resolveSymbol: symbolName) ifNotNil: [:val | System waitForDebug ] ifNil: [
+      | newDict size |
+      newDict := SymbolDictionary new
+        name: symbolName;
+        objectSecurityPolicy: symbolList objectSecurityPolicy;
+        yourself.
+      size := System myUserProfile symbolList size.
+      System myUserProfile insertDictionary: newDict at: size + 1 .
+      GsFile gciLogServer:'created ', symbolName . 
+] ]. 
+%
+
 input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Announcements.gs
 input $ROWAN_PROJECTS_HOME/RemoteServiceReplication/src-gs/bootstrapRSR.gs
+
+input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/GemStoneInteractions.gs
 
 input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
 
@@ -99,7 +118,7 @@ run
 %
 
 run
-	#( RwExecuteClassInitializeMethodsAfterLoadNotification RwPerformingUnpackagedEditNotification GsInteractionHandler GsInteractionRequest RwPackage RBParser RwMethodDefinition RwProject RwSemanticVersionNumber RwPlatformSubcomponent RwSubcomponent RwSpecification RwClassDefinition) 
+	#(RwExecuteClassInitializeMethodsAfterLoadNotification RwPerformingUnpackagedEditNotification RwPackage RBParser RwMethodDefinition RwProject RwSemanticVersionNumber RwPlatformSubcomponent RwSubcomponent RwSpecification RwClassDefinition) 
 		do: [:symbolName |
 			Globals at: symbolName put: (RwGsDummy named: symbolName) ].
 %
@@ -140,6 +159,32 @@ executeCommand
 			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
 			ex pass ].
 	^ self
+%
+
+#
+# overwrites of RowanClassService methods that will need to change for JfPwoR
+#
+category: 'Rowan3 stub'
+method: RowanClassService
+compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol
+	"returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
+
+	| method warnings |
+	[ [ method := aBehavior
+		compileMethod: methodString 
+		dictionaries: aSymbolList 
+		category: categorySymbol 
+		environmentId: 0 ]
+			on: CompileError
+			do: [:ex | System waitForDebug. ^nil -> (ex gsArguments at: 1)]]
+				on: CompileWarning
+				do: 
+					[:ex | 
+					warnings := ex warningString.
+					ex resume ].
+	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] 
+		on: Error
+		do: [:ex | ex return: method -> warnings]
 %
 
 #
