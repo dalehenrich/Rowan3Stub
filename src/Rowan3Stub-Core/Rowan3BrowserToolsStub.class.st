@@ -96,19 +96,17 @@ Rowan3BrowserToolsStub >> classCreationTemplateForSubclassOf: superclassName cat
 		addLast: $'.
 	result
 		addAll: lfsp;
-		addAll: 'instVarNames: #( )';
-		add: $).	" classVars: #( <list of strings> ) "
+		addAll: 'instVarNames: #( )'.
 	result
 		addAll: lfsp;
-		addLast: 'classVars: #()'.	" classInstVars: #( <list of strings> ) "
+		addLast: 'classVars: #()'.
 	result
 		addAll: lfsp;
 		addLast: 'classInstVars: #()'.
-
 	result
 		addAll: lfsp;
 		addAll: 'poolDictionaries: #('.
-	result add: '#()'.	" inDictionary: <name of containing dictionary> "
+	result add: '#()'.
 	result
 		addAll: lfsp;
 		addAll: 'inDictionary: ';
