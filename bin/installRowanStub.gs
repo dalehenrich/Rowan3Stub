@@ -219,6 +219,89 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 		do: [:ex | ex return: method -> warnings]
 %
 
+category: 'Rowan3 stub'
+method: RowanClassService
+classCreationTemplateUsing: packageNames
+	"copying RwPrjBrowserToolV2>>classCreationTemplateForClass:hybridBrowser: with one change for performance"
+
+	| result anArray lfsp newByteSubclass civs superClass className |
+	result := String new.
+	superClass := self theClass superclass.
+	className := self theClass name asString.
+	superClass
+		ifNil: [ result addAll: 'nil' ]
+		ifNotNil: [ result addAll: superClass name asString ].
+	lfsp := Character lf asString tab.
+	newByteSubclass := false.
+	(self theClass isBytes _and: [ superClass isBytes not ])
+		ifTrue: [ 
+			result 
+				addAll: ' byteSubclass: ''';
+				addAll: className;
+				addLast: $'.
+			newByteSubclass := true ]
+		ifFalse: [ 
+			(self theClass isIndexable and: [ superClass isIndexable not ])
+				ifTrue: [ 
+					result 
+						addAll: ' indexableSubclass: ''';
+						addAll: className;
+						addLast: $' ]
+				ifFalse: [ 
+					result 
+						addAll: ' subclass: ''';
+						addAll: className;
+						addLast: $' ] ].
+	newByteSubclass
+		ifFalse: [ 
+			result
+				addAll: lfsp;
+				addAll: 'instVarNames: #(';
+				addAll:
+						(self theClass _instVarNamesWithSeparator: lfsp , '                 ');
+				add: $) ].
+	result
+		addAll: lfsp;
+		addLast: 'classVars: #('.
+	self theClass _sortedClassVarNames
+		do: [ :aKey | 
+			result addLast: $ .
+			(aKey includesValue: $')
+				ifTrue: [ result addAll: aKey _asSource ]
+				ifFalse: [ result addAll: aKey ] ].
+	result addLast: $).
+	result
+		addAll: lfsp;
+		addLast: 'classInstVars: #('.
+	civs := self theClass class allInstVarNames.
+	civs removeFrom: 1 to: self theClass class superClass instSize.
+	civs
+		do: [ :civName | 
+			result addLast: $ .
+			(civName includesValue: $')
+				ifTrue: [ result addAll: civName _asSource ]
+				ifFalse: [ result addAll: civName ] ].
+	result addLast: $).
+	result
+		addAll: lfsp;
+		addAll: 'poolDictionaries: '.
+	result addAll: '#()'.	"ignored for now"
+ 
+			"if the class is unpackaged, then we need to provide for the specification of symbol dictionary into which the class will be installed"
+			result
+				addAll: lfsp;
+				addAll: 'inDictionary: '.
+			anArray := Rowan image symbolList dictionariesAndSymbolsOf: self theClass.
+			anArray isEmpty
+				ifTrue: [ result addAll: '''''' ]
+				ifFalse: [ result addAll: ((anArray at: 1) at: 1) name asString ].
+	result
+		add: lfsp;
+		add: self theClass _optionsArrayForDefinition.
+	result add: Character lf.
+	^ result
+%
+
 #
 # overwrites of RowanBrowserService methods that will need to change for JfPwoR
 #

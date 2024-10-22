@@ -183,8 +183,7 @@ classCreationTemplateForSubclassOf: superclassName category: category packageNam
 		addLast: 'classInstVars: #()'.
 	result
 		addAll: lfsp;
-		addAll: 'poolDictionaries: #('.
-	result add: '#()'.
+		addAll: 'poolDictionaries: #()'.
 	result
 		addAll: lfsp;
 		addAll: 'inDictionary: ';
