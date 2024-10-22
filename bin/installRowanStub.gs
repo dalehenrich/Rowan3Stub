@@ -198,6 +198,14 @@ executeCommand
 #
 category: 'Rowan3 stub'
 method: RowanClassService
+classComment: string
+	| theClass |
+	theClass := self theClass. 
+	theClass comment: string.
+%
+
+category: 'Rowan3 stub'
+method: RowanClassService
 compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol
 	"returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
 
