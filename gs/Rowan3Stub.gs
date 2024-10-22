@@ -228,11 +228,19 @@ loadedClassForClass: aClass ifAbsent: absentBlock
 
 category: 'accessing'
 method: Rowan3ImageStub
+loadedPackageNamed: aName ifAbsent: absentBlock
+	"scan the symbol list a RwLoadedPackage instance of the given name"
+
+	^ absentBlock value
+%
+
+category: 'accessing'
+method: Rowan3ImageStub
 loadedProjects
 	^ IdentitySet new
 %
 
-category: 'accessing'
+category: 'querying'
 method: Rowan3ImageStub
 objectNamed: aSymbol
 	"Returns the first object in the current session's symbol list that has the given
@@ -245,6 +253,20 @@ category: 'accessing'
 method: Rowan3ImageStub
 packageNames
 	^ #()
+%
+
+category: 'querying'
+method: Rowan3ImageStub
+resolveClassNamed: aName
+
+	"If the given name is bound to a class in the environment of the current session, 
+	answer that class. Otherwise, answer nil."
+
+	| resolved |
+	resolved := self objectNamed: aName.
+	^ (resolved isBehavior and: [ resolved isMeta not ])
+		ifTrue: [ resolved ]
+		ifFalse: [ nil ]
 %
 
 category: 'accessing'
@@ -263,6 +285,13 @@ category: 'accessing'
 method: Rowan3PlatformStub
 image
 	^ image ifNil: [ image := Rowan3ImageStub new ]
+%
+
+category: 'accessing'
+method: Rowan3PlatformStub
+loggingServiceClass
+
+	^ GsSession currentSession objectNamed: #RowanLoggingService
 %
 
 category: 'accessing'
@@ -392,6 +421,13 @@ jadeServerClassNamed: className
 	jadeClasses add: (UserGlobals at: #JadeServer64bit32). 
 	jadeClasses add: (UserGlobals at: #JadeServer64bit35). 
 	^jadeClasses detect:[:cls | cls name == className] ifNone:[self error: 'Could not look up a JadeServer class: ', className]
+%
+
+category: 'accessing'
+method: Rowan3Stub
+loggingServiceClass
+
+	^ self platform loggingServiceClass
 %
 
 category: 'accessing'

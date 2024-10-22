@@ -24,11 +24,18 @@ Rowan3ImageStub >> loadedClassForClass: aClass ifAbsent: absentBlock [
 ]
 
 { #category : 'accessing' }
+Rowan3ImageStub >> loadedPackageNamed: aName ifAbsent: absentBlock [
+	"scan the symbol list a RwLoadedPackage instance of the given name"
+
+	^ absentBlock value
+]
+
+{ #category : 'accessing' }
 Rowan3ImageStub >> loadedProjects [
 	^ IdentitySet new
 ]
 
-{ #category : 'accessing' }
+{ #category : 'querying' }
 Rowan3ImageStub >> objectNamed: aSymbol [
 	"Returns the first object in the current session's symbol list that has the given
  name.  If no object with the given name is found, returns nil."
@@ -39,6 +46,19 @@ Rowan3ImageStub >> objectNamed: aSymbol [
 { #category : 'accessing' }
 Rowan3ImageStub >> packageNames [
 	^ #()
+]
+
+{ #category : 'querying' }
+Rowan3ImageStub >> resolveClassNamed: aName [
+
+	"If the given name is bound to a class in the environment of the current session, 
+	answer that class. Otherwise, answer nil."
+
+	| resolved |
+	resolved := self objectNamed: aName.
+	^ (resolved isBehavior and: [ resolved isMeta not ])
+		ifTrue: [ resolved ]
+		ifFalse: [ nil ]
 ]
 
 { #category : 'accessing' }

@@ -64,6 +64,12 @@ Rowan3PlatformStub >> image [
 ]
 
 { #category : 'accessing' }
+Rowan3PlatformStub >> loggingServiceClass [
+
+	^ GsSession currentSession objectNamed: #RowanLoggingService
+]
+
+{ #category : 'accessing' }
 Rowan3PlatformStub >> parseSelectorFrom: methodString [
 	^ self parseSelectorFrom: methodString passCompileError: false
 ]

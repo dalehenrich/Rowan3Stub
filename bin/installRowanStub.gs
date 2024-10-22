@@ -40,7 +40,7 @@ Published at: #Rowan put: Rowan3Stub new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
 %
 
-# the following 4 methods can't be packaged, since they conflict with the Rowan implementation
+# the following 4 methods cannot be packaged, since they conflict with the Rowan implementation
 method: Behavior
 rowanPackageName
 	^  '(NONE)'
@@ -56,6 +56,38 @@ rowanPackageName
 method: GsNMethod
 rowanProjectName
 	^  '(NONE)'
+%
+
+run
+(Object
+	subclass: 'TestClass1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #()
+)
+		category: 'Rowan-Stubs';
+		immediateInvariant.
+%
+
+run
+(TestClass1
+	subclass: 'TestClass2'
+	instVarNames: #(name)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #()
+)
+		category: 'Rowan-Stubs';
+		immediateInvariant.
+%
+method: TestClass2
+name
+	^name
 %
 
 run
@@ -185,6 +217,64 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] 
 		on: Error
 		do: [:ex | ex return: method -> warnings]
+%
+
+#
+# overwrites of RowanBrowserService methods that will need to change for JfPwoR
+#
+category: 'Rowan3 stub'
+method: RowanBrowserService
+recompileMethodsAfterClassCompilation
+	"compileClass: must be run first"
+
+	| theClass classService packageService projectService |
+	theClass := [ 
+	[ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
+		on: CompileWarning , CompileError
+		do: [ :ex | 
+			(ex isKindOf: CompileError)
+				ifTrue: [ 
+					| compileErrorService |
+					self postCommandExecutionWithoutAutoCommit.
+					compileErrorService := RowanCompileErrorServiceServer new.
+					compileErrorService gsArguments: ex errorDetails.
+					updates := Array with: compileErrorService.
+					^ RowanCommandResult addResult: compileErrorService ]
+				ifFalse: [ ex resume ] ] ]
+		ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
+	classService := RowanClassService new name: theClass name.
+	classService update.
+	classService updateSubclasses.
+	classService isNewClass: true.	"if nothing else, the dirty state of the package/project services
+	should be updated. Would like a less heavy weight solution than this, though."
+	RowanCommandResult addResult: classService.
+	selectedClass := classService.
+	updateType := #'none'.
+	self updateSymbols: (Array with: theClass name asString).
+	RowanCommandResult addResult: self.
+	^classService
+%
+
+#
+# overwrites of RowanPackageService methods that will need to change for JfPwoR
+#
+category: 'Rowan3 stub'
+method: RowanPackageService
+updateProjectName
+
+	projectName := nil.
+%
+category: 'Rowan3 stub'
+classmethod: RowanPackageService
+forPackageNamed: ignored
+	| inst aName |
+	inst := self new.
+	inst name: aName.
+	aName isNil
+		ifFalse: [ inst updateIsDirty ].
+	inst setDefaultTemplate.
+	inst updateProjectName.
+	^ inst
 %
 
 #

@@ -39,6 +39,12 @@ Rowan3Stub >> jadeServerClassNamed: className [
 ]
 
 { #category : 'accessing' }
+Rowan3Stub >> loggingServiceClass [
+
+	^ self platform loggingServiceClass
+]
+
+{ #category : 'accessing' }
 Rowan3Stub >> platform [
 	^ platform ifNil: [ platform := Rowan3PlatformStub new ]
 ]
