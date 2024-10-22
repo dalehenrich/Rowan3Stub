@@ -59,6 +59,36 @@ rowanProjectName
 %
 
 run
+(TestCase
+	subclass: 'TestCase1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: UserGlobals
+	options: #()
+)
+		category: 'Rowan-Stubs';
+		immediateInvariant.
+%
+method: TestCase1
+testError
+
+	self foo
+%
+method: TestCase1
+testFail
+
+	self assert: false
+%
+method: TestCase1
+testPassing
+
+	self assert: true
+%
+
+
+run
 (Object
 	subclass: 'TestClass1'
 	instVarNames: #()
