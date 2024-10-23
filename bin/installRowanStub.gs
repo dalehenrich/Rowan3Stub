@@ -1,3 +1,8 @@
+#!/usr/bin/env superdoit_topaz
+#
+# to run as superdoit script with $GEMSTONE set :
+#		./installRowanStub.gs -I <path-to-topazini> -L
+# 
 # as SystemUser
 login
 
