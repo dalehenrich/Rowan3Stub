@@ -1,4 +1,11 @@
-### Scripts
+### Install Scripts
+```
+# Installation shell script for extent0.dbf
+#		Uses GsDevKit_stones and superdoit script; hardwired paths in the script, so edit before running in your environment
+
+bin/instalRowanStub.sh
+```
+### Dev Scripts
 ```
 #
 ## Create project and package
