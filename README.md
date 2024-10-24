@@ -5,7 +5,7 @@
 
 bin/instalRowanStub.sh
 ```
-### Dev Scripts -- should be run against GemSTone 3.7.2 or later
+### Dev Scripts -- should be run using GemStone 3.7.2 or later for solo scripts
 ```
 #
 ## Create project and package

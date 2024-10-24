@@ -12812,29 +12812,3 @@ serviceClassFor: className
 	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone:[]
 %
 
-
-		add: RowanTestServiceServer;
-		add: RowanVariableServiceServer.
-	^ array
-%
-
-category: '*rowan-services-extensions'
-method: RwGsPlatform
-serviceClassFor: className
-
-	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone:[]
-%
-
-category: '*rowan-services-extensions'
-method: RwGsPlatform
-serviceClassFor: className ifAbsent: absentBlock
-
-	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone: absentBlock
-%
-
-category: '*rowan-services-extensions'
-method: RwGsPlatform
-specificationServiceClass
-  ^ RowanLoadSpecService
-%
-
