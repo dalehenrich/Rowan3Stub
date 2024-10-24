@@ -5,7 +5,7 @@
 
 bin/instalRowanStub.sh
 ```
-### Dev Scripts
+### Dev Scripts -- should be run against GemSTone 3.7.2 or later
 ```
 #
 ## Create project and package
@@ -28,6 +28,6 @@ product/rowan3/bin/exportRowanProjectAsTopaz.solo file:/bosch1/users/dhenrich/_s
 #
 # export GemStone-Interactions packages from Rowan 3 using GsDevKit_stones/bin/exportRowanPackagesAsTopaz.solo
 #
-exportRowanPackagesAsTopaz.solo --loadSpec=file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/RowanV3/rowan/specs/Rowan.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st --fileName=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/GemStoneInteractions GemStone-Interactions-Core GemStone-Interactions-Kernel -D
+product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/RowanV3/rowan/specs/Rowan.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st --fileName=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/GemStoneInteractions.gs GemStone-Interactions-Core GemStone-Interactions-Kernel
 
 ```
