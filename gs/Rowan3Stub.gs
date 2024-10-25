@@ -64,7 +64,7 @@ true.
 doit
 (Object
 	subclass: 'Rowan3Stub'
-	instVarNames: #(image platform projectTools)
+	instVarNames: #(platform projectTools)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -276,12 +276,28 @@ symbolList
 
 ! Class implementation for 'Rowan3PlatformStub'
 
+!		Class methods for 'Rowan3PlatformStub'
+
+category: 'instance creation'
+classmethod: Rowan3PlatformStub
+new
+	"Create a new initialized instance of the receiver."
+
+	^ self basicNew initialize
+%
+
 !		Instance methods for 'Rowan3PlatformStub'
 
 category: 'accessing'
 method: Rowan3PlatformStub
 image
 	^ image ifNil: [ image := Rowan3ImageStub new ]
+%
+
+category: 'initialization'
+method: Rowan3PlatformStub
+initialize
+	self image
 %
 
 category: 'accessing'
@@ -382,6 +398,16 @@ _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironme
 
 ! Class implementation for 'Rowan3ProjectToolsStub'
 
+!		Class methods for 'Rowan3ProjectToolsStub'
+
+category: 'instance creation'
+classmethod: Rowan3ProjectToolsStub
+new
+	"Create a new initialized instance of the receiver."
+
+	^ self basicNew initialize
+%
+
 !		Instance methods for 'Rowan3ProjectToolsStub'
 
 category: 'accessing'
@@ -390,7 +416,23 @@ browser
 	^ browserTool ifNil: [ browserTool := Rowan3BrowserToolsStub new ]
 %
 
+category: 'initialization'
+method: Rowan3ProjectToolsStub
+initialize
+	self browser
+%
+
 ! Class implementation for 'Rowan3Stub'
+
+!		Class methods for 'Rowan3Stub'
+
+category: 'instance creation'
+classmethod: Rowan3Stub
+new
+	"Create a new initialized instance of the receiver."
+
+	^ self basicNew initialize
+%
 
 !		Instance methods for 'Rowan3Stub'
 
@@ -398,7 +440,7 @@ category: 'accessing'
 method: Rowan3Stub
 commandResultClass
 
-	^ GsSession currentSession objectNamed: #RowanCommandResult
+	^ self platform commandResultClass
 %
 
 category: 'accessing'
@@ -413,6 +455,13 @@ category: 'accessing'
 method: Rowan3Stub
 image
 	^ self platform image
+%
+
+category: 'initialization'
+method: Rowan3Stub
+initialize
+	self platform.
+	self projectTools
 %
 
 category: 'accessing'

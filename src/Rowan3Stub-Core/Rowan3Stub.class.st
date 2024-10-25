@@ -2,17 +2,23 @@ Class {
 	#name : 'Rowan3Stub',
 	#superclass : 'Object',
 	#instVars : [
-		'image',
 		'platform',
 		'projectTools'
 	],
 	#category : 'Rowan3Stub-Core'
 }
 
+{ #category : 'instance creation' }
+Rowan3Stub class >> new [
+	"Create a new initialized instance of the receiver."
+
+	^ self basicNew initialize
+]
+
 { #category : 'accessing' }
 Rowan3Stub >> commandResultClass [
 
-	^ GsSession currentSession objectNamed: #RowanCommandResult
+	^ self platform commandResultClass
 ]
 
 { #category : 'accessing' }
@@ -25,6 +31,12 @@ Rowan3Stub >> globalNamed: aString [
 { #category : 'accessing' }
 Rowan3Stub >> image [
 	^ self platform image
+]
+
+{ #category : 'initialization' }
+Rowan3Stub >> initialize [
+	self platform.
+	self projectTools
 ]
 
 { #category : 'accessing' }

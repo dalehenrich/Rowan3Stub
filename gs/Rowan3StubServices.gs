@@ -4,6 +4,12 @@
 
 category: 'accessing'
 method: Rowan3PlatformStub
+commandResultClass
+	^ RowanCommandResult
+%
+
+category: 'accessing'
+method: Rowan3PlatformStub
 serviceClasses
 	"Explicitly add each class rather than sending #allSubclasses so
 	that users other than SystemUser have visibility. Visibility in Rowan

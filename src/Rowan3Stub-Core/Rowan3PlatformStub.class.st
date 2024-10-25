@@ -7,6 +7,13 @@ Class {
 	#category : 'Rowan3Stub-Core'
 }
 
+{ #category : 'instance creation' }
+Rowan3PlatformStub class >> new [
+	"Create a new initialized instance of the receiver."
+
+	^ self basicNew initialize
+]
+
 { #category : '_private' }
 Rowan3PlatformStub >> _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId [
 	"Compiles the method into disposable dictionaries, if possible.
@@ -61,6 +68,11 @@ Rowan3PlatformStub >> _parseMethod: source category: cat using: aSymbolList envi
 { #category : 'accessing' }
 Rowan3PlatformStub >> image [
 	^ image ifNil: [ image := Rowan3ImageStub new ]
+]
+
+{ #category : 'initialization' }
+Rowan3PlatformStub >> initialize [
+	self image
 ]
 
 { #category : 'accessing' }

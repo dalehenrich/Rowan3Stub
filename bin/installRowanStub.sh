@@ -3,8 +3,8 @@ set -ex
 
 export ROWAN_PROJECTS_HOME=/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st/
 
-newExtent.solo -r 37x -e product/bin/extent0.dbf battery_j
-#newExtent.solo -r 37x -e product/bin/extent0.seaside.dbf battery_j
+#newExtent.solo -r 37x -e product/bin/extent0.dbf battery_j
+newExtent.solo -r 37x -e product/bin/extent0.seaside.dbf battery_j
 
 startNetldi.solo -r
 
