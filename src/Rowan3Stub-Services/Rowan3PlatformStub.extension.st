@@ -6,6 +6,12 @@ Rowan3PlatformStub >> commandResultClass [
 ]
 
 { #category : 'accessing' }
+Rowan3PlatformStub >> loggingServiceClass [
+
+	^ RowanLoggingService
+]
+
+{ #category : 'accessing' }
 Rowan3PlatformStub >> serviceClasses [
 	"Explicitly add each class rather than sending #allSubclasses so
 	that users other than SystemUser have visibility. Visibility in Rowan
