@@ -34,7 +34,7 @@ symbolList := GsCurrentSession currentSession symbolList.
 %
 
 input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Announcements.gs
-input $ROWAN_PROJECTS_HOME/RemoteServiceReplication/src-gs/bootstrapRSR.gs
+input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RemoteServiceReplication.gs
 
 input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/GemStoneInteractions.gs
 

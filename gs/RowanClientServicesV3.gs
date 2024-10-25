@@ -2844,6 +2844,15 @@ breakPointsAreEnabled
 	^SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' ifAbsentPut: [true]
 %
 
+category: 'rsr'
+classmethod: RowanService
+clientClass
+
+	^Rowan platform
+		serviceClassFor: self clientClassName
+		ifAbsent: [Error signal:  'Cannot find client class - ', self clientClassName ]
+%
+
 category: 'autocommit'
 classmethod: RowanService
 flipAutoCommit
@@ -2893,6 +2902,15 @@ sampleService
 	^self new sampleService
 %
 
+category: 'rsr'
+classmethod: RowanService
+serverClass
+
+	^Rowan platform
+		serviceClassFor: self serverClassName
+		ifAbsent: [Error signal:  'Cannot find server class - ', self serverClassName ]
+%
+
 category: 'autocommit'
 classmethod: RowanService
 setAutoCommit: object
@@ -2904,6 +2922,15 @@ category: 'autocommit'
 classmethod: RowanService
 setBreakPointsAreEnabled: boolean
   ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
+%
+
+category: 'rsr'
+classmethod: RowanService
+templateClass
+
+	^Rowan platform
+		serviceClassFor: self templateClassName
+		ifAbsent: [Error signal:  'Cannot find template class - ', self templateClassName ]
 %
 
 category: 'rsr'
@@ -12839,11 +12866,6 @@ stonName
 category: 'resolving'
 method: RowanClientServiceTemplateResolver
 templateNamed: aTemplateName ifAbsent: aBlock
-	"serviceClass := (((AllUsers userWithId: 'SystemUser') objectNamed: 'Rowan')
-										ifNotNil: [ :rowan | rowan platform serviceClassFor: name ])"
-	GsFile gciLogServer: 'RowanClientServiceTemplateResolver>>templateNamed:ifAbsent:'. 
-	GsFile gciLogServer: ' Rowan platform: ',  Rowan platform printString. 
-	GsFile gciLogServer: 'serviceClasses: ', Rowan platform serviceClasses printString. 
 	^ Rowan platform
 		serviceClassFor: aTemplateName
 		ifAbsent: [ super templateNamed: aTemplateName ifAbsent: aBlock ]
