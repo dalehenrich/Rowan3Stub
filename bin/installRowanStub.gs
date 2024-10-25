@@ -191,6 +191,7 @@ run
 %
 
 input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RowanClientServicesV3.gs
+input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubServices.gs
 
 #
 # PATCHES to RowanClientServices methods to enable the use of `System waitForDebug`

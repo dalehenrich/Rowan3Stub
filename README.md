@@ -10,24 +10,27 @@ bin/instalRowanStub.sh
 #
 ## Create project and package
 #
-product/rowan3/bin/createRowanProject.solo --projectName=Rowan3Stub --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st --packageConvention=Rowan --repositoryType=git --packageFormat=tonel --defaultSymbolDictName=Globals
-/bosch1/users/dhenrich/_stones/37x/stones/rowan3_dev_i/product/rowan3/bin/addRowanProjectPackages.solo file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/rowan/specs/Rowan3Stub.ston  --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st Rowan3Stub-Core
+product/rowan3/bin/createRowanProject.solo --projectName=Rowan3Stub --projectsHome=/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st --packageConvention=Rowan --repositoryType=git --packageFormat=tonel --defaultSymbolDictName=Globals
+/bosch1/users/dhenrich/_stones/37x/stones/rowan3_dev_i/product/rowan3/bin/addRowanProjectPackages.solo file:/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st/Rowan3Stub/rowan/specs/Rowan3Stub.ston  --projectsHome=/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st Rowan3Stub-Core
 #
 ## install Rowan3Stub project in Rowan3 image for development
 #
-installProject.stone file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/rowan/specs/Rowan3Stub.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st
+installProject.stone file:/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st/Rowan3Stub/rowan/specs/Rowan3Stub.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st
 #
 ## export projects (Rowan3Stub, RowanClientServices, Announcements to Rowan3Stub/gs
 #
-product/rowan3/bin/exportRowanProjectAsTopaz.solo file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/rowan/specs/Rowan3Stub.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st /bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/Rowan3Stub.gs
+product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$ROWAN_PROJECTS_HOME/Rowan3Stub/rowan/specs/Rowan3Stub.ston --projectsHome=$ROWAN_PROJECTS_HOME --fileName=$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs Rowan3Stub-Core
 
-product/rowan3/bin/exportRowanProjectAsTopaz.solo file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/RowanClientServicesV3/rowan/specs/RowanClientServices.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st --projectAlias=RowanClientServicesV3 /bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/RowanClientServicesV3.gs
+product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$ROWAN_PROJECTS_HOME/Rowan3Stub/rowan/specs/Rowan3Stub.ston --projectsHome=$ROWAN_PROJECTS_HOME --fileName=$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubServices.gs Rowan3Stub-Services
 
-product/rowan3/bin/exportRowanProjectAsTopaz.solo file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Announcements/rowan/specs/Announcements.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st /bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/Announcements.gs
+
+product/rowan3/bin/exportRowanProjectAsTopaz.solo file:$ROWAN_PROJECTS_HOME/RowanClientServicesV3/rowan/specs/RowanClientServices.ston --projectAlias=RowanClientServicesV3 --projectsHome=$ROWAN_PROJECTS_HOME $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RowanClientServicesV3.gs
+
+product/rowan3/bin/exportRowanProjectAsTopaz.solo file:$ROWAN_PROJECTS_HOME/Announcements/rowan/specs/Announcements.ston --projectsHome=$ROWAN_PROJECTS_HOME $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Announcements.gs
 
 #
 # export GemStone-Interactions packages from Rowan 3 using GsDevKit_stones/bin/exportRowanPackagesAsTopaz.solo
 #
-product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/RowanV3/rowan/specs/Rowan.ston --projectsHome=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st --fileName=/bosch1/users/dhenrich/_stones/37x/i_37x_externals_st/Rowan3Stub/gs/GemStoneInteractions.gs GemStone-Interactions-Core GemStone-Interactions-Kernel
+product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$ROWAN_PROJECTS_HOME/RowanV3/rowan/specs/Rowan.ston --projectsHome=$ROWAN_PROJECTS_HOME --fileName=$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/GemStoneInteractions.gs GemStone-Interactions-Core GemStone-Interactions-Kernel
 
 ```

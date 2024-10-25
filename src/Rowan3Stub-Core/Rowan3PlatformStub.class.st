@@ -96,3 +96,9 @@ Rowan3PlatformStub >> parseSelectorFrom: methodString passCompileError: passComp
 				ifTrue: [ ex pass ]
 				ifFalse: [ ex return: '_____could_not_parse_selector_from_method_source_____' ] ]
 ]
+
+{ #category : 'accessing' }
+Rowan3PlatformStub >> serviceClassFor: className ifAbsent: absentBlock [
+
+	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone: absentBlock
+]

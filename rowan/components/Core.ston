@@ -3,7 +3,8 @@ RwLoadComponent {
 	#projectNames : [ ],
 	#componentNames : [ ],
 	#packageNames : [
-		'Rowan3Stub-Core'
+		'Rowan3Stub-Core',
+		'Rowan3Stub-Services'
 	],
 	#comment : ''
 }

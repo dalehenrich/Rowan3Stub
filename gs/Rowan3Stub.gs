@@ -321,6 +321,13 @@ parseSelectorFrom: methodString passCompileError: passCompileError
 				ifFalse: [ ex return: '_____could_not_parse_selector_from_method_source_____' ] ]
 %
 
+category: 'accessing'
+method: Rowan3PlatformStub
+serviceClassFor: className ifAbsent: absentBlock
+
+	^self serviceClasses detect:[:cls | cls name asString = className asString] ifNone: absentBlock
+%
+
 category: '_private'
 method: Rowan3PlatformStub
 _parseMethod: source category: cat using: aSymbolList environmentId: anEnvironmentId
