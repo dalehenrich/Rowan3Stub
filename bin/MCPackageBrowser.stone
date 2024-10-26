@@ -2,6 +2,7 @@
 options
 {
   SuperDoitOptionalOptionWithNoArg long: 'list' short: 'l'.
+  SuperDoitOptionalOptionWithNoArg long: 'modified' short: 'm'.
 }
 %
 # Example options section
@@ -49,14 +50,22 @@ EXAMPLES
   $basename -h                               -- -l -I ./.topazini  # with GEMSTONE set
   $basename -D <script-arguments>            <topaz-arguments>
   $basename --debugGem <script-arguments>    <topaz-arguments>
-  $basename -l
+  $basename --list
+  $basename --modified
 -----
 %
 method
+modifiedPackageNames
+	"return a list of the modified Monticello packages in the image"
+	^ ((MCWorkingCopy allManagers select: [:wc | wc modified ]) collect: [:wc | wc ancestry ancestors first name ]) sort.
+%
+method
 packageNames
+	"return a list of the loaded Monticello packages in the image"
 	^ (MCWorkingCopy allManagers collect: [:wc | wc ancestry ancestors first name ]) sort.
 %
 doit
 	self list ifTrue: [ ^ self packageNames ].
+	self modified ifTrue: [ ^ self modifiedPackageNames ].
 	^ 'no command selected'
 %
