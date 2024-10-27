@@ -76,7 +76,11 @@ showChanges
 	self modifiedPackages do: [:wc |
 		| patch |
 		patch := wc changesRelativeToRepository: wc repositoryGroup repositories first.
-		self stdout nextPutAll: patch printString ].
+patch halt.
+"
+		patch operations do: [:op |
+			self stdout nextPutAll: op sourceString ].
+" ].
 	^ self noResult
 %
 doit

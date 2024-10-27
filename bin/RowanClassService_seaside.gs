@@ -44,4 +44,36 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 		do: [:ex | ex return: nil -> warnings]
 %
 
+#
+# overwrite of RowanProjectService method that will need to change for JfPwoR
+# when run against extent0.seaside.dbf
+#
+
+run
+UserGlobals 
+	at: #RowanProjectService 
+	put: (Rowan platform 
+					serviceClassFor: 'RowanProjectService' 
+					ifAbsent: [ self error: 'Cannot find RowanProjectService']).
+%
+
+category: 'Rowan3 stub'
+method: RowanProjectService
+changes
+	| jadeServer modifiedMCPackages |
+	jadeServer := Rowan jadeServerClassNamed: #'JadeServer'.	
+	modifiedMCPackages := MCWorkingCopy allManagers select: [:wc | wc modified ].
+	changes := Array new.	
+	modifiedMCPackages
+		collect: [ :wc | | patch packageName |
+			patch := wc changesRelativeToRepository: wc repositoryGroup repositories first.
+			packageName := wc ancestry ancestors first name.
+			changes add:
+				(jadeServer new
+					_mcDescriptionOfPatch: patch
+					baseName: 'closest ancestor'
+					alternateName: nil
+					packageName: packageName)  ].
+%
+
 commit
