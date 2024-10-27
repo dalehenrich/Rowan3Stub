@@ -1,6 +1,7 @@
 #!/usr/bin/env superdoit_stone
 options
 {
+  SuperDoitOptionalOptionWithNoArg long: 'changes' short: 'c'.
   SuperDoitOptionalOptionWithNoArg long: 'list' short: 'l'.
   SuperDoitOptionalOptionWithNoArg long: 'modified' short: 'm'.
 }
@@ -52,20 +53,35 @@ EXAMPLES
   $basename --debugGem <script-arguments>    <topaz-arguments>
   $basename --list -- -I ./.topazini			# DataCurator login
   $basename --modified -- -I ./.topazini	# DataCurator login
+  $basename --changes -- -I ./.topazini	# DataCurator login
 -----
 %
 method
+modifiedPackages
+	"return a modified Monticello packages in the image"
+	^ MCWorkingCopy allManagers select: [:wc | wc modified ]
+%
+method
 modifiedPackageNames
-	"return a list of the modified Monticello packages in the image"
-	^ ((MCWorkingCopy allManagers select: [:wc | wc modified ]) collect: [:wc | wc ancestry ancestors first name ]) sort.
+	"return a list of the modified Monticello package names in the image"
+	^ (self modifiedPackages collect: [:wc | wc ancestry ancestors first name ]) sort.
 %
 method
 packageNames
-	"return a list of the loaded Monticello packages in the image"
+	"return a list of the loaded Monticello package names in the image"
 	^ (MCWorkingCopy allManagers collect: [:wc | wc ancestry ancestors first name ]) sort.
+%
+method
+showChanges
+	self modifiedPackages do: [:wc |
+		| patch |
+		patch := wc changesRelativeToRepository: wc repositoryGroup repositories first.
+		self stdout nextPutAll: patch printString ].
+	^ self noResult
 %
 doit
 	self list ifTrue: [ ^ self packageNames ].
 	self modified ifTrue: [ ^ self modifiedPackageNames ].
+	self changes ifTrue: [ ^ self showChanges ].
 	^ 'no command selected'
 %
