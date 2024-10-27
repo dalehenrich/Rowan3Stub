@@ -3,8 +3,15 @@ set -ex
 
 export ROWAN_PROJECTS_HOME=/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st/
 
-#newExtent.solo -r 37x -e product/bin/extent0.dbf battery_j
-newExtent.solo -r 37x -e product/bin/extent0.seaside.dbf battery_j
+extentType="base"
+extentType="seaside"
+topazini=".topazini"
+topazini_seaside=".topazini_DC"
+if [ $extentType = "seaside" ]; then
+	newExtent.solo -r 37x -e product/bin/extent0.seaside.dbf battery_j
+else
+	newExtent.solo -r 37x -e product/bin/extent0.dbf battery_j
+fi
 
 startNetldi.solo -r
 
@@ -28,5 +35,10 @@ fi
 
 source customenv # set $GEMSTONE
 
-$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub.gs -I .topazini -L
+$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub.gs -I $topazini -L
 
+if [ $extentType = "seaside" ]; then
+	$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_seaside.gs -I $topazini_seaside -L
+else
+	$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_base.gs -I $topazini -L
+fi

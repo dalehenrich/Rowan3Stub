@@ -50,8 +50,8 @@ EXAMPLES
   $basename -h                               -- -l -I ./.topazini  # with GEMSTONE set
   $basename -D <script-arguments>            <topaz-arguments>
   $basename --debugGem <script-arguments>    <topaz-arguments>
-  $basename --list
-  $basename --modified
+  $basename --list -- -I ./.topazini			# DataCurator login
+  $basename --modified -- -I ./.topazini	# DataCurator login
 -----
 %
 method
