@@ -72,20 +72,33 @@ packageNames
 	^ (MCWorkingCopy allManagers collect: [:wc | wc ancestry ancestors first name ]) sort.
 %
 method
+listNames: names
+	names do: [:name | 	self stdout nextPutAll: name; lf ]
+%
+method
+listPackageNames
+	self listNames: self packageNames.
+	^ self noResult
+%
+method
+listModifiedPackageNames
+	self listNames: self modifiedPackageNames.
+	^ self noResult
+%
+method
 showChanges
 	self modifiedPackages do: [:wc |
 		| patch |
 		patch := wc changesRelativeToRepository: wc repositoryGroup repositories first.
-patch halt.
-"
+		self stdout nextPutAll: wc ancestry ancestors first name; lf.
 		patch operations do: [:op |
-			self stdout nextPutAll: op sourceString ].
-" ].
+			self stdout tab; nextPutAll: op sourceString; lf ].
+ ].
 	^ self noResult
 %
 doit
-	self list ifTrue: [ ^ self packageNames ].
-	self modified ifTrue: [ ^ self modifiedPackageNames ].
+	self list ifTrue: [ ^ self listPackageNames ].
+	self modified ifTrue: [ ^ self listModifiedPackageNames ].
 	self changes ifTrue: [ ^ self showChanges ].
 	^ 'no command selected'
 %

@@ -77,3 +77,5 @@ changes
 %
 
 commit
+
+## end of RowanClassService_seaside.gs
