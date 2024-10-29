@@ -370,8 +370,8 @@ updateProjectName
 %
 category: 'Rowan3 stub'
 classmethod: RowanPackageService
-forPackageNamed: ignored
-	| inst aName |
+forPackageNamed: aName
+	| inst |
 	inst := self new.
 	inst name: aName.
 	aName isNil

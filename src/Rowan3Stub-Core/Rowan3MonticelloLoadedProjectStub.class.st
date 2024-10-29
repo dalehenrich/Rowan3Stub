@@ -6,7 +6,11 @@ Class {
 
 { #category : 'accessing' }
 Rowan3MonticelloLoadedProjectStub >> loadedPackageNamed: aName ifAbsent: absentBlock [
-self halt.
+	(self packageNames includes: aName)
+		ifFalse: absentBlock.
+	^ Rowan3MonticelloLoadedPackageStub new
+		name: aName;
+		yourself
 ]
 
 { #category : 'accessing' }

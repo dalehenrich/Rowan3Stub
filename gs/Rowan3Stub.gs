@@ -389,6 +389,22 @@ symbolList
 	^ GsCurrentSession currentSession symbolList
 %
 
+! Class implementation for 'Rowan3LoadedPackageStub'
+
+!		Instance methods for 'Rowan3LoadedPackageStub'
+
+category: 'accessing'
+method: Rowan3LoadedPackageStub
+name
+	^name
+%
+
+category: 'accessing'
+method: Rowan3LoadedPackageStub
+name: object
+	name := object
+%
+
 ! Class implementation for 'Rowan3LoadedProjectStub'
 
 !		Instance methods for 'Rowan3LoadedProjectStub'
@@ -448,7 +464,11 @@ projectUrl
 category: 'accessing'
 method: Rowan3MonticelloLoadedProjectStub
 loadedPackageNamed: aName ifAbsent: absentBlock
-self halt.
+	(self packageNames includes: aName)
+		ifFalse: absentBlock.
+	^ Rowan3MonticelloLoadedPackageStub new
+		name: aName;
+		yourself
 %
 
 category: 'accessing'
