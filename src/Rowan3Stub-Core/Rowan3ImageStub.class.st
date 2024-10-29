@@ -1,9 +1,6 @@
 Class {
 	#name : 'Rowan3ImageStub',
 	#superclass : 'Object',
-	#instVars : [
-		'loadedProjects'
-	],
 	#category : 'Rowan3Stub-Core'
 }
 
@@ -30,6 +27,10 @@ Rowan3ImageStub >> loadedClassForClass: aClass ifAbsent: absentBlock [
 Rowan3ImageStub >> loadedPackageNamed: aName ifAbsent: absentBlock [
 	"scan the symbol list a RwLoadedPackage instance of the given name"
 
+	self loadedProjects
+		do: [ :loadedProject | 
+			(loadedProject loadedPackageNamed: aName ifAbsent: [  ])
+				ifNotNil: [ :loadedPackage | ^ loadedPackage ] ].
 	^ absentBlock value
 ]
 
@@ -83,7 +84,11 @@ Rowan3ImageStub >> objectNamed: aSymbol [
 
 { #category : 'accessing' }
 Rowan3ImageStub >> packageNames [
-	^ #()
+	| packageNames |
+	packageNames := Set new.
+	self loadedProjects
+		do: [ :loadedProject | packageNames addAll: loadedProject packageNames ].
+	^ packageNames asArray
 ]
 
 { #category : 'querying' }

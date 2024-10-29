@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : 'accessing' }
+Rowan3MonticelloLoadedProjectStub >> loadedPackageNamed: aName ifAbsent: absentBlock [
+self halt.
+]
+
+{ #category : 'accessing' }
 Rowan3MonticelloLoadedProjectStub >> packageConvention [
 	^ 'Monticello'
 ]
@@ -12,4 +17,12 @@ Rowan3MonticelloLoadedProjectStub >> packageConvention [
 { #category : 'accessing' }
 Rowan3MonticelloLoadedProjectStub >> packageGroupNames [
 	^ #()
+]
+
+{ #category : 'accessing' }
+Rowan3MonticelloLoadedProjectStub >> packageNames [
+	self name = 'Monticello'
+		ifFalse: [ self error: 'unexpected projectName: ' self name ].
+	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
+		collect: [ :wc | wc ancestry ancestors first name ]) sort
 ]

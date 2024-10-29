@@ -19,7 +19,37 @@ true.
 doit
 (Object
 	subclass: 'Rowan3ImageStub'
-	instVarNames: #(loadedProjects)
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Rowan3Stub-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'Rowan3LoadedPackageStub'
+	instVarNames: #(name)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Rowan3Stub-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(Rowan3LoadedPackageStub
+	subclass: 'Rowan3MonticelloLoadedPackageStub'
+	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -258,6 +288,10 @@ method: Rowan3ImageStub
 loadedPackageNamed: aName ifAbsent: absentBlock
 	"scan the symbol list a RwLoadedPackage instance of the given name"
 
+	self loadedProjects
+		do: [ :loadedProject | 
+			(loadedProject loadedPackageNamed: aName ifAbsent: [  ])
+				ifNotNil: [ :loadedPackage | ^ loadedPackage ] ].
 	^ absentBlock value
 %
 
@@ -317,7 +351,11 @@ objectNamed: aSymbol
 category: 'accessing'
 method: Rowan3ImageStub
 packageNames
-	^ #()
+	| packageNames |
+	packageNames := Set new.
+	self loadedProjects
+		do: [ :loadedProject | packageNames addAll: loadedProject packageNames ].
+	^ packageNames asArray
 %
 
 category: 'querying'
@@ -409,6 +447,12 @@ projectUrl
 
 category: 'accessing'
 method: Rowan3MonticelloLoadedProjectStub
+loadedPackageNamed: aName ifAbsent: absentBlock
+self halt.
+%
+
+category: 'accessing'
+method: Rowan3MonticelloLoadedProjectStub
 packageConvention
 	^ 'Monticello'
 %
@@ -417,6 +461,15 @@ category: 'accessing'
 method: Rowan3MonticelloLoadedProjectStub
 packageGroupNames
 	^ #()
+%
+
+category: 'accessing'
+method: Rowan3MonticelloLoadedProjectStub
+packageNames
+	self name = 'Monticello'
+		ifFalse: [ self error: 'unexpected projectName: ' self name ].
+	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
+		collect: [ :wc | wc ancestry ancestors first name ]) sort
 %
 
 ! Class implementation for 'Rowan3PlatformStub'

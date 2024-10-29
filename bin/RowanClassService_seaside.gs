@@ -110,6 +110,13 @@ basicRefresh
 "
 	RowanCommandResult addResult: self
 %
+category: 'Rowan3 stub'
+method: RowanProjectService
+defaultSymbolDictionaryFromLoadSpec
+	^ #UserGlobals
+%
+
+
 commit
 
 ## end of RowanClassService_seaside.gs
