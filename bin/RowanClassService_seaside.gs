@@ -50,11 +50,15 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 #
 
 run
-UserGlobals 
-	at: #RowanProjectService 
-	put: (Rowan platform 
-					serviceClassFor: 'RowanProjectService' 
-					ifAbsent: [ self error: 'Cannot find RowanProjectService']).
+"Make some classes visible ... not sure if they need to stay visible or even need to be visible ... but 
+	for now they are needed for compiles to work"
+#( RowanProjectService RowanBrowserService RowanCommandResult ) 
+	do: [:serviceName |
+		UserGlobals 
+			at: serviceName 
+			put: (Rowan platform 
+					serviceClassFor: serviceName 
+					ifAbsent: [ self error: 'Cannot find ', serviceName])].
 %
 
 category: 'Rowan3 stub'
@@ -75,7 +79,37 @@ changes
 					alternateName: nil
 					packageName: packageName)  ].
 %
-
+category: 'Rowan3 stub'
+method: RowanProjectService
+basicRefresh
+	name = Rowan unpackagedName
+		ifTrue: [ 
+			isLoaded := false.
+			RowanBrowserService new updateDictionaries.
+			^ self ].
+	(isLoaded := self projectIsLoaded)
+		ifFalse: [ 
+			existsOnDisk := false.
+			self isDefinedProject
+				ifFalse: [ 
+					updateType := #'removedProject:'.
+					^ RowanCommandResult addResult: self ] ].
+	self updateIsDirty. 
+	self setExistsOnDisk.
+	isSkew := self isSkew.
+	sha := self rowanSha.
+	diskSha := self rowanDiskSha. 
+	branch := self rowanBranch.
+	projectUrl := self rowanProjectUrl.
+	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'.
+	isDiskDirty := self isGitDirty.
+"
+	componentServices := self componentServices.
+	specService := RowanLoadSpecService new initialize: self rwProject loadSpecification asOop.
+	packageConvention := self rwProject packageConvention.
+"
+	RowanCommandResult addResult: self
+%
 commit
 
 ## end of RowanClassService_seaside.gs

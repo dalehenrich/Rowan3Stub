@@ -382,6 +382,25 @@ forPackageNamed: ignored
 %
 
 #
+# overwrites of RowanProjectService methods that will need to change for JfPwoR
+#
+category: 'Rowan3 stub'
+method: RowanProjectService
+rowanDirty
+	"placeholder..."
+	^ false
+%
+category: 'Rowan3 stub'
+method: RowanProjectService
+rwProject
+	^ rwProject
+		ifNil: [ 
+			rwProject := Rowan image loadedProjectNamed: name. 
+			projectOop := rwProject asOop.
+			rwProject ]
+%
+
+#
 #	PATCHES extracted from Rowan-GemStone-Kernel package 
 #		(trying to avoid bringing in the whole kit and kaboodle if possible)
 #

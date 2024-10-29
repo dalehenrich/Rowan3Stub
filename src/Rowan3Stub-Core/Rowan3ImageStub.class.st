@@ -1,6 +1,9 @@
 Class {
 	#name : 'Rowan3ImageStub',
 	#superclass : 'Object',
+	#instVars : [
+		'loadedProjects'
+	],
 	#category : 'Rowan3Stub-Core'
 }
 
@@ -31,8 +34,43 @@ Rowan3ImageStub >> loadedPackageNamed: aName ifAbsent: absentBlock [
 ]
 
 { #category : 'accessing' }
+Rowan3ImageStub >> loadedProjectNamed: aString [
+
+	^ self
+		loadedProjectNamed: aString
+		ifPresent: [:loadedProject | loadedProject ]
+		ifAbsent: [ self error: 'No loaded project named ' , aString printString , ' found' ]
+]
+
+{ #category : 'accessing' }
+Rowan3ImageStub >> loadedProjectNamed: projectName ifAbsent: absentBlock [
+	^ self loadedProjects
+		detect: [ :each | each name = projectName ]
+		ifNone: absentBlock
+]
+
+{ #category : 'accessing' }
+Rowan3ImageStub >> loadedProjectNamed: aString ifPresent: presentBlock ifAbsent: absentBlock [
+	"Look up a loaded project in the loaded project registry"
+
+	| loadedProject |
+	loadedProject := self loadedProjectNamed: aString ifAbsent: absentBlock.
+	^ presentBlock cull: loadedProject
+]
+
+{ #category : 'accessing' }
 Rowan3ImageStub >> loadedProjects [
-	^ IdentitySet new
+	^ UserGlobals
+		at: #'Rowan3StubUserLoadedProjects'
+		ifAbsent: [ 
+			UserGlobals
+				at: #'Rowan3StubUserLoadedProjects'
+				put:
+					(IdentitySet
+						with:
+							(Rowan3MonticelloLoadedProjectStub new
+								name: 'Monticello';
+								yourself)) ]
 ]
 
 { #category : 'querying' }
@@ -46,6 +84,14 @@ Rowan3ImageStub >> objectNamed: aSymbol [
 { #category : 'accessing' }
 Rowan3ImageStub >> packageNames [
 	^ #()
+]
+
+{ #category : 'querying' }
+Rowan3ImageStub >> packageNamesForLoadedProjectNamed: projectName [
+	projectName = 'Monticello'
+		ifFalse: [ self error: 'unexpected projectName: ' projectName ].
+	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
+		collect: [ :wc | wc ancestry ancestors first name ]) sort
 ]
 
 { #category : 'querying' }

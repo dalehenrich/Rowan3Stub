@@ -19,6 +19,36 @@ true.
 doit
 (Object
 	subclass: 'Rowan3ImageStub'
+	instVarNames: #(loadedProjects)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Rowan3Stub-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
+	subclass: 'Rowan3LoadedProjectStub'
+	instVarNames: #(name)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Rowan3Stub-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(Rowan3LoadedProjectStub
+	subclass: 'Rowan3MonticelloLoadedProjectStub'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -233,8 +263,46 @@ loadedPackageNamed: aName ifAbsent: absentBlock
 
 category: 'accessing'
 method: Rowan3ImageStub
+loadedProjectNamed: aString
+
+	^ self
+		loadedProjectNamed: aString
+		ifPresent: [:loadedProject | loadedProject ]
+		ifAbsent: [ self error: 'No loaded project named ' , aString printString , ' found' ]
+%
+
+category: 'accessing'
+method: Rowan3ImageStub
+loadedProjectNamed: projectName ifAbsent: absentBlock
+	^ self loadedProjects
+		detect: [ :each | each name = projectName ]
+		ifNone: absentBlock
+%
+
+category: 'accessing'
+method: Rowan3ImageStub
+loadedProjectNamed: aString ifPresent: presentBlock ifAbsent: absentBlock
+	"Look up a loaded project in the loaded project registry"
+
+	| loadedProject |
+	loadedProject := self loadedProjectNamed: aString ifAbsent: absentBlock.
+	^ presentBlock cull: loadedProject
+%
+
+category: 'accessing'
+method: Rowan3ImageStub
 loadedProjects
-	^ IdentitySet new
+	^ UserGlobals
+		at: #'Rowan3StubUserLoadedProjects'
+		ifAbsent: [ 
+			UserGlobals
+				at: #'Rowan3StubUserLoadedProjects'
+				put:
+					(IdentitySet
+						with:
+							(Rowan3MonticelloLoadedProjectStub new
+								name: 'Monticello';
+								yourself)) ]
 %
 
 category: 'querying'
@@ -250,6 +318,15 @@ category: 'accessing'
 method: Rowan3ImageStub
 packageNames
 	^ #()
+%
+
+category: 'querying'
+method: Rowan3ImageStub
+packageNamesForLoadedProjectNamed: projectName
+	projectName = 'Monticello'
+		ifFalse: [ self error: 'unexpected projectName: ' projectName ].
+	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
+		collect: [ :wc | wc ancestry ancestors first name ]) sort
 %
 
 category: 'querying'
@@ -272,6 +349,74 @@ symbolList
 	"Answer the current session (transient) symbol list"
 
 	^ GsCurrentSession currentSession symbolList
+%
+
+! Class implementation for 'Rowan3LoadedProjectStub'
+
+!		Instance methods for 'Rowan3LoadedProjectStub'
+
+category: 'accessing'
+method: Rowan3LoadedProjectStub
+commitId
+	^ 0
+%
+
+category: 'accessing'
+method: Rowan3LoadedProjectStub
+componentNames
+	^ #()
+%
+
+category: 'testing'
+method: Rowan3LoadedProjectStub
+existsOnDisk
+	^ true
+%
+
+category: 'accessing'
+method: Rowan3LoadedProjectStub
+loadedCommitId
+	^ 0
+%
+
+category: 'accessing'
+method: Rowan3LoadedProjectStub
+loadSpecification
+	^ nil
+%
+
+category: 'accessing'
+method: Rowan3LoadedProjectStub
+name
+	^name
+%
+
+category: 'accessing'
+method: Rowan3LoadedProjectStub
+name: object
+	name := object
+%
+
+category: 'accessing'
+method: Rowan3LoadedProjectStub
+projectUrl
+	^ 'file://fake'
+%
+
+! Class implementation for 'Rowan3MonticelloLoadedProjectStub'
+
+!		Instance methods for 'Rowan3MonticelloLoadedProjectStub'
+
+category: 'accessing'
+method: Rowan3MonticelloLoadedProjectStub
+packageConvention
+	^ 'Monticello'
+%
+
+category: 'accessing'
+method: Rowan3MonticelloLoadedProjectStub
+packageGroupNames
+	^ #()
 %
 
 ! Class implementation for 'Rowan3PlatformStub'

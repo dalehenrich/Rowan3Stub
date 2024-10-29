@@ -84,6 +84,7 @@ Rowan3PlatformStub >> serviceClasses [
 		"add: RowanSubcomponentDefinitionServiceServer; "
 		add: RowanTranscriptServiceServer;
 		add: RowanTestServiceServer;
-		add: RowanVariableServiceServer.
+		add: RowanVariableServiceServer;
+		add: RowanCommandResult.	"temporary measure"
 	^ array
 ]

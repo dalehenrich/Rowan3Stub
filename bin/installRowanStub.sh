@@ -4,10 +4,12 @@ set -ex
 export ROWAN_PROJECTS_HOME=/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st/
 
 extentType="base"
-extentType="seaside"
 extentType="tode"
+extentType="seaside"
+
 topazini_systemuser=".topazini_SU"
 topazini_seaside=".topazini_DC"
+
 if [ $extentType = "tode" ]; then
 	newExtent.solo -r tode -e snapshots/extent0.10-28-2024_14:21:33_tode_virgin.dbf tode_3.7.2_j
 elif [ $extentType = "seaside" ]; then
