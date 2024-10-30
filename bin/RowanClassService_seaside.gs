@@ -44,6 +44,28 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 		do: [:ex | ex return: nil -> warnings]
 %
 
+
+#
+# overwrite of RowanPackageService method that will need to change for JfPwoR
+# when run against extent0.seaside.dbf
+#
+
+run
+UserGlobals 
+	at: #RowanPackageService 
+	put: (Rowan platform 
+					serviceClassFor: 'RowanPackageService' 
+					ifAbsent: [ self error: 'Cannot find RowanPackageService']).
+%
+category: 'Rowan3 stub'
+method: RowanPackageService
+rowanDirty
+
+	^ (MCWorkingCopy allManagers 
+		detect: [:wc | wc ancestry ancestors first name = name ] 
+		ifNone: [ ^false ]) modified
+%
+
 #
 # overwrite of RowanProjectService method that will need to change for JfPwoR
 # when run against extent0.seaside.dbf

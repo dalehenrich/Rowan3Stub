@@ -366,7 +366,7 @@ category: 'Rowan3 stub'
 method: RowanPackageService
 updateProjectName
 
-	projectName := nil.
+	projectName := 'Monticello'.
 %
 category: 'Rowan3 stub'
 classmethod: RowanPackageService
