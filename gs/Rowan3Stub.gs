@@ -33,6 +33,21 @@ true.
 
 doit
 (Object
+	subclass: 'Rowan3LoadedClassStub'
+	instVarNames: #(theClass)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Rowan3Stub-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
 	subclass: 'Rowan3LoadedPackageStub'
 	instVarNames: #(name)
 	classVars: #()
@@ -285,6 +300,14 @@ loadedClassForClass: aClass ifAbsent: absentBlock
 
 category: 'accessing'
 method: Rowan3ImageStub
+loadedPackageNamed: aString
+	^ self
+		loadedPackageNamed: aString
+		ifAbsent: [ self error: 'No package named ' , aString printString , ' found' ]
+%
+
+category: 'accessing'
+method: Rowan3ImageStub
 loadedPackageNamed: aName ifAbsent: absentBlock
 	"scan the symbol list a RwLoadedPackage instance of the given name"
 
@@ -335,7 +358,7 @@ loadedProjects
 					(IdentitySet
 						with:
 							(Rowan3MonticelloLoadedProjectStub new
-								name: 'Monticello';
+								name: Rowan3MonticelloLoadedProjectStub monticelloProjectName;
 								yourself)) ]
 %
 
@@ -361,10 +384,10 @@ packageNames
 category: 'querying'
 method: Rowan3ImageStub
 packageNamesForLoadedProjectNamed: projectName
-	projectName = 'Monticello'
+	projectName = Rowan3MonticelloLoadedProjectStub monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' projectName ].
 	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc ancestry ancestors first name ]) sort
+		collect: [ :wc | wc packageName ]) sort
 %
 
 category: 'querying'
@@ -389,6 +412,22 @@ symbolList
 	^ GsCurrentSession currentSession symbolList
 %
 
+! Class implementation for 'Rowan3LoadedClassStub'
+
+!		Instance methods for 'Rowan3LoadedClassStub'
+
+category: 'accessing'
+method: Rowan3LoadedClassStub
+theClass
+	^theClass
+%
+
+category: 'accessing'
+method: Rowan3LoadedClassStub
+theClass: object
+	theClass := object
+%
+
 ! Class implementation for 'Rowan3LoadedPackageStub'
 
 !		Instance methods for 'Rowan3LoadedPackageStub'
@@ -403,6 +442,43 @@ category: 'accessing'
 method: Rowan3LoadedPackageStub
 name: object
 	name := object
+%
+
+! Class implementation for 'Rowan3MonticelloLoadedPackageStub'
+
+!		Instance methods for 'Rowan3MonticelloLoadedPackageStub'
+
+category: 'accessing'
+method: Rowan3MonticelloLoadedPackageStub
+gs_symbolDictionary
+	^ #'UserGlobals'
+%
+
+category: 'accessing'
+method: Rowan3MonticelloLoadedPackageStub
+loadedClasses
+	| theLoadedClasses |
+	theLoadedClasses := KeyValueDictionary new.
+	(ClassOrganizer new categories at: self name ifAbsent: [ ^ theLoadedClasses ])
+		do: [ :aClass | 
+			theLoadedClasses
+				at: aClass name
+				put: (Rowan3LoadedClassStub new theClass: aClass) ].
+	^ theLoadedClasses
+%
+
+category: 'accessing'
+method: Rowan3MonticelloLoadedPackageStub
+loadedClassExtensions
+	"do we need to distinguish extensions for Monticello packages?"
+
+	^ Dictionary new
+%
+
+category: 'accessing'
+method: Rowan3MonticelloLoadedPackageStub
+projectName
+	^ Rowan3MonticelloLoadedProjectStub monticelloProjectName
 %
 
 ! Class implementation for 'Rowan3LoadedProjectStub'
@@ -459,6 +535,14 @@ projectUrl
 
 ! Class implementation for 'Rowan3MonticelloLoadedProjectStub'
 
+!		Class methods for 'Rowan3MonticelloLoadedProjectStub'
+
+category: 'accessing'
+classmethod: Rowan3MonticelloLoadedProjectStub
+monticelloProjectName
+	^ 'Monticello'
+%
+
 !		Instance methods for 'Rowan3MonticelloLoadedProjectStub'
 
 category: 'accessing'
@@ -486,10 +570,10 @@ packageGroupNames
 category: 'accessing'
 method: Rowan3MonticelloLoadedProjectStub
 packageNames
-	self name = 'Monticello'
+	self name = self class monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' self name ].
 	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc ancestry ancestors first name ]) sort
+		collect: [ :wc | wc packageName ]) sort
 %
 
 ! Class implementation for 'Rowan3PlatformStub'

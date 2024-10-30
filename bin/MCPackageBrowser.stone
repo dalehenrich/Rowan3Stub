@@ -64,12 +64,12 @@ modifiedPackages
 method
 modifiedPackageNames
 	"return a list of the modified Monticello package names in the image"
-	^ (self modifiedPackages collect: [:wc | wc ancestry ancestors first name ]) sort.
+	^ (self modifiedPackages collect: [:wc | wc packageName ]) sort.
 %
 method
 packageNames
 	"return a list of the loaded Monticello package names in the image"
-	^ (MCWorkingCopy allManagers collect: [:wc | wc ancestry ancestors first name ]) sort.
+	^ (MCWorkingCopy allManagers collect: [:wc | wc packageName ]) sort.
 %
 method
 listNames: names
@@ -90,7 +90,7 @@ showChanges
 	self modifiedPackages do: [:wc |
 		| patch |
 		patch := wc changesRelativeToRepository: wc repositoryGroup repositories first.
-		self stdout nextPutAll: wc ancestry ancestors first name; lf.
+		self stdout nextPutAll: wc packageName; lf.
 		patch operations do: [:op |
 			self stdout tab; nextPutAll: op sourceString; lf ].
  ].

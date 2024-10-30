@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : 'accessing' }
+Rowan3MonticelloLoadedProjectStub class >> monticelloProjectName [
+	^ 'Monticello'
+]
+
+{ #category : 'accessing' }
 Rowan3MonticelloLoadedProjectStub >> loadedPackageNamed: aName ifAbsent: absentBlock [
 	(self packageNames includes: aName)
 		ifFalse: absentBlock.
@@ -25,8 +30,8 @@ Rowan3MonticelloLoadedProjectStub >> packageGroupNames [
 
 { #category : 'accessing' }
 Rowan3MonticelloLoadedProjectStub >> packageNames [
-	self name = 'Monticello'
+	self name = self class monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' self name ].
 	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc ancestry ancestors first name ]) sort
+		collect: [ :wc | wc packageName ]) sort
 ]

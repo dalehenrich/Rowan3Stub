@@ -24,6 +24,13 @@ Rowan3ImageStub >> loadedClassForClass: aClass ifAbsent: absentBlock [
 ]
 
 { #category : 'accessing' }
+Rowan3ImageStub >> loadedPackageNamed: aString [
+	^ self
+		loadedPackageNamed: aString
+		ifAbsent: [ self error: 'No package named ' , aString printString , ' found' ]
+]
+
+{ #category : 'accessing' }
 Rowan3ImageStub >> loadedPackageNamed: aName ifAbsent: absentBlock [
 	"scan the symbol list a RwLoadedPackage instance of the given name"
 
@@ -70,7 +77,7 @@ Rowan3ImageStub >> loadedProjects [
 					(IdentitySet
 						with:
 							(Rowan3MonticelloLoadedProjectStub new
-								name: 'Monticello';
+								name: Rowan3MonticelloLoadedProjectStub monticelloProjectName;
 								yourself)) ]
 ]
 
@@ -93,10 +100,10 @@ Rowan3ImageStub >> packageNames [
 
 { #category : 'querying' }
 Rowan3ImageStub >> packageNamesForLoadedProjectNamed: projectName [
-	projectName = 'Monticello'
+	projectName = Rowan3MonticelloLoadedProjectStub monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' projectName ].
 	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc ancestry ancestors first name ]) sort
+		collect: [ :wc | wc packageName ]) sort
 ]
 
 { #category : 'querying' }

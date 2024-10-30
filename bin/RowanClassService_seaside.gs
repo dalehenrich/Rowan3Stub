@@ -62,7 +62,7 @@ method: RowanPackageService
 rowanDirty
 
 	^ (MCWorkingCopy allManagers 
-		detect: [:wc | wc ancestry ancestors first name = name ] 
+		detect: [:wc | wc packageName = name ] 
 		ifNone: [ ^false ]) modified
 %
 
@@ -93,7 +93,7 @@ changes
 	modifiedMCPackages
 		collect: [ :wc | | patch packageName |
 			patch := wc changesRelativeToRepository: wc repositoryGroup repositories first.
-			packageName := wc ancestry ancestors first name.
+			packageName := wc packageName.
 			changes add:
 				(jadeServer new
 					_mcDescriptionOfPatch: patch
