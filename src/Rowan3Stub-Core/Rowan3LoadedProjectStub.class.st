@@ -23,6 +23,20 @@ Rowan3LoadedProjectStub >> existsOnDisk [
 ]
 
 { #category : 'accessing' }
+Rowan3LoadedProjectStub >> loadedClasses [
+	| theLoadedClasses |
+	theLoadedClasses := KeyValueDictionary new.
+	(ClassOrganizer new categories at: self name ifAbsent: [ ^ theLoadedClasses ])
+		do: [ :aBehavior | 
+			| aClass |
+			aClass := aBehavior theNonMetaClass.
+			theLoadedClasses
+				at: aClass name
+				put: (Rowan3LoadedClassStub new theClass: aClass) ].
+	^ theLoadedClasses
+]
+
+{ #category : 'accessing' }
 Rowan3LoadedProjectStub >> loadedCommitId [
 	^ 0
 ]

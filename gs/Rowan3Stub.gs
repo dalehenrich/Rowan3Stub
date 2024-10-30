@@ -33,6 +33,21 @@ true.
 
 doit
 (Object
+	subclass: 'Rowan3LoadedClassExtensionStub'
+	instVarNames: #(theClass)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Rowan3Stub-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(Object
 	subclass: 'Rowan3LoadedClassStub'
 	instVarNames: #(theClass)
 	classVars: #()
@@ -412,6 +427,22 @@ symbolList
 	^ GsCurrentSession currentSession symbolList
 %
 
+! Class implementation for 'Rowan3LoadedClassExtensionStub'
+
+!		Instance methods for 'Rowan3LoadedClassExtensionStub'
+
+category: 'accessing'
+method: Rowan3LoadedClassExtensionStub
+theClass
+	^theClass
+%
+
+category: 'accessing'
+method: Rowan3LoadedClassExtensionStub
+theClass: object
+	theClass := object
+%
+
 ! Class implementation for 'Rowan3LoadedClassStub'
 
 !		Instance methods for 'Rowan3LoadedClassStub'
@@ -470,9 +501,18 @@ loadedClasses
 category: 'accessing'
 method: Rowan3MonticelloLoadedPackageStub
 loadedClassExtensions
-	"do we need to distinguish extensions for Monticello packages?"
-
-	^ Dictionary new
+	| theExtendedClasses packageInfo extensionClasses |
+	theExtendedClasses := KeyValueDictionary new.
+	extensionClasses := IdentitySet new.
+	packageInfo := (Rowan globalNamed: 'PackageInfo') named: self name.
+	packageInfo extensionClasses
+		do: [ :aBehavior | extensionClasses add: aBehavior theNonMetaClass ].
+	extensionClasses
+		do: [ :aClass | 
+			theExtendedClasses
+				at: aClass name
+				put: (Rowan3LoadedClassExtensionStub new theClass: aClass) ].
+	^ theExtendedClasses
 %
 
 category: 'accessing'
@@ -501,6 +541,21 @@ category: 'testing'
 method: Rowan3LoadedProjectStub
 existsOnDisk
 	^ true
+%
+
+category: 'accessing'
+method: Rowan3LoadedProjectStub
+loadedClasses
+	| theLoadedClasses |
+	theLoadedClasses := KeyValueDictionary new.
+	(ClassOrganizer new categories at: self name ifAbsent: [ ^ theLoadedClasses ])
+		do: [ :aBehavior | 
+			| aClass |
+			aClass := aBehavior theNonMetaClass.
+			theLoadedClasses
+				at: aClass name
+				put: (Rowan3LoadedClassStub new theClass: aClass) ].
+	^ theLoadedClasses
 %
 
 category: 'accessing'
