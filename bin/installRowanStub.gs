@@ -420,4 +420,19 @@ copyUpTo: anObject
 		ifFalse: [ ^ self copyFrom: 1 to: idx - 1 ]
 %
 
+#
+# overwrites of JadeServer methods that will need to change for JfPwoR
+#
+
+category: 'Rowan3 stub'
+method: JadeServer
+_describeMCOrganizationDefinition: anMCOrganizationDefinition on: aStream packageName: packageName
+	aStream
+		nextPut: $O;
+		tab;
+		nextPutAll: packageName;
+		tab;
+		lf
+%
+
 commit

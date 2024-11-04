@@ -2844,15 +2844,6 @@ breakPointsAreEnabled
 	^SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' ifAbsentPut: [true]
 %
 
-category: 'rsr'
-classmethod: RowanService
-clientClass
-
-	^Rowan platform
-		serviceClassFor: self clientClassName
-		ifAbsent: [Error signal:  'Cannot find client class - ', self clientClassName ]
-%
-
 category: 'autocommit'
 classmethod: RowanService
 flipAutoCommit
@@ -2902,15 +2893,6 @@ sampleService
 	^self new sampleService
 %
 
-category: 'rsr'
-classmethod: RowanService
-serverClass
-
-	^Rowan platform
-		serviceClassFor: self serverClassName
-		ifAbsent: [Error signal:  'Cannot find server class - ', self serverClassName ]
-%
-
 category: 'autocommit'
 classmethod: RowanService
 setAutoCommit: object
@@ -2922,15 +2904,6 @@ category: 'autocommit'
 classmethod: RowanService
 setBreakPointsAreEnabled: boolean
   ^ SessionTemps current at: #'Jadeite_BreakPointsAreEnabled' put: boolean
-%
-
-category: 'rsr'
-classmethod: RowanService
-templateClass
-
-	^Rowan platform
-		serviceClassFor: self templateClassName
-		ifAbsent: [Error signal:  'Cannot find template class - ', self templateClassName ]
 %
 
 category: 'rsr'
@@ -4097,7 +4070,7 @@ basicExec: aString context: oop shouldDebug: shouldDebug
 			^ answer ].
 	shouldDebug
 		ifTrue: [ 
-			tempMethod setBreakAtStepPoint: 1.
+			tempMethod setBreakAtStepPoint: 1 breakpointLevel: 1.
 			RowanDebuggerService new saveProcessOop: GsProcess _current asOop ].
 	[ answer := true -> (tempMethod _executeInContext: object) asOop ]
 		ensure: [ 
@@ -4111,18 +4084,21 @@ basicExec: aString context: oop shouldDebug: shouldDebug
 category: 'client command support'
 method: RowanAnsweringService
 basicExec: aString context: oop shouldDebug: shouldDebug returningString: returnStringBoolean
-	| object symbolList tempMethod result  return |
+	| object symbolList tempMethod result return theString |
 	object := Object _objectForOop: oop.
 	symbolList := Rowan image symbolList.
-	[ tempMethod := aString _compileInContext: object symbolList: symbolList ]
+	shouldDebug
+		ifTrue: [ theString := self addHaltToString: aString ]
+		ifFalse: [theString := aString]. 
+	[ tempMethod := theString _compileInContext: object symbolList: symbolList ]
 		on: CompileError
 		do: [ :ex | 
 			answer := Array with: false with: ex errorDetails with: aString.
 			^ answer ].
 	shouldDebug
 		ifTrue: [ 
-			| theResult |
-			theResult := tempMethod setBreakAtStepPoint: 1 breakpointLevel: 1.
+			"| theResult |
+			theResult := tempMethod setBreakAtStepPoint: 1 breakpointLevel: 1. <<<< Not working if no other bp's in system."
 			RowanDebuggerService new saveProcessOop: GsProcess _current asOop ].
 	[ 
 	result := tempMethod _executeInContext: object.
@@ -12862,6 +12838,22 @@ stonName
 ! Class implementation for 'RowanClientServiceTemplateResolver'
 
 !		Instance methods for 'RowanClientServiceTemplateResolver'
+
+category: 'resolving'
+method: RowanClientServiceTemplateResolver
+clientClassForTemplate: aTemplate ifAbsent: absentBlock
+	^ Rowan platform
+		serviceClassFor: aTemplate clientClassName
+		ifAbsent: [ super clientClassForTemplate: aTemplate ifAbsent: absentBlock ]
+%
+
+category: 'resolving'
+method: RowanClientServiceTemplateResolver
+serverClassForTemplate: aTemplate ifAbsent: absentBlock
+	^ Rowan platform
+		serviceClassFor: aTemplate serverClassName
+		ifAbsent: [ super serverClassForTemplate: aTemplate ifAbsent: absentBlock ]
+%
 
 category: 'resolving'
 method: RowanClientServiceTemplateResolver

@@ -64,7 +64,7 @@ true.
 
 doit
 (RsrError
-	subclass: 'RsrAlreadyRegistered'
+	subclass: 'RsrAlreadyRegisteredWithAnotherConnection'
 	instVarNames: #(service intendedConnection)
 	classVars: #()
 	classInstVars: #()
@@ -587,6 +587,81 @@ true.
 
 doit
 (RsrService
+	subclass: 'RsrAbstractTestTemplate'
+	instVarNames: #(abstractTemplateVariable)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrAbstractTestTemplate
+	subclass: 'RsrTestTemplate'
+	instVarNames: #(templateVariable)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrTestTemplate
+	subclass: 'RsrAbstractTestTemplateClient'
+	instVarNames: #(abstractClientVariable)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrAbstractTestTemplateClient
+	subclass: 'RsrTestTemplateClient'
+	instVarNames: #(clientVariable)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrTestTemplate
+	subclass: 'RsrTestTemplateServer'
+	instVarNames: #(serverVariable)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrService
 	subclass: 'RsrConcurrentTestService'
 	instVarNames: #()
 	classVars: #()
@@ -739,6 +814,66 @@ doit
 	options: #()
 )
 		category: 'RemoteServiceReplication-Platform-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrService
+	subclass: 'RsrNoClientService'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrNoClientService
+	subclass: 'RsrNoClientServiceServer'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrService
+	subclass: 'RsrNoServerService'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrNoServerService
+	subclass: 'RsrNoServerServiceClient'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
 		immediateInvariant.
 true.
 %
@@ -1271,6 +1406,21 @@ true.
 %
 
 doit
+(RsrAbstractTemplateResolver
+	subclass: 'RsrTestTemplateResolver'
+	instVarNames: #(templates)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
 (RsrObject
 	subclass: 'RsrAsyncMournHandler'
 	instVarNames: #(process notifier isActive)
@@ -1288,21 +1438,6 @@ In GemStone, Ephemeron interrupts are serviced on the active thread when the int
 A recursive lock isn''t a safe choice to resolve this problem. We may be part way through updating the registry data structures when we process a removal sparked by an Ephemeron mourn.
 
 This class gets around this issue by processing Ephemeron mourning on a separate and distict thread from all others in the program. It is possible that another process might already be processing events asynchronously. In that event, we notify the calling code. If they choose to continue using RSR, we abort the handler and allow RSR to continue its setup.';
-		immediateInvariant.
-true.
-%
-
-doit
-(RsrObject
-	subclass: 'RsrBufferedSocketStream'
-	instVarNames: #(stream outBuffer writePosition nextToWrite)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'RemoteServiceReplication';
 		immediateInvariant.
 true.
 %
@@ -1971,7 +2106,7 @@ true.
 doit
 (RsrObject
 	subclass: 'RsrLog'
-	instVarNames: #(verbosity sinks)
+	instVarNames: #(verbosity destinations)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1985,7 +2120,7 @@ true.
 
 doit
 (RsrObject
-	subclass: 'RsrLogSink'
+	subclass: 'RsrLogDestination'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -1999,24 +2134,24 @@ true.
 %
 
 doit
-(RsrLogSink
-	subclass: 'RsrCustomSink'
+(RsrLogDestination
+	subclass: 'RsrLogToTranscript'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrLogDestination
+	subclass: 'RsrLogViaBlock'
 	instVarNames: #(action)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'RemoteServiceReplication';
-		immediateInvariant.
-true.
-%
-
-doit
-(RsrLogSink
-	subclass: 'RsrTranscriptSink'
-	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2916,6 +3051,21 @@ true.
 
 doit
 (RsrStream
+	subclass: 'RsrBufferedStream'
+	instVarNames: #(stream outBuffer firstByte nextToWrite)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrStream
 	subclass: 'RsrSocketStream'
 	instVarNames: #(socket)
 	classVars: #()
@@ -3762,12 +3912,12 @@ connection: aConnection
 	connection := aConnection
 %
 
-! Class implementation for 'RsrAlreadyRegistered'
+! Class implementation for 'RsrAlreadyRegisteredWithAnotherConnection'
 
-!		Class methods for 'RsrAlreadyRegistered'
+!		Class methods for 'RsrAlreadyRegisteredWithAnotherConnection'
 
 category: 'instance creation'
-classmethod: RsrAlreadyRegistered
+classmethod: RsrAlreadyRegisteredWithAnotherConnection
 signalService: aService
 intendedConnection: aConnection
 
@@ -3777,31 +3927,31 @@ intendedConnection: aConnection
 		signal
 %
 
-!		Instance methods for 'RsrAlreadyRegistered'
+!		Instance methods for 'RsrAlreadyRegisteredWithAnotherConnection'
 
 category: 'accessing'
-method: RsrAlreadyRegistered
+method: RsrAlreadyRegisteredWithAnotherConnection
 intendedConnection
 
 	^intendedConnection
 %
 
 category: 'accessing'
-method: RsrAlreadyRegistered
+method: RsrAlreadyRegisteredWithAnotherConnection
 intendedConnection: aConnection
 
 	intendedConnection := aConnection
 %
 
 category: 'accessing'
-method: RsrAlreadyRegistered
+method: RsrAlreadyRegisteredWithAnotherConnection
 service
 
 	^service
 %
 
 category: 'accessing'
-method: RsrAlreadyRegistered
+method: RsrAlreadyRegisteredWithAnotherConnection
 service: aService
 
 	service := aService
@@ -4017,41 +4167,6 @@ trace
 		cr
 %
 
-!		Instance methods for 'RsrObject'
-
-category: 'notes'
-method: RsrObject
-flag: aSymbol
-
-	"Send this message, with a relevant symbol as argument, to flag a message for subsequent retrieval.  For example, you might put the following line in a number of messages:
-	self flag: #returnHereUrgently
-	Then, to retrieve all such messages, browse all senders of #returnHereUrgently."
-%
-
-category: 'delaying'
-method: RsrObject
-minimalWait
-	"Ensure the calling process is not schedulable for a short period of time."
-
-	(Delay forMilliseconds: 1) wait
-%
-
-category: 'notes'
-method: RsrObject
-note: aString
-	"This method can be used to leave a note in code. For instance, a code path that needs to be tested."
-%
-
-category: 'tracing'
-method: RsrObject
-trace
-
-	Transcript
-		show: RsrProcessModel currentStackDump;
-		cr;
-		cr
-%
-
 ! Class implementation for 'RsrAbstractPolicy'
 
 !		Instance methods for 'RsrAbstractPolicy'
@@ -4140,13 +4255,6 @@ exception: anException
 
 category: 'accessing'
 classmethod: RsrService
-clientClass
-
-	^RsrClassResolver classNamed: self clientClassName
-%
-
-category: 'accessing'
-classmethod: RsrService
 clientClassName
 
 	^(self templateClassName, 'Client') asSymbol
@@ -4175,23 +4283,9 @@ isTemplateClass
 
 category: 'accessing'
 classmethod: RsrService
-serverClass
-
-	^RsrClassResolver classNamed: self serverClassName
-%
-
-category: 'accessing'
-classmethod: RsrService
 serverClassName
 
 	^(self templateClassName, 'Server') asSymbol
-%
-
-category: 'accessing'
-classmethod: RsrService
-templateClass
-
-	^RsrClassResolver classNamed: self templateClassName
 %
 
 category: 'accessing'
@@ -4334,10 +4428,9 @@ synchronize
 category: 'public-accessing'
 method: RsrService
 template
-	"Returns the template associated with this Service.
-	This method should NOT be redefined."
+	"Returns the template associated with this Service."
 
-	^self _template
+	^_connection templateResolver templateFor: self
 %
 
 category: 'private-accessing'
@@ -4375,12 +4468,15 @@ _synchronize
 	^self
 %
 
-category: 'private-accessing'
-method: RsrService
-_template
-	"Returns the template associated with this Service. General users should use #template."
+! Class implementation for 'RsrTestTemplate'
 
-	^_connection templateResolver templateFor: self
+!		Class methods for 'RsrTestTemplate'
+
+category: 'accessing'
+classmethod: RsrTestTemplate
+templateClassName
+
+	^#RsrTestTemplate
 %
 
 ! Class implementation for 'RsrConcurrentTestService'
@@ -4735,6 +4831,28 @@ service
 	^self
 %
 
+! Class implementation for 'RsrNoClientService'
+
+!		Class methods for 'RsrNoClientService'
+
+category: 'accessing'
+classmethod: RsrNoClientService
+templateClassName
+
+	^#RsrNoClientService
+%
+
+! Class implementation for 'RsrNoServerService'
+
+!		Class methods for 'RsrNoServerService'
+
+category: 'accessing'
+classmethod: RsrNoServerService
+templateClassName
+
+	^#RsrNoServerService
+%
+
 ! Class implementation for 'RsrPolicyRejectedService'
 
 !		Class methods for 'RsrPolicyRejectedService'
@@ -4748,7 +4866,7 @@ templateName: aTemplateName
 	The client will GC and the server will later GC. We don't care to have
 	a server hanging around if we don't need it."
 
-	^self clientClass new
+	^RsrPolicyRejectedServiceClient new
 		sid: aSID;
 		templateName: aTemplateName;
 		yourself
@@ -4820,7 +4938,7 @@ from: anException
 			[[anException tag asString]
 				on: Error
 				do: [:ex | ex return: 'Unable to pack #tag containing an instance of ', anException tag class name]].
-	^self clientClass new
+	^RsrRemoteExceptionClient new
 		exceptionClassName: anException class name;
 		tag: tag;
 		messageText: anException messageText;
@@ -5488,10 +5606,52 @@ templateClassName
 
 category: 'resolving'
 method: RsrAbstractTemplateResolver
+clientClassForTemplate: aTemplate
+	"Lookup the client class for the provided template."
+
+	^self
+		clientClassForTemplate: aTemplate
+		ifAbsent: [ RsrUnknownClass signal: aTemplate clientClassName ]
+%
+
+category: 'resolving'
+method: RsrAbstractTemplateResolver
+clientClassForTemplate: aTemplate
+ifAbsent: absentBlock
+	"Lookup the client class for the provided template."
+	
+	self subclassResponsibility
+%
+
+category: 'resolving'
+method: RsrAbstractTemplateResolver
+serverClassForTemplate: aTemplate
+	"Lookup the server class for the provided template."
+
+	^self
+		serverClassForTemplate: aTemplate
+		ifAbsent: [ RsrUnknownClass signal: aTemplate serverClassName ]
+%
+
+category: 'resolving'
+method: RsrAbstractTemplateResolver
+serverClassForTemplate: aTemplate
+ifAbsent: absentBlock
+	"Lookup the server class for the provided template."
+
+	self subclassResponsibility
+%
+
+category: 'resolving'
+method: RsrAbstractTemplateResolver
 templateFor: aService
 	"Resolve the template associated with the provided Service."
 
-	self subclassResponsibility
+	| template |
+	template := aService class.
+	[template isTemplateClass]
+		whileFalse: [template := template superclass].
+	^template
 %
 
 category: 'resolving'
@@ -5510,8 +5670,7 @@ templateNamed: aTemplateName
 ifAbsent: aBlock
 	"Resolve a template with the provided name."
 
-	self flag: 'This should not send #templateClass. This can go away once ServiceSnapshot wire encoding is updated.'.
-	^(RsrClassResolver classNamed: aTemplateName ifAbsent: aBlock) templateClass
+	self subclassResponsibility
 %
 
 ! Class implementation for 'RsrTemplateResolver'
@@ -5520,14 +5679,24 @@ ifAbsent: aBlock
 
 category: 'resolving'
 method: RsrTemplateResolver
-templateFor: aService
-	"Resolve the template associated with the provided Service."
+clientClassForTemplate: aTemplate
+ifAbsent: absentBlock
+	"Lookup the client class for the provided template."
 
-	| template |
-	template := aService class.
-	[template isTemplateClass]
-		whileFalse: [template := template superclass].
-	^template
+	^RsrClassResolver
+		classNamed: aTemplate clientClassName
+		ifAbsent: absentBlock
+%
+
+category: 'resolving'
+method: RsrTemplateResolver
+serverClassForTemplate: aTemplate
+ifAbsent: absentBlock
+	"Lookup the server class for the provided template."
+
+	^RsrClassResolver
+		classNamed: aTemplate serverClassName
+		ifAbsent: absentBlock
 %
 
 category: 'resolving'
@@ -5536,8 +5705,63 @@ templateNamed: aTemplateName
 ifAbsent: aBlock
 	"Resolve a template with the provided name."
 
-	self flag: 'This should not send #templateClass. This can go away once ServiceSnapshot wire encoding is updated.'.
-	^(RsrClassResolver classNamed: aTemplateName ifAbsent: [^aBlock value]) templateClass
+	^RsrClassResolver
+		classNamed: aTemplateName
+		ifAbsent: aBlock
+%
+
+! Class implementation for 'RsrTestTemplateResolver'
+
+!		Instance methods for 'RsrTestTemplateResolver'
+
+category: 'adding'
+method: RsrTestTemplateResolver
+addTemplate: aTemplate
+
+	^templates add: aTemplate
+%
+
+category: 'resolving'
+method: RsrTestTemplateResolver
+clientClassForTemplate: aTemplate
+ifAbsent: absentBlock
+	"Lookup the client class for the provided template."
+
+	| clientClassName |
+	clientClassName := aTemplate clientClassName.
+	templates do: [:template | template allSubclasses do: [:sc | sc name == clientClassName ifTrue: [^sc]]].
+	^absentBlock value
+%
+
+category: 'initializing'
+method: RsrTestTemplateResolver
+initialize
+
+	super initialize.
+	templates := OrderedCollection new
+%
+
+category: 'resolving'
+method: RsrTestTemplateResolver
+serverClassForTemplate: aTemplate
+ifAbsent: absentBlock
+	"Lookup the server class for the provided template."
+
+	| serverClassName |
+	serverClassName := aTemplate serverClassName.
+	templates do: [:template | template allSubclasses do: [:sc | sc name == serverClassName ifTrue: [^sc]]].
+	^absentBlock value
+%
+
+category: 'resolving'
+method: RsrTestTemplateResolver
+templateNamed: aTemplateName
+ifAbsent: aBlock
+	"Resolve a template with the provided name."
+
+	^templates
+		detect: [:template | template name == aTemplateName]
+		ifNone: aBlock
 %
 
 ! Class implementation for 'RsrAsyncMournHandler'
@@ -5638,116 +5862,6 @@ stop
 		ifTrue:
 			[GsSignalingSocket disableAsyncExceptions.
 			Processor yield]
-%
-
-! Class implementation for 'RsrBufferedSocketStream'
-
-!		Class methods for 'RsrBufferedSocketStream'
-
-category: 'instance creation'
-classmethod: RsrBufferedSocketStream
-on: aSocketStream
-
-	^self new
-		stream: aSocketStream;
-		yourself
-%
-
-!		Instance methods for 'RsrBufferedSocketStream'
-
-category: 'writing'
-method: RsrBufferedSocketStream
-atEnd
-
-	^stream atEnd
-%
-
-category: 'writing'
-method: RsrBufferedSocketStream
-checkAutoFlush
-
-	nextToWrite > 4096
-		ifTrue: [ self flush ]
-%
-
-category: 'writing'
-method: RsrBufferedSocketStream
-close
-
-	stream close
-%
-
-category: 'writing'
-method: RsrBufferedSocketStream
-flush
-
-	writePosition = nextToWrite
-		ifTrue: [^self].
-	stream nextPutAll: (outBuffer copyFrom: writePosition to: nextToWrite - 1).
-	writePosition := nextToWrite := 1.
-	stream flush
-%
-
-category: 'writing'
-method: RsrBufferedSocketStream
-growOutBufferTo: aNumberOfBytes
-
-	| rounding |
-	rounding := ((aNumberOfBytes \\ 4096) + 1) * 4096.
-	outBuffer := outBuffer , (ByteArray new: rounding - outBuffer size)
-%
-
-category: 'initialization'
-method: RsrBufferedSocketStream
-initialize
-
-	super initialize.
-	outBuffer := ByteArray new: 4096.
-	nextToWrite := 1.
-	writePosition := 1
-%
-
-category: 'writing'
-method: RsrBufferedSocketStream
-isConnected
-
-	^stream isConnected
-%
-
-category: 'writing'
-method: RsrBufferedSocketStream
-next
-
-	^self next: 1
-%
-
-category: 'writing'
-method: RsrBufferedSocketStream
-next: aCount
-
-	^stream next: aCount
-%
-
-category: 'writing'
-method: RsrBufferedSocketStream
-nextPutAll: aByteArray
-
-	(outBuffer size >= (aByteArray size + nextToWrite))
-		ifFalse: [self growOutBufferTo: outBuffer size + nextToWrite].
-	outBuffer
-		replaceFrom: nextToWrite
-		to: nextToWrite + aByteArray size - 1
-		with: aByteArray
-		startingAt: 1.
-	nextToWrite := nextToWrite + aByteArray size.
-	self checkAutoFlush
-%
-
-category: 'accessing'
-method: RsrBufferedSocketStream
-stream: aStream
-
-	stream := aStream
 %
 
 ! Class implementation for 'RsrChannel'
@@ -7393,6 +7507,14 @@ defaultPort
 	^61982
 %
 
+category: 'waiting'
+method: RsrInternalSocketConnectionSpecification
+minimalWait
+	"Ensure the calling process is not schedulable for a short period of time."
+
+	(Delay forMilliseconds: 1) wait
+%
+
 ! Class implementation for 'RsrSocketConnectionSpecification'
 
 !		Class methods for 'RsrSocketConnectionSpecification'
@@ -7549,7 +7671,7 @@ waitForConnection
 				[listener close.
 				listener := nil.
 				isWaitingForConnection := false].
-	stream := RsrSocketStream on: socket.
+	stream := socket bufferedSocketStream.
 	handshake := RsrHandshake
 		steps: self handshakeSteps
 		stream: stream.
@@ -7631,7 +7753,7 @@ connect
 	socket
 		connectToHost: self host
 		port: self port.
-	stream := RsrSocketStream on: socket.
+	stream := socket bufferedSocketStream.
 	handshake := RsrHandshake
 		steps: self handshakeSteps
 		stream: stream.
@@ -7998,9 +8120,10 @@ performOver: aStream
 
 category: 'configuring'
 method: RsrLog
-addSink: aLogSink
+addDestination: aLogDestination
+	"Add an additional destination for logs"
 
-	sinks add: aLogSink
+	destinations add: aLogDestination
 %
 
 category: 'logging'
@@ -8041,7 +8164,7 @@ initialize
 
 	super initialize.
 	verbosity := self levelTrace.
-	sinks := OrderedCollection new
+	destinations := OrderedCollection new
 %
 
 category: 'accessing'
@@ -8093,7 +8216,7 @@ level: aLevelString
 
 	| message |
 	message := RsrDateAndTime now printString, '-', aLevelString, '-', aMessage.
-	sinks do: [:each | each write: message]
+	destinations do: [:each | each write: message]
 %
 
 category: 'logging'
@@ -8126,23 +8249,36 @@ warning: aString
 		ifTrue: [self log: aString level: #warning]
 %
 
-! Class implementation for 'RsrLogSink'
+! Class implementation for 'RsrLogDestination'
 
-!		Instance methods for 'RsrLogSink'
+!		Instance methods for 'RsrLogDestination'
 
 category: 'writing'
-method: RsrLogSink
+method: RsrLogDestination
 write: aMessage
 
 	self subclassResponsibility
 %
 
-! Class implementation for 'RsrCustomSink'
+! Class implementation for 'RsrLogToTranscript'
 
-!		Class methods for 'RsrCustomSink'
+!		Instance methods for 'RsrLogToTranscript'
+
+category: 'writing'
+method: RsrLogToTranscript
+write: aMessageString
+
+	Transcript
+		show: aMessageString;
+		cr
+%
+
+! Class implementation for 'RsrLogViaBlock'
+
+!		Class methods for 'RsrLogViaBlock'
 
 category: 'instance creation'
-classmethod: RsrCustomSink
+classmethod: RsrLogViaBlock
 action: aBlock
 
 	^self new
@@ -8150,40 +8286,27 @@ action: aBlock
 		yourself
 %
 
-!		Instance methods for 'RsrCustomSink'
+!		Instance methods for 'RsrLogViaBlock'
 
 category: 'accessing'
-method: RsrCustomSink
+method: RsrLogViaBlock
 action
 
 	^action
 %
 
 category: 'accessing'
-method: RsrCustomSink
+method: RsrLogViaBlock
 action: aBlock
 
 	action := aBlock
 %
 
 category: 'writing'
-method: RsrCustomSink
+method: RsrLogViaBlock
 write: aMessage
 
 	self action value: aMessage
-%
-
-! Class implementation for 'RsrTranscriptSink'
-
-!		Instance methods for 'RsrTranscriptSink'
-
-category: 'writing'
-method: RsrTranscriptSink
-write: aMessageString
-
-	Transcript
-		show: aMessageString;
-		cr
 %
 
 ! Class implementation for 'RsrLogWithPrefix'
@@ -9982,9 +10105,10 @@ category: 'variable utilites'
 classmethod: RsrServiceSnapshot
 reflectedVariablesFor: aService
 
-	| currentClass variables template |
+	| currentClass variables templateResolver template |
 	variables := OrderedCollection new.
-	template := aService _template.
+	templateResolver := aService _connection templateResolver.
+	template := templateResolver templateFor: aService.
 	currentClass := template.
 	[currentClass == RsrService]
 		whileFalse:
@@ -10009,13 +10133,15 @@ category: 'accessing'
 method: RsrServiceSnapshot
 createInstanceRegisteredIn: aConnection
 
-	| instance template |
-	template := aConnection templateResolver templateNamed: self templateName.
+	| templateResolver template instanceClass instance |
+	templateResolver := aConnection templateResolver.
+	template := templateResolver templateNamed: self templateName.
 	((aConnection policy permits: template) or: [template inheritsFrom: RsrReasonService])
 		ifFalse: [RsrServiceRejected signalReason: (RsrPolicyRejectedService sid: sid templateName: templateName)].
-	instance := self shouldCreateServer
-		ifTrue: [template serverClass basicNew]
-		ifFalse: [template clientClass basicNew].
+	instanceClass := self shouldCreateServer
+		ifTrue: [templateResolver serverClassForTemplate: template]
+		ifFalse: [templateResolver clientClassForTemplate: template].
+	instance := instanceClass basicNew.
 	aConnection
 		_register: instance
 		as: self sid.
@@ -10097,7 +10223,7 @@ reifyIn: aConnection
 	| instance referenceStream |
 	instance := self instanceIn: aConnection.
 	(self class reflectedVariablesFor: instance) size = slots size 
-		ifFalse: [ self error: 'Incorrectly encoded instance detected' ].
+		ifFalse: [ self error: 'Expected ', (self class reflectedVariablesFor: instance) size printString, ' value(s) for template ', templateName, ' but received ', slots size printString, ' value(s) instead. Verify peers have compatible template definitions.'  ].
 	referenceStream := ReadStream on: slots.
 	self class reflectedVariableIndicesFor: instance do: [ :index | 
 		instance
@@ -10145,8 +10271,9 @@ category: 'other'
 method: RsrServiceSnapshot
 snapshot: aService
 
-	| template |
-	template := aService _template.
+	| templateResolver template |
+	templateResolver := aService _connection templateResolver.
+	template := templateResolver templateFor: aService.
 	sid := aService _id.
 	templateName := template name.
 	"If I am snapshotting a Client, the Snapshot represents a Server."
@@ -10436,7 +10563,9 @@ method: RsrSocket
 port
 	"Return the port associated with the socket."
 
-	^nativeSocket port
+	^[nativeSocket port]
+    on: SocketError
+    do: [:ex | ex return: 0]
 %
 
 category: 'read/write'
@@ -10570,7 +10699,7 @@ category: 'accessing'
 method: RsrSocketPair
 firstStream
 
-	^self socketStreamClass on: firstSocket
+	^firstSocket bufferedSocketStream
 %
 
 category: 'accessing'
@@ -10591,14 +10720,7 @@ category: 'accessing'
 method: RsrSocketPair
 secondStream
 
-	^self socketStreamClass on: secondSocket
-%
-
-category: 'accessing'
-method: RsrSocketPair
-socketStreamClass
-
-	^(RsrClassResolver classNamed: #RsrSocketStream)
+	^secondSocket bufferedSocketStream
 %
 
 ! Class implementation for 'RsrStream'
@@ -10611,6 +10733,14 @@ atEnd
 	"Answers when the Stream cannot take or provide any additional bytes."
 
 	^self subclassResponsibility
+%
+
+category: 'closing'
+method: RsrStream
+chunkSize
+	"Size of each chunk"
+
+	^16384
 %
 
 category: 'closing'
@@ -10652,6 +10782,124 @@ nextPutAll: aByteArray
 	^self subclassResponsibility
 %
 
+! Class implementation for 'RsrBufferedStream'
+
+!		Class methods for 'RsrBufferedStream'
+
+category: 'instance creation'
+classmethod: RsrBufferedStream
+on: aSocketStream
+
+	^self new
+		stream: aSocketStream;
+		yourself
+%
+
+!		Instance methods for 'RsrBufferedStream'
+
+category: 'writing'
+method: RsrBufferedStream
+atEnd
+
+	^stream atEnd
+%
+
+category: 'writing'
+method: RsrBufferedStream
+checkAutoFlush
+
+	nextToWrite > self flushThreshold
+		ifTrue: [ self flush ]
+%
+
+category: 'writing'
+method: RsrBufferedStream
+close
+
+	stream close
+%
+
+category: 'writing'
+method: RsrBufferedStream
+flush
+
+	firstByte = nextToWrite
+		ifTrue: [^self].
+	stream nextPutAll: (outBuffer copyFrom: firstByte to: nextToWrite - 1).
+	firstByte := nextToWrite := 1.
+	stream flush
+%
+
+category: 'accessing'
+method: RsrBufferedStream
+flushThreshold
+	"After how much data should we automatically flush?"
+
+	^self chunkSize
+%
+
+category: 'writing'
+method: RsrBufferedStream
+growOutBufferTo: aNumberOfBytes
+
+	| rounding |
+	rounding := ((aNumberOfBytes // self chunkSize) + 1) * self chunkSize.
+	outBuffer := outBuffer , (ByteArray new: rounding - outBuffer size)
+%
+
+category: 'initialization'
+method: RsrBufferedStream
+initialize
+
+	super initialize.
+	outBuffer := ByteArray new: self chunkSize.
+	nextToWrite := 1.
+	firstByte := 1
+%
+
+category: 'writing'
+method: RsrBufferedStream
+isConnected
+
+	^stream isConnected
+%
+
+category: 'writing'
+method: RsrBufferedStream
+next
+
+	^self next: 1
+%
+
+category: 'writing'
+method: RsrBufferedStream
+next: aCount
+
+	^stream next: aCount
+%
+
+category: 'writing'
+method: RsrBufferedStream
+nextPutAll: aByteArray
+
+	(outBuffer size >= (aByteArray size + nextToWrite))
+		ifFalse: [self growOutBufferTo: aByteArray size + (nextToWrite - firstByte)].
+	outBuffer
+		replaceFrom: nextToWrite
+		to: nextToWrite + aByteArray size - 1
+		with: aByteArray
+		startingAt: 1.
+	nextToWrite := nextToWrite + aByteArray size.
+	self checkAutoFlush
+%
+
+category: 'accessing'
+method: RsrBufferedStream
+stream: aStream
+
+	stream := aStream
+%
+
 ! Class implementation for 'RsrSocketStream'
 
 !		Class methods for 'RsrSocketStream'
@@ -10673,14 +10921,6 @@ atEnd
 	"Return whether additional bytes could become available on the socket."
 
 	^socket isConnected not
-%
-
-category: 'accessing'
-method: RsrSocketStream
-chunkSize
-	"The largest size that should be read from or written to a Socket in each attempt."
-
-	^4096
 %
 
 category: 'closing'
@@ -12250,6 +12490,33 @@ decodeService: anObjectBytes
 
 category: 'running'
 method: RsrCommandDecoderTest
+testDecodeIncompatibleServiceWithExtraInstVar
+	"Ensure that there is a reasonable error message when decoding failes due to incompatible templates."
+
+	| encoding exception |
+	encoding := 	#[0 0 0 0 0 0 0 0], "type"
+	#[0 0 0 0 0 0 0 1], "referencedService's OID = 1"
+	#[0 0 0 0 0 0 0 1], "Inst Var Count"
+	#[0 0 0 0 0 0 0 0], "Start of service name. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 20], "Length of UTF-8 encoded bytes"
+	#[82 115 114 83 101 114 118 105 99 101 78 111 73 110 115 116 86 97 114 115], "#RsrServiceNoInstVars"
+	#[0 0 0 0 0 0 0 0], "Start of persona. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 6], "Length of UTF-8 encoded bytes"
+	#[115 101 114 118 101 114], "#server"
+	"inst var referencing itself"
+	#[0 0 0 0 0 0 0 1].
+	exception := [self decodeService: encoding]
+		on: Error
+		do: [:ex | ex return: ex].
+	self
+		assert: exception messageText
+		equals: 'Expected 0 value(s) for template RsrServiceNoInstVars but received 1 value(s) instead. Verify peers have compatible template definitions.'
+%
+
+category: 'running'
+method: RsrCommandDecoderTest
 testDeliverResponse
 
 	| service response encoding command decodedService |
@@ -12778,7 +13045,7 @@ testForwarding
 	"This test needs to be improved. It is out of sync."
 
 	| service id connection forwarder sendMessage |
-	service := RsrTestService clientClass new.
+	service := RsrClientTestService new.
 	id := 1.
 	connection := RsrConnection
 		channel: RsrNullChannel new
@@ -13273,8 +13540,8 @@ testMultiPathsToSameService
 	"Tests issue 76, Unnecessary duplicate snapshots being sent."
 
 	| childService parentService orderedCollection analysis |
-	childService := RsrRemoteAction clientClass new.
-	parentService := RsrRemoteAction clientClass sharedVariable:
+	childService := RsrRemoteActionClient new.
+	parentService := RsrRemoteActionClient sharedVariable:
 		                 childService.
 	orderedCollection := OrderedCollection
 		                     with: childService
@@ -13347,7 +13614,7 @@ testServiceAllDataObjects
 	that Data Objects are actually encoded in-line."
 
 	| client analysis expected |
-	client := RsrRemoteAction clientClass new.
+	client := RsrRemoteActionClient new.
 	analysis := self analyze: client.
 	expected := OrderedCollection with: client.
 	self
@@ -13376,7 +13643,7 @@ testServiceNoInstVars
 	snapshotTemplate := connection templateResolver templateNamed: snapshot templateName.
 	self
 		assert: snapshotTemplate
-		equals: client _template
+		equals: RsrServiceNoInstVars
 %
 
 category: 'running'
@@ -13386,8 +13653,8 @@ testServiceReferencingAnotherService
 	that Data Objects are actually encoded in-line."
 
 	| referencedService client analysis |
-	referencedService := RsrRemoteAction clientClass new.
-	client := RsrRemoteAction clientClass sharedVariable: referencedService.
+	referencedService := RsrRemoteActionClient new.
+	client := RsrRemoteActionClient sharedVariable: referencedService.
 	analysis := self analyze: client.
 	self
 		assert: analysis snapshots size
@@ -13483,7 +13750,7 @@ testNextPutAllAfterClose
 	aStream close.
 	self assert: aStream atEnd.
 	self
-		should: [aStream nextPutAll: #[1 2 3]]
+		should: [aStream nextPutAll: #[1 2 3]; flush]
 		raise: RsrSocketClosed
 %
 
@@ -13975,7 +14242,7 @@ testAllowExistingInstancesOfDeniedTemplate
 	value := Time millisecondClockValue.
 
 	"Send a new instance before Policy denies it."
-	allow := template clientClass new.
+	allow := RsrClientNoInstVars new.
 	allow registerWith: connectionA.
 	promise := allow asyncSendReturnArgument: value.
 	result := self expectWhen: promise.
@@ -14003,7 +14270,7 @@ testPolicyRejection
 	value := Time millisecondClockValue.
 
 	"Send a new instance before Policy denies it."
-	allow := template clientClass new.
+	allow := RsrClientNoInstVars new.
 	allow registerWith: connectionA.
 	promise := allow asyncSendReturnArgument: value.
 	result := self expectWhen: promise.
@@ -14013,7 +14280,7 @@ testPolicyRejection
 
 	"Reject the template and try again with a new instance."
 	policy deny: template.
-	reject := template clientClass new.
+	reject := RsrClientNoInstVars new.
 	reject registerWith: connectionA.
 	promise := reject asyncSendReturnArgument: value.
 	reason := self expectCatch: promise.
@@ -14037,11 +14304,11 @@ testPolicyRejectsFrameworkTemplate
 	template := RsrPolicyRejectedService.
 	connectionA policy: policy.
 	connectionB policy: policy.
-	service := RsrServiceNoInstVars clientClass new.
+	service := RsrClientNoInstVars new.
 	service registerWith: connectionA.
 
 	"Send a new instance before Policy denies it."
-	frameworkService := template clientClass new.
+	frameworkService := RsrPolicyRejectedServiceClient new.
 	promise := service asyncSendReturnArgument: frameworkService.
 	result := self expectWhen: promise.
 	self
@@ -14050,7 +14317,7 @@ testPolicyRejectsFrameworkTemplate
 
 	"Ensure it is allowed even if the Policy rejects it."
 	policy deny: template.
-	frameworkService := template clientClass new.
+	frameworkService := RsrPolicyRejectedServiceClient new.
 	promise := service asyncSendReturnArgument: frameworkService.
 	result := self expectWhen: promise.
 	self
@@ -14986,7 +15253,7 @@ method: RsrServiceTest
 testAnalyzeServiceRegisteredWithDifferentConnection
 
 	| instance analysis |
-	instance := RsrRemoteAction clientClass new.
+	instance := RsrRemoteActionClient new.
 	analysis := RsrSnapshotAnalysis
 		roots: (Array with: instance)
 		connection: connectionA.
@@ -14997,7 +15264,42 @@ testAnalyzeServiceRegisteredWithDifferentConnection
 		connection: connectionB.
 	self
 		should: [analysis perform]
-		raise: RsrAlreadyRegistered
+		raise: RsrAlreadyRegisteredWithAnotherConnection
+%
+
+category: 'running'
+method: RsrServiceTest
+testCustomTemplateResolver
+
+	| serviceClass templateClass replicatedService testResolver newService |
+	"Replicate a service initially to verify it continues to function."
+	serviceClass := RsrRemoteActionClient.
+	templateClass := RsrRemoteAction.
+	replicatedService := serviceClass new.
+	replicatedService
+		registerWith: connectionA;
+		synchronize.
+	self
+		assert: (connectionB serviceAt: replicatedService _id) class
+		equals: RsrRemoteActionServer.
+
+	"Set the template resolver to a test resolver which cannot resolve any templates initially."
+	testResolver := RsrTestTemplateResolver new.
+	connectionB templateResolver: testResolver.
+	self "Ensure that the existing service continues to function."
+		shouldnt: [replicatedService synchronize]
+		raise: RsrBrokenPromise.
+	newService := serviceClass new.
+	newService registerWith: connectionA.
+	self
+		should: [newService synchronize]
+		raise: RsrBrokenPromise.
+	
+	"Add the template to the resolver. The service should now replicate successfully."
+	testResolver addTemplate: templateClass.
+	self
+		shouldnt: [newService synchronize]
+		raise: RsrBrokenPromise.
 %
 
 category: 'running'
@@ -15021,7 +15323,7 @@ method: RsrServiceTest
 testHasRemoteSelf
 
 	| service |
-	service := RsrTestService clientClass new.
+	service := RsrClientTestService new.
 	self mirror: service.
 	self deny: nil == service remoteSelf
 %
@@ -15031,7 +15333,7 @@ method: RsrServiceTest
 testInitialization
 
 	| instance |
-	instance := RsrRemoteAction clientClass new.
+	instance := RsrRemoteActionClient new.
 	self
 		assert: instance isMirrored
 		equals: false.
@@ -15048,7 +15350,7 @@ method: RsrServiceTest
 testIsMirrored
 
 	| instance |
-	instance := RsrRemoteAction clientClass new.
+	instance := RsrRemoteActionClient new.
 	self deny: instance isMirrored.
 	self mirror: instance.
 	self assert: instance isMirrored
@@ -15243,40 +15545,33 @@ category: 'running'
 method: RsrServiceTest
 testReflectedVariableNames
 
-	| client server clientNames serverNames |
-	client := RsrClientTestService new
+	| client server expectedNames clientNames serverNames |
+	client := RsrTestTemplateClient new
 		registerWith: connectionA;
 		synchronize.
 	server := connectionB serviceAt: client _id.
+	expectedNames := #(#abstractTemplateVariable #templateVariable) asOrderedCollection.
 	clientNames := RsrServiceSnapshot reflectedVariablesFor: client.
 	serverNames := RsrServiceSnapshot reflectedVariablesFor: server.
 	self
 		assert: clientNames
-		equals: serverNames.
+		equals: expectedNames.
 	self
-		assert: clientNames size
-		equals: 1.
-	self
-		assert: (clientNames at: 1) asSymbol
-		equals: #sharedVariable.
+		assert: serverNames
+		equals: expectedNames.
 	client := RsrReflectedVariableTestClient new
 		registerWith: connectionA;
 		synchronize.
 	server := connectionB serviceAt: client _id.
+	expectedNames := #( #varA #varB ) asOrderedCollection.
 	clientNames := RsrServiceSnapshot reflectedVariablesFor: client.
 	serverNames := RsrServiceSnapshot reflectedVariablesFor: server.
 	self
 		assert: clientNames
-		equals: serverNames.
+		equals: expectedNames.
 	self
-		assert: clientNames size
-		equals: 2.
-	self
-		assert: (clientNames at: 1) asSymbol
-		equals: #varA.
-	self
-		assert: (clientNames at: 2) asSymbol
-		equals: #varB
+		assert: serverNames
+		equals: expectedNames
 %
 
 category: 'running'
@@ -15284,13 +15579,13 @@ method: RsrServiceTest
 testRegisterWith
 
 	| instance |
-	instance := RsrRemoteAction clientClass new.
+	instance := RsrRemoteActionClient new.
 	self deny: instance isMirrored.
 	instance registerWith: connectionA.
 	self assert: instance isMirrored.
 	self
 		should: [instance registerWith: connectionB]
-		raise: RsrAlreadyRegistered
+		raise: RsrAlreadyRegisteredWithAnotherConnection
 %
 
 category: 'running'
@@ -15333,7 +15628,7 @@ method: RsrServiceTest
 testVariableReflection
 
 	| localService remoteService |
-	localService := RsrTestService clientClass new
+	localService := RsrClientTestService new
 		sharedVariable: #shared;
 		privateVariable: #private;
 		yourself.
@@ -15509,8 +15804,8 @@ method: RsrSpeciesEquality
 testService
 
 	| clientClass serverClass |
-	clientClass := RsrRemoteAction clientClass.
-	serverClass := RsrRemoteAction serverClass.
+	clientClass := RsrRemoteActionClient.
+	serverClass := RsrRemoteActionServer.
 	self
 		verify: clientClass new;
 		verify: (clientClass sharedVariable: clientClass new);
@@ -15853,6 +16148,74 @@ resolver
 
 category: 'running'
 method: RsrTemplateResolverTestCase
+testClientClassForTemplate
+
+	| result |
+	result := self resolver clientClassForTemplate: RsrNoServerService.
+	self
+		assert: result
+		equals: RsrNoServerServiceClient.
+	self
+		should: [ self resolver clientClassForTemplate: RsrNoClientService ]
+		raise: RsrUnknownClass
+%
+
+category: 'running'
+method: RsrTemplateResolverTestCase
+testClientClassForTemplateIfAbsent
+
+	| marker result |
+	marker := Object new.
+	result := self resolver
+		clientClassForTemplate: RsrNoServerService
+		ifAbsent: [ marker ].
+	self
+		assert: result
+		equals: RsrNoServerServiceClient.
+	result := self resolver
+		clientClassForTemplate: RsrNoClientService
+		ifAbsent: [ marker ].
+	self
+		assert: result
+		equals: marker
+%
+
+category: 'running'
+method: RsrTemplateResolverTestCase
+testServerClassForTemplate
+
+	| result |
+	result := self resolver serverClassForTemplate: RsrNoClientService.
+	self
+		assert: result
+		equals: RsrNoClientServiceServer.
+	self
+		should: [ self resolver serverClassForTemplate: RsrNoServerService ]
+		raise: RsrUnknownClass
+%
+
+category: 'running'
+method: RsrTemplateResolverTestCase
+testServerClassForTemplateIfAbsent
+
+	| marker result |
+	marker := Object new.
+	result := self resolver
+		serverClassForTemplate: RsrNoClientService
+		ifAbsent: [ marker ].
+	self
+		assert: result
+		equals: RsrNoClientServiceServer.
+	result := self resolver
+		serverClassForTemplate: RsrNoServerService
+		ifAbsent: [ marker ].
+	self
+		assert: result
+		equals: marker
+%
+
+category: 'running'
+method: RsrTemplateResolverTestCase
 testTemplateFor
 
 	| service template |
@@ -15917,14 +16280,16 @@ category: 'cleanup'
 method: RsrTemplateResolverWithClassVersions
 tearDown
 
-	RsrService
+	[RsrService
 		rwSubclass: 'RsrVersionService'
 		instVarNames: #()
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
 		category: 'RemoteServiceReplication-GemStone-Test'
-		options: #().
+		options: #().]
+    on: SecurityError "Ignore errors indicating we cannot version the test class."
+    do: [:ex | ex return].
 	super tearDown
 %
 
@@ -15934,20 +16299,22 @@ testVersionClassAfterCreatingService
 
 	| template service result |
 	template := RsrVersionService.
-	service := template clientClass new.
+	service := RsrVersionServiceClient new.
 	result := self resolver templateFor: service.
 	self
 		assert: result
 		identicalTo: template.
 	"Revision the Service class and Template"
-	RsrService
+	[RsrService
 		rwSubclass: 'RsrVersionService'
-		instVarNames: {'a' + Time millisecondClockValue printString}
+		instVarNames: {'a', Time millisecondClockValue printString}
 		classVars: #()
 		classInstVars: #()
 		poolDictionaries: #()
 		category: 'RemoteServiceReplication-GemStone-Test'
-		options: #().
+		options: #().]
+    on: SecurityError "This user does not have permissions to alter this class. Skip the test."
+    do: [:ex | ^self].
 	result := self resolver templateFor: service.
 	self
 		assert: result
@@ -15955,7 +16322,7 @@ testVersionClassAfterCreatingService
 	self
 		deny: result
 		identicalTo: RsrVersionService.
-	result := self resolver templateFor: RsrVersionService clientClass new.
+	result := self resolver templateFor: RsrVersionServiceClient new.
 	self
 		assert: result
 		identicalTo: RsrVersionService
@@ -16261,7 +16628,7 @@ _ensureRegistered: aService
 			aService postRegistration.
 			^ self ].
 	aService _connection == self
-		ifFalse: [ ^ RsrAlreadyRegistered signalService: aService intendedConnection: self ]
+		ifFalse: [ ^ RsrAlreadyRegisteredWithAnotherConnection signalService: aService intendedConnection: self ]
 %
 
 category: '*remoteservicereplication'
@@ -16601,15 +16968,21 @@ initializeReferenceMapping
 	referenceMapping
 		at: String
 		put: RsrStringReference.
-    referenceMapping
-        at: Unicode7
-        put: RsrStringReference.
-    referenceMapping
-        at: DoubleByteString
-        put: RsrStringReference.
-    referenceMapping
-        at: QuadByteString
-        put: RsrStringReference.
+	referenceMapping
+		at: Unicode7
+		put: RsrStringReference.
+	referenceMapping
+		at: Unicode16
+		put: RsrStringReference.
+	referenceMapping
+		at: Unicode32
+		put: RsrStringReference.
+	referenceMapping
+		at: DoubleByteString
+		put: RsrStringReference.
+	referenceMapping
+		at: QuadByteString
+		put: RsrStringReference.
 	referenceMapping
 		at: LargeInteger
 		put: RsrIntegerReference.
@@ -16664,6 +17037,26 @@ referenceClassFor: anObject
 	^self referenceMapping
 		at: anObject class
 		ifAbsent: [RsrUnsupportedObject signal: anObject]
+%
+
+! Class extensions for 'RsrSocket'
+
+!		Instance methods for 'RsrSocket'
+
+category: '*RemoteServiceReplication'
+method: RsrSocket
+bufferedSocketStream
+	"Return a SocketStream on the receiver"
+	
+	^RsrBufferedStream on: self socketStream
+%
+
+category: '*RemoteServiceReplication'
+method: RsrSocket
+socketStream
+	"Return a SocketStream on the receiver"
+	
+	^RsrSocketStream on: self
 %
 
 ! Class extensions for 'RsrToken'

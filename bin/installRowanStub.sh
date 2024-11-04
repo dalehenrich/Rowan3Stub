@@ -3,9 +3,13 @@ set -ex
 
 export ROWAN_PROJECTS_HOME=/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st/
 
-extentType="base"
-extentType="tode"
-extentType="seaside"
+if [ "$*" = "seaside" ]; then
+	extentType="seaside"
+elif [ "$*" = "tode" ]; then
+ 	extentType="tode"
+else
+	extentType="base"
+fi
 
 topazini_systemuser=".topazini_SU"
 topazini_seaside=".topazini_DC"
