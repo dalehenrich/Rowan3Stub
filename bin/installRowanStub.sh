@@ -3,23 +3,29 @@ set -ex
 
 export ROWAN_PROJECTS_HOME=/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st/
 
-if [ "$*" = "seaside" ]; then
+extentType=$1
+stoneName=$2
+if [ "$extentType" = "" ]; then
 	extentType="seaside"
-elif [ "$*" = "tode" ]; then
  	extentType="tode"
-else
 	extentType="base"
 fi
+if [ "$stoneName" = "" ]; then
+	echo "missing stone name (argument 2"
+	exit 1
+fi
+
+echo "extentType=$extentType stoneName=$stoneName"
 
 topazini_systemuser=".topazini_SU"
 topazini_seaside=".topazini_DC"
 
 if [ $extentType = "tode" ]; then
-	newExtent.solo -r tode -e snapshots/extent0.10-28-2024_14:21:33_tode_virgin.dbf tode_3.7.2_j
+	newExtent.solo -r tode -e snapshots/extent0.10-28-2024_14:21:33_tode_virgin.dbf $stoneName
 elif [ $extentType = "seaside" ]; then
-	newExtent.solo -r 37x -e product/bin/extent0.seaside.dbf battery_j
+	newExtent.solo -r 37x -e product/bin/extent0.seaside.dbf $stoneName
 else
-	newExtent.solo -r 37x -e product/bin/extent0.dbf battery_j
+	newExtent.solo -r 37x -e product/bin/extent0.dbf $stoneName
 fi
 
 startNetldi.solo -r
