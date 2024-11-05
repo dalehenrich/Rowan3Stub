@@ -66,21 +66,6 @@ Rowan3ImageStub >> loadedProjectNamed: aString ifPresent: presentBlock ifAbsent:
 	^ presentBlock cull: loadedProject
 ]
 
-{ #category : 'accessing' }
-Rowan3ImageStub >> loadedProjects [
-	^ UserGlobals
-		at: #'Rowan3StubUserLoadedProjects'
-		ifAbsent: [ 
-			UserGlobals
-				at: #'Rowan3StubUserLoadedProjects'
-				put:
-					(IdentitySet
-						with:
-							(Rowan3MonticelloLoadedProjectStub new
-								name: Rowan3MonticelloLoadedProjectStub monticelloProjectName;
-								yourself)) ]
-]
-
 { #category : 'querying' }
 Rowan3ImageStub >> objectNamed: aSymbol [
 	"Returns the first object in the current session's symbol list that has the given
@@ -96,14 +81,6 @@ Rowan3ImageStub >> packageNames [
 	self loadedProjects
 		do: [ :loadedProject | packageNames addAll: loadedProject packageNames ].
 	^ packageNames asArray
-]
-
-{ #category : 'querying' }
-Rowan3ImageStub >> packageNamesForLoadedProjectNamed: projectName [
-	projectName = Rowan3MonticelloLoadedProjectStub monticelloProjectName
-		ifFalse: [ self error: 'unexpected projectName: ' projectName ].
-	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc packageName ]) sort
 ]
 
 { #category : 'querying' }

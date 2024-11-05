@@ -40,7 +40,22 @@ input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/GemStoneInteractions.gs
 
 input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
 
+# install Monticello package support for Rowan3Stub
 run
+| filePath |
+(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'base'
+	ifTrue: [ ].
+(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside'
+	ifTrue: [
+		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath.
+].
+(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'
+	ifTrue: [
+		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath.
+].
+
 Published at: #Rowan put: Rowan3Stub new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
 %
