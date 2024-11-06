@@ -4,7 +4,6 @@ RwLoadComponent {
 	#componentNames : [ ],
 	#packageNames : [
 		'Rowan3Stub-Core',
-		'Rowan3Stub-Monticello',
 		'Rowan3Stub-Services'
 	],
 	#comment : ''

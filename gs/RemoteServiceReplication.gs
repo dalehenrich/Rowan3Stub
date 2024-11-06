@@ -1846,7 +1846,7 @@ true.
 doit
 (RsrSocketConnectionSpecification
 	subclass: 'RsrAcceptConnection'
-	instVarNames: #(listener isListening isWaitingForConnection)
+	instVarNames: #(portRange listener isListening isWaitingForConnection)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2368,7 +2368,7 @@ doit
 	subclass: 'RsrReference'
 	instVarNames: #()
 	classVars: #()
-	classInstVars: #(referenceMapping)
+	classInstVars: #()
 	poolDictionaries: #()
 	inDictionary: Globals
 	options: #()
@@ -3207,22 +3207,6 @@ doit
 	options: #()
 )
 		category: 'RemoteServiceReplication';
-		immediateInvariant.
-true.
-%
-
-doit
-(Object
-	subclass: 'RsrPlatformInitializer'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'RemoteServiceReplication';
-		comment: 'Does load-time initialization of any class instance variables of classes defined in Base but that have platform-specific contents and thus can''t be initialized by their own package, and can''t be lazily initialized because that fails on GemStone for non-privileged users.';
 		immediateInvariant.
 true.
 %
@@ -7521,13 +7505,9 @@ minimalWait
 
 category: 'instance creation'
 classmethod: RsrSocketConnectionSpecification
-host: hostnameOrAddress
-port: port
+host: hostnameOrAddress port: port
 
-	^self new
-		host: hostnameOrAddress;
-		port: port;
-		yourself
+	^ self subclassResponsibility
 %
 
 !		Instance methods for 'RsrSocketConnectionSpecification'
@@ -7578,11 +7558,36 @@ socketClass
 
 category: 'instance creation'
 classmethod: RsrAcceptConnection
+host: hostnameOrAddress port: portNumber
+
+	^ self new
+		  host: hostnameOrAddress;
+		  portRange: (portNumber to: portNumber);
+		  yourself
+%
+
+category: 'instance creation'
+classmethod: RsrAcceptConnection
+host: hostnameOrAddress portRange: anInterval
+
+	^ self new
+		  host: hostnameOrAddress;
+		  portRange: anInterval;
+		  yourself
+%
+
+category: 'instance creation'
+classmethod: RsrAcceptConnection
 port: aPortInteger
 
-	^super
-		host: self wildcardAddress
-		port: aPortInteger
+	^ self host: self wildcardAddress port: aPortInteger
+%
+
+category: 'instance creation'
+classmethod: RsrAcceptConnection
+portRange: anInterval
+
+	^ self host: self wildcardAddress portRange: anInterval
 %
 
 category: 'accessing'
@@ -7601,6 +7606,22 @@ wildcardPort
 
 !		Instance methods for 'RsrAcceptConnection'
 
+category: 'private'
+method: RsrAcceptConnection
+bind
+
+	"Attempt to listen on each of the port range, answer the successful port or signal RsrInvalidBind"
+
+	portRange do: [ :portToTry | 
+		[ 
+		listener bindAddress: self host port: portToTry.
+		^ portToTry ]
+			on: RsrInvalidBind
+			do: [ :ex | ex return ] ].
+	RsrInvalidBind signal:
+		'Cannot bind to any port in range ' , portRange printString
+%
+
 category: 'actions'
 method: RsrAcceptConnection
 cancelWaitForConnection
@@ -7613,10 +7634,8 @@ method: RsrAcceptConnection
 ensureListening
 
 	isListening ifTrue: [^self].
-	listener
-		bindAddress: self host
-		port: self port.
-	listener listen: 1.
+	self bind.
+	listener listen: 5.
 	isListening := true
 %
 
@@ -7655,6 +7674,20 @@ listeningPort
 
 	isListening ifFalse: [^nil].
 	^listener port
+%
+
+category: 'accessing'
+method: RsrAcceptConnection
+portRange
+
+	^ portRange
+%
+
+category: 'accessing'
+method: RsrAcceptConnection
+portRange: anObject
+
+	portRange := anObject
 %
 
 category: 'actions'
@@ -7741,6 +7774,18 @@ token: aToken
 %
 
 ! Class implementation for 'RsrInitiateConnection'
+
+!		Class methods for 'RsrInitiateConnection'
+
+category: 'instance creation'
+classmethod: RsrInitiateConnection
+host: hostnameOrAddress port: port
+
+	^ self new
+		  host: hostnameOrAddress;
+		  port: port;
+		  yourself
+%
 
 !		Instance methods for 'RsrInitiateConnection'
 
@@ -8922,13 +8967,6 @@ from: anObject
 	| referenceClass |
 	referenceClass := self referenceClassFor: anObject.
 	^referenceClass from: anObject
-%
-
-category: 'accessing'
-classmethod: RsrReference
-referenceMapping
-
-	^referenceMapping
 %
 
 category: 'accessing'
@@ -10564,8 +10602,8 @@ port
 	"Return the port associated with the socket."
 
 	^[nativeSocket port]
-    on: SocketError
-    do: [:ex | ex return: 0]
+		on: SocketError
+		do: [:ex | ex return: 0]
 %
 
 category: 'read/write'
@@ -10614,6 +10652,9 @@ _nativeSocket: aGsSignalingSocket
 	"Private - Configure w/ a platform socket"
 
 	nativeSocket := aGsSignalingSocket.
+	nativeSocket
+		option: 'NODELAY'
+		put: true.
 	nativeSocket interrupting: true
 %
 
@@ -11442,17 +11483,6 @@ method: RsrTokenRejected
 wasAccepted
 
 	^false
-%
-
-! Class implementation for 'RsrPlatformInitializer'
-
-!		Class methods for 'RsrPlatformInitializer'
-
-category: 'class initialization'
-classmethod: RsrPlatformInitializer
-initialize
-
-	RsrReference initializeReferenceMapping
 %
 
 ! Class implementation for 'RsrProcessModel'
@@ -12892,22 +12922,127 @@ method: RsrConnectionSpecificationTestCase
 testAcceptOnLocalhost
 
 	| acceptor initiator semaphore connectionA connectionB |
-	acceptor := RsrAcceptConnection
-		host: self localhost 
-		port: self port.
+	acceptor := RsrAcceptConnection host: self localhost port: self port.
+	acceptor ensureListening.
+	self assert: acceptor listeningPort equals: self port.
 	initiator := RsrInitiateConnection
-		host: self localhost
-		port: self port.
+		             host: self localhost
+		             port: self port.
 	semaphore := Semaphore new.
 	RsrProcessModel
-		fork: [[connectionA := acceptor waitForConnection] ensure: [semaphore signal]] named: 'Pending AcceptConnection';
-		fork: [[connectionB := initiator connect] ensure: [semaphore signal]] named: 'Pending InitiateConnection'.
-	semaphore wait; wait.
+		fork: [ 
+			[ connectionA := acceptor waitForConnection ] ensure: [ 
+					semaphore signal ] ]
+		named: 'Pending AcceptConnection';
+		fork: [ 
+			[ connectionB := initiator connect ] ensure: [ semaphore signal ] ]
+		named: 'Pending InitiateConnection'.
+	semaphore
+		wait;
+		wait.
 	self
 		assert: connectionA isOpen;
 		assert: connectionB isOpen.
 	connectionA close.
 	connectionB close
+%
+
+category: 'running'
+method: RsrConnectionSpecificationTestCase
+testBindToAvailablePortRange
+
+	"If no one is listening on self port, we should get that port."
+
+	| acceptor initiator semaphore connectionA connectionB |
+	acceptor := RsrAcceptConnection
+		            host: self localhost
+		            portRange: (self port to: self port + 1).
+	acceptor ensureListening.
+	self assert: acceptor listeningPort equals: self port.
+	initiator := RsrInitiateConnection
+		             host: self localhost
+		             port: acceptor listeningPort.
+	semaphore := Semaphore new.
+	RsrProcessModel
+		fork: [ 
+			[ connectionA := acceptor waitForConnection ] ensure: [ 
+					semaphore signal ] ]
+		named: 'Pending AcceptConnection';
+		fork: [ 
+			[ connectionB := initiator connect ] ensure: [ semaphore signal ] ]
+		named: 'Pending InitiateConnection'.
+	semaphore
+		wait;
+		wait.
+	self
+		assert: connectionA isOpen;
+		assert: connectionB isOpen.
+	connectionA close.
+	connectionB close
+%
+
+category: 'running'
+method: RsrConnectionSpecificationTestCase
+testBindToPartlyAvailablePortRange
+
+	"Listen on first port to force range to listen on second port."
+
+	| blocker acceptor initiator semaphore connectionA connectionB |
+	blocker := RsrAcceptConnection host: self localhost port: self port.
+	[ 
+	blocker ensureListening.
+	self assert: blocker listeningPort equals: self port.
+	acceptor := RsrAcceptConnection
+		            host: self localhost
+		            portRange: (self port to: self port + 1).
+	acceptor ensureListening.
+	self assert: acceptor listeningPort equals: self port + 1.
+	initiator := RsrInitiateConnection
+		             host: self localhost
+		             port: acceptor listeningPort.
+	semaphore := Semaphore new.
+	RsrProcessModel
+		fork: [ 
+			[ connectionA := acceptor waitForConnection ] ensure: [ 
+					semaphore signal ] ]
+		named: 'Pending AcceptConnection';
+		fork: [ 
+			[ connectionB := initiator connect ] ensure: [ semaphore signal ] ]
+		named: 'Pending InitiateConnection'.
+	semaphore
+		wait;
+		wait.
+	self
+		assert: connectionA isOpen;
+		assert: connectionB isOpen.
+	connectionA close.
+	connectionB close ] ensure: [ blocker cancelWaitForConnection ]
+%
+
+category: 'running'
+method: RsrConnectionSpecificationTestCase
+testBindToUnavailablePortRange
+
+	"Listen on both ports in range -- range should then fail."
+
+	| blocker1 blocker2 acceptor |
+	blocker1 := RsrAcceptConnection host: self localhost port: self port.
+	blocker2 := RsrAcceptConnection
+		            host: self localhost
+		            port: self port + 1.
+	[ 
+	blocker1 ensureListening.
+	self assert: blocker1 listeningPort equals: self port.
+	blocker2 ensureListening.
+	self assert: blocker2 listeningPort equals: self port + 1.
+	acceptor := RsrAcceptConnection
+		            host: self localhost
+		            portRange: (self port to: self port + 1).
+	self should: [ acceptor ensureListening ] raise: RsrInvalidBind ] 
+		ensure: [ 
+			{ 
+				blocker1.
+				blocker2 } do: [ :each | each cancelWaitForConnection ] ]
 %
 
 category: 'running'
@@ -14006,17 +14141,6 @@ testPartialRead
 	self
 		assert: readBuffer
 		equals: writeBuffer
-%
-
-category: 'running'
-method: RsrSocketTestCase
-testPort
-
-	| socket |
-	socket := self newSocket.
-	self
-		assert: socket port
-		equals: 0
 %
 
 category: 'running-read/write'
@@ -16952,91 +17076,76 @@ currentStackDump
 
 category: '*remoteservicereplication-gemstone'
 classmethod: RsrReference
-initializeReferenceMapping
-	"RsrReference initializeReferenceMapping"
-
-	referenceMapping := Dictionary new.
-	referenceMapping
-		at: Symbol
-		put: RsrSymbolReference.
-	referenceMapping
-		at: DoubleByteSymbol
-		put: RsrSymbolReference.
-	referenceMapping
-		at: QuadByteSymbol
-		put: RsrSymbolReference.
-	referenceMapping
-		at: String
-		put: RsrStringReference.
-	referenceMapping
-		at: Unicode7
-		put: RsrStringReference.
-	referenceMapping
-		at: Unicode16
-		put: RsrStringReference.
-	referenceMapping
-		at: Unicode32
-		put: RsrStringReference.
-	referenceMapping
-		at: DoubleByteString
-		put: RsrStringReference.
-	referenceMapping
-		at: QuadByteString
-		put: RsrStringReference.
-	referenceMapping
-		at: LargeInteger
-		put: RsrIntegerReference.
-	referenceMapping
-		at: SmallInteger
-		put: RsrIntegerReference.
-	referenceMapping
-		at: Character
-		put: RsrCharacterReference.
-	referenceMapping
-		at: UndefinedObject
-		put: RsrNilReference.
-	referenceMapping
-		at: Boolean
-		put: RsrTrueReference.
-	referenceMapping
-		at: Array
-		put: RsrArrayReference.
-	referenceMapping
-		at: ByteArray
-		put: RsrByteArrayReference.
-	referenceMapping
-		at: Set
-		put: RsrSetReference.
-	referenceMapping
-		at: OrderedCollection
-		put: RsrOrderedCollectionReference.
-	referenceMapping
-		at: Dictionary
-		put: RsrDictionaryReference.
-	referenceMapping
-		at: DateAndTime
-		put: RsrDateAndTimeReference.
-	referenceMapping
-		at: SmallDateAndTime
-		put: RsrDateAndTimeReference.
-	referenceMapping
-		at: SmallDouble
-		put: RsrDoubleReference.
-	referenceMapping
-		at: Float
-		put: RsrDoubleReference.
-	^referenceMapping
-%
-
-category: '*remoteservicereplication'
-classmethod: RsrReference
 referenceClassFor: anObject
+	"This method is called for each object in the transitive closure of a send to #remoteSelf.
 
+	This implementation takes advantage of open-coded selectors. Testing in Pharo showed this
+	is 2.5x faster than a Dictionary lookup. This multiplier is likely different in GemStone
+	but hasn't be tested."
+
+	| oc |
+	oc := anObject class.
+
+	"Text"
+	oc == Symbol
+		ifTrue: [^RsrSymbolReference].
+	oc == DoubleByteSymbol
+		ifTrue: [^RsrSymbolReference].
+	oc == QuadByteSymbol
+		ifTrue: [^RsrSymbolReference].
+	oc == String
+		ifTrue: [^RsrStringReference].
+	oc == Unicode7
+		ifTrue: [^RsrStringReference].
+	oc == Unicode16
+		ifTrue: [^RsrStringReference].
+	oc == Unicode32
+		ifTrue: [^RsrStringReference].
+	oc == DoubleByteString
+		ifTrue: [^RsrStringReference].
+	oc == QuadByteString
+		ifTrue: [^RsrStringReference].
+	oc == Character
+		ifTrue: [^RsrCharacterReference].
+
+	"Numbers"
+	oc == LargeInteger
+		ifTrue: [^RsrIntegerReference].
+	oc == SmallInteger
+		ifTrue: [^RsrIntegerReference].
+	oc == SmallDouble
+		ifTrue: [^RsrDoubleReference].
+	oc == Float
+		ifTrue: [^RsrDoubleReference].
+
+	"Keywords"
+	oc == UndefinedObject
+		ifTrue: [^RsrNilReference].
+	oc == Boolean
+		ifTrue: [^RsrTrueReference].
+
+	"Collections"
+	oc == Array
+		ifTrue: [^RsrArrayReference].
+	oc == ByteArray
+		ifTrue: [^RsrByteArrayReference].
+	oc == Set
+		ifTrue: [^RsrSetReference].
+	oc == OrderedCollection
+		ifTrue: [^RsrOrderedCollectionReference].
+	oc == Dictionary
+		ifTrue: [^RsrDictionaryReference].
+	oc == DateAndTime
+		ifTrue: [^RsrDateAndTimeReference].
+	oc == SmallDateAndTime
+		ifTrue: [^RsrDateAndTimeReference].
+
+	"Services"
 	(anObject isKindOf: RsrService)
 		ifTrue: [^RsrServiceReference].
-	^self referenceMapping
-		at: anObject class
-		ifAbsent: [RsrUnsupportedObject signal: anObject]
+
+	"Unsupported"
+	^RsrUnsupportedObject signal: anObject
 %
 
 ! Class extensions for 'RsrSocket'
@@ -17078,9 +17187,3 @@ newRandom
 	^self bytes: bytes
 %
 
-! Class Initialization
-
-run
-RsrPlatformInitializer initialize.
-true
-%

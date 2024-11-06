@@ -1,33 +1,28 @@
 Class {
-	#name : 'Rowan3MonticelloLoadedPackageStub',
+	#name : 'Rowan3BaseLoadedPackageStub',
 	#superclass : 'Rowan3LoadedPackageStub',
 	#category : 'Rowan3Stub-Core'
 }
 
 { #category : 'accessing' }
-Rowan3MonticelloLoadedPackageStub >> gs_symbolDictionary [
+Rowan3BaseLoadedPackageStub >> gs_symbolDictionary [
 	^ #'UserGlobals'
 ]
 
 { #category : 'accessing' }
-Rowan3MonticelloLoadedPackageStub >> loadedClasses [
-	| theLoadedClasses classes organizer |
+Rowan3BaseLoadedPackageStub >> loadedClasses [
+	| theLoadedClasses |
 	theLoadedClasses := KeyValueDictionary new.
-	classes := IdentitySet new.
-	organizer := ClassOrganizer new.
-	((GsSession currentSession objectNamed: #'MCPackage') named: self name)
-		packageInfo systemCategories
-		do: [ :cat | 
-			(organizer categories at: cat)
-				do: [ :aClass | 
-					theLoadedClasses
-						at: aClass name
-						put: (Rowan3LoadedClassStub new theClass: aClass) ] ].
+	(ClassOrganizer new categories at: self name ifAbsent: [ ^ theLoadedClasses ])
+		do: [ :aClass | 
+			theLoadedClasses
+				at: aClass name
+				put: (Rowan3LoadedClassStub new theClass: aClass) ].
 	^ theLoadedClasses
 ]
 
 { #category : 'accessing' }
-Rowan3MonticelloLoadedPackageStub >> loadedClassExtensions [
+Rowan3BaseLoadedPackageStub >> loadedClassExtensions [
 	| theExtendedClasses packageInfo extensionClasses |
 	theExtendedClasses := KeyValueDictionary new.
 	extensionClasses := IdentitySet new.
@@ -43,6 +38,6 @@ Rowan3MonticelloLoadedPackageStub >> loadedClassExtensions [
 ]
 
 { #category : 'accessing' }
-Rowan3MonticelloLoadedPackageStub >> projectName [
-	^ Rowan3MonticelloLoadedProjectStub monticelloProjectName
+Rowan3BaseLoadedPackageStub >> projectName [
+	^ Rowan3BaseLoadedProjectStub baseProjectName
 ]

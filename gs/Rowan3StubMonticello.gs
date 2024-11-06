@@ -44,13 +44,18 @@ gs_symbolDictionary
 category: 'accessing'
 method: Rowan3MonticelloLoadedPackageStub
 loadedClasses
-	| theLoadedClasses |
+	| theLoadedClasses classes organizer |
 	theLoadedClasses := KeyValueDictionary new.
-	(ClassOrganizer new categories at: self name ifAbsent: [ ^ theLoadedClasses ])
-		do: [ :aClass | 
-			theLoadedClasses
-				at: aClass name
-				put: (Rowan3LoadedClassStub new theClass: aClass) ].
+	classes := IdentitySet new.
+	organizer := ClassOrganizer new.
+	((GsSession currentSession objectNamed: #'MCPackage') named: self name)
+		packageInfo systemCategories
+		do: [ :cat | 
+			(organizer categories at: cat)
+				do: [ :aClass | 
+					theLoadedClasses
+						at: aClass name
+						put: (Rowan3LoadedClassStub new theClass: aClass) ] ].
 	^ theLoadedClasses
 %
 

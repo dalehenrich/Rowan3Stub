@@ -271,7 +271,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanClassService'
-	instVarNames: #(name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName hasSubclasses)
+	instVarNames: #(name comment instVarNames classVarNames classInstVarNames superclassName subclassType poolDictionaryNames classType meta isExtension version versions oop template filters filterType methods selectedPackageServices packageName definedPackageName selectedMethods projectName hierarchyServices variables categories isTestCase expand visibleTests isNewClass updateAfterCommand isInSymbolList dictionaryName wasRemoved renamedName hasSubclasses classCategory)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -598,7 +598,7 @@ true.
 doit
 (RowanService
 	subclass: 'RowanDictionaryService'
-	instVarNames: #(name classes hierarchyServices globals defaultTemplate testClasses)
+	instVarNames: #(name classes hierarchyServices globals defaultTemplate testClasses classCategories)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3752,6 +3752,7 @@ setDebugActionBlock
 					debuggerResult = #'terminate'
 						ifTrue: [ 
 							self postCommandExecution.
+							RowanBrowserService new unsetSecretBreakpoint. 
 							ex tag: #'rsrProcessTerminated'.
 							RsrUnhandledException signal: ex	"stop processing the exception but let rsr return" ].
 					ex resume ]
@@ -4084,21 +4085,18 @@ basicExec: aString context: oop shouldDebug: shouldDebug
 category: 'client command support'
 method: RowanAnsweringService
 basicExec: aString context: oop shouldDebug: shouldDebug returningString: returnStringBoolean
-	| object symbolList tempMethod result return theString |
+	| object symbolList tempMethod result return  |
 	object := Object _objectForOop: oop.
 	symbolList := Rowan image symbolList.
-	shouldDebug
-		ifTrue: [ theString := self addHaltToString: aString ]
-		ifFalse: [theString := aString]. 
-	[ tempMethod := theString _compileInContext: object symbolList: symbolList ]
+	[ tempMethod := aString _compileInContext: object symbolList: symbolList ]
 		on: CompileError
 		do: [ :ex | 
 			answer := Array with: false with: ex errorDetails with: aString.
 			^ answer ].
 	shouldDebug
 		ifTrue: [ 
-			"| theResult |
-			theResult := tempMethod setBreakAtStepPoint: 1 breakpointLevel: 1. <<<< Not working if no other bp's in system."
+			| theResult |
+			theResult := tempMethod setBreakAtStepPoint: 1 breakpointLevel: 1. 
 			RowanDebuggerService new saveProcessOop: GsProcess _current asOop ].
 	[ 
 	result := tempMethod _executeInContext: object.
@@ -5727,6 +5725,19 @@ selectedClass: object
 
 category: 'client commands'
 method: RowanBrowserService
+turnOffNativeCode
+	"setting a breakpoint anywhere in the system will turn off native code"
+
+	| methodService |
+	methodService := RowanMethodService new
+		selector: #'methodForTurningOffNativeCode';
+		meta: false;
+		className: 'RowanBrowserServiceServer'.
+	methodService setBreakAt: 1.
+%
+
+category: 'client commands'
+method: RowanBrowserService
 unloadProjectsNamed: projectNames
 	projectNames do: [ :projectName | (RwProject newNamed: projectName) unload ].
 	self updateProjects
@@ -5734,12 +5745,28 @@ unloadProjectsNamed: projectNames
 
 category: 'client commands'
 method: RowanBrowserService
-updateDictionaries
+unsetSecretBreakpoint
+	"used for turning off native code"
 
-	dictionaries := Rowan image symbolList names collect:[:name | RowanDictionaryService new name: name asString].
-	dictionaries := dictionaries asOrderedCollection. 
-	updateType ifNil: [updateType := OrderedCollection new]. 
-	updateType add: #dictionaryListUpdate:.
+	| methodService |
+	methodService := RowanMethodService new
+		selector: #'methodForTurningOffNativeCode';
+		meta: false;
+		className: 'RowanBrowserServiceServer'.
+	methodService clearBreakAt: 1.
+%
+
+category: 'client commands'
+method: RowanBrowserService
+updateDictionaries
+	dictionaries := Rowan image symbolList names
+		collect: [ :name | 
+			RowanDictionaryService new
+				name: name asString;
+				update ].
+	dictionaries := dictionaries asOrderedCollection.
+	updateType ifNil: [ updateType := OrderedCollection new ].
+	updateType add: #'dictionaryListUpdate:'.
 	RowanCommandResult addResult: self
 %
 
@@ -5761,6 +5788,19 @@ method: RowanBrowserService
 updateSymbols: classNames
   self newCachedClasses addAll: classNames.
   updateType := #'addCachedSymbols:'
+%
+
+! Class implementation for 'RowanBrowserServiceServer'
+
+!		Instance methods for 'RowanBrowserServiceServer'
+
+category: 'private'
+method: RowanBrowserServiceServer
+methodForTurningOffNativeCode
+
+	"set a breakpoint here to turn off native code so anonymous breakpoints will be honored" 
+	
+	^'do not remove this method'
 %
 
 ! Class implementation for 'RowanClassService'
@@ -5902,7 +5942,7 @@ basicForClassNamed: className
 	self basicRefreshFrom: theClass.
 %
 
-category: 'initialization'
+category: 'Accessing'
 method: RowanClassService
 basicRefreshFrom: theClass
 	| classOrMeta theFilters |
@@ -5925,6 +5965,7 @@ basicRefreshFrom: theClass
 	self setIsTestCase.
 	self updateIsExtension.
 	hasSubclasses := (self organizer subclassesOf: theClass) notEmpty.
+	classCategory := classOrMeta category.
 %
 
 category: 'Accessing'
@@ -5935,6 +5976,18 @@ behavior
 	behavior := self theClass. 
 	meta == true ifTrue:[behavior := behavior class].
 	^behavior
+%
+
+category: 'accessing'
+method: RowanClassService
+classCategory
+	^classCategory
+%
+
+category: 'accessing'
+method: RowanClassService
+classCategory: object
+	classCategory := object
 %
 
 category: 'client commands'
@@ -8652,6 +8705,7 @@ update
 	dictionary ifNil: [ ^ self ].
 	(dictionary isKindOf: SymbolDictionary)
 		ifFalse: [ ^ self ].
+	classCategories := Set new. 
 	dictionary
 		keysAndValuesDo: [ :key :value | 
 			value isClass
@@ -8660,8 +8714,10 @@ update
 					classService := RowanClassService new name: key asString.
 					classService versions: value classHistory size.
 					classService version: (value classHistory indexOf: value).
-					classService setIsTestCase. 
-					classes add: classService ]
+					classService setIsTestCase.
+					classService classCategory: value category.  
+					classes add: classService.
+					classCategories add: value category ]
 				ifFalse: [ 
 					| printString theKey |
 					printString := [ 
@@ -8681,6 +8737,7 @@ update
 								with: value asOop
 								with: printString) ] ].
 	globals := sorted asArray.
+	classCategories := classCategories  asSortedCollection asArray. 
 	RowanCommandResult addResult: self
 %
 

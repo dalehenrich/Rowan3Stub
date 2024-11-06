@@ -2,7 +2,7 @@ RwLoadSpecificationV2 {
 	#projectName : 'Rowan3Stub',
 	#projectSpecFile : 'rowan/project.ston',
 	#componentNames : [
-		'Core'
+		'Base'
 	],
 	#platformProperties : {
 		'gemstone' : {

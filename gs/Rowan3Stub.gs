@@ -446,6 +446,7 @@ category: 'accessing'
 method: Rowan3LoadedProjectStub
 loadedClasses
 	| theLoadedClasses |
+	self halt: 'not expecting this to be called'.
 	theLoadedClasses := KeyValueDictionary new.
 	(ClassOrganizer new categories at: self name ifAbsent: [ ^ theLoadedClasses ])
 		do: [ :aBehavior | 

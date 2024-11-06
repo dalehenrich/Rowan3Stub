@@ -8,6 +8,58 @@ login
 
 set INPUTPAUSEONERROR on
 
+#
+#	this method should be in GemStone-Interactions-Kernel package in Rowan 3 and should
+#		be when we hit masterV3.3
+#
+method: CharacterCollection
+withoutGemstoneLineEndings
+
+	"assume the string is textual, and that CR, LF, and CRLF are all 
+	valid line endings.  Remove each occurence. "
+
+	| cr lf crlf inPos outPos outString lineEndPos newOutPos |
+	cr := Character cr.
+	lf := Character lf.
+	crlf := ByteArray new.
+	crlf
+		add: cr asciiValue;
+		add: lf asciiValue.
+
+	inPos := 1.
+	outPos := 1.
+	outString := self class _newString: self size.
+
+	[ 
+	lineEndPos := self indexOfAnyOf: crlf startingAt: inPos ifAbsent: [ 0 ].
+	lineEndPos ~= 0 ]
+		whileTrue: [ 
+			newOutPos := outPos + (lineEndPos - inPos + 1).
+			outString
+				replaceFrom: outPos
+				to: newOutPos - 2
+				with: self
+				startingAt: inPos.
+			outPos := newOutPos - 1.
+
+			((self at: lineEndPos) = cr
+				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
+				ifTrue: [ 
+					"CRLF ending"
+					inPos := lineEndPos + 2 ]
+				ifFalse: [ 
+					"CR or LF ending"
+					inPos := lineEndPos + 1 ] ].	"no more line endings.  copy the rest"
+	newOutPos := outPos + (self size - inPos + 1).
+	outString
+		replaceFrom: outPos
+		to: newOutPos - 1
+		with: self
+		startingAt: inPos.
+
+	^ outString copyFrom: 1 to: newOutPos - 1
+%
+
 # install JadeiteForPharo support in a non-Rowan stone
 
 run
@@ -44,17 +96,17 @@ input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
 run
 | filePath |
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'base'
-	ifTrue: [ ].
+	ifTrue: [
+ 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubBase.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside'
 	ifTrue: [
 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath.
-].
+		GsFileIn fromServerPath: filePath ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'
 	ifTrue: [
 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath.
-].
+		GsFileIn fromServerPath: filePath ].
 
 Published at: #Rowan put: Rowan3Stub new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
