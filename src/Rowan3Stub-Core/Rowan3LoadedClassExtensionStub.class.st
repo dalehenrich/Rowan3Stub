@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : 'accessing' }
+Rowan3LoadedClassExtensionStub >> handle [
+	^ self theClass
+]
+
+{ #category : 'accessing' }
 Rowan3LoadedClassExtensionStub >> theClass [
 	^theClass
 ]

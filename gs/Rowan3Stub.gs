@@ -378,6 +378,12 @@ symbolList
 
 category: 'accessing'
 method: Rowan3LoadedClassExtensionStub
+handle
+	^ self theClass
+%
+
+category: 'accessing'
+method: Rowan3LoadedClassExtensionStub
 theClass
 	^theClass
 %
@@ -391,6 +397,12 @@ theClass: object
 ! Class implementation for 'Rowan3LoadedClassStub'
 
 !		Instance methods for 'Rowan3LoadedClassStub'
+
+category: 'accessing'
+method: Rowan3LoadedClassStub
+handle
+	^ self theClass
+%
 
 category: 'accessing'
 method: Rowan3LoadedClassStub
