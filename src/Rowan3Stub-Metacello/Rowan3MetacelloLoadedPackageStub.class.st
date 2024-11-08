@@ -1,21 +1,12 @@
 Class {
 	#name : 'Rowan3MetacelloLoadedPackageStub',
 	#superclass : 'Rowan3LoadedPackageStub',
-	#category : 'Rowan3Stub-Core',
 	#instVars : [
-		'workingCopy'
-	]
+		'workingCopy',
+		'loadedProject'
+	],
+	#category : 'Rowan3Stub-Core'
 }
-
-{ #category : 'accessing' }
-Rowan3MetacelloLoadedPackageStub >> workingCopy [
-	^ workingCopy
-]
-
-{ #category : 'accessing' }
-Rowan3MetacelloLoadedPackageStub >> workingCopy: aMCWorkingCopy [
-	workingCopy := aMCWorkingCopy
-]
 
 { #category : 'accessing' }
 Rowan3MetacelloLoadedPackageStub >> gs_symbolDictionary [
@@ -56,6 +47,26 @@ Rowan3MetacelloLoadedPackageStub >> loadedClassExtensions [
 ]
 
 { #category : 'accessing' }
+Rowan3MetacelloLoadedPackageStub >> loadedProject [
+	^loadedProject
+]
+
+{ #category : 'accessing' }
+Rowan3MetacelloLoadedPackageStub >> loadedProject: object [
+	loadedProject := object
+]
+
+{ #category : 'accessing' }
 Rowan3MetacelloLoadedPackageStub >> projectName [
-	self halt: 'will need an IV for this methinks'
+	^ self loadedProject name
+]
+
+{ #category : 'accessing' }
+Rowan3MetacelloLoadedPackageStub >> workingCopy [
+	^ workingCopy
+]
+
+{ #category : 'accessing' }
+Rowan3MetacelloLoadedPackageStub >> workingCopy: aMCWorkingCopy [
+	workingCopy := aMCWorkingCopy
 ]

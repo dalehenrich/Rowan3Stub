@@ -25,6 +25,7 @@ Rowan3MetacelloLoadedProjectStub >> loadedPackageNamed: aName ifAbsent: absentBl
 		ifFalse: absentBlock.
 	^ Rowan3MetacelloLoadedPackageStub new
 		name: aName;
+		loadedProject: self;
 		yourself
 ]
 

@@ -4,7 +4,7 @@
 doit
 (Rowan3LoadedPackageStub
 	subclass: 'Rowan3MetacelloLoadedPackageStub'
-	instVarNames: #(workingCopy)
+	instVarNames: #(workingCopy loadedProject)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -78,8 +78,20 @@ loadedClassExtensions
 
 category: 'accessing'
 method: Rowan3MetacelloLoadedPackageStub
+loadedProject
+	^loadedProject
+%
+
+category: 'accessing'
+method: Rowan3MetacelloLoadedPackageStub
+loadedProject: object
+	loadedProject := object
+%
+
+category: 'accessing'
+method: Rowan3MetacelloLoadedPackageStub
 projectName
-	self halt: 'will need an IV for this methinks'
+	^ self loadedProject name
 %
 
 category: 'accessing'
@@ -120,6 +132,7 @@ loadedPackageNamed: aName ifAbsent: absentBlock
 		ifFalse: absentBlock.
 	^ Rowan3MetacelloLoadedPackageStub new
 		name: aName;
+		loadedProject: self;
 		yourself
 %
 
