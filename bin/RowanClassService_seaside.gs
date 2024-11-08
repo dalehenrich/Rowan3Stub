@@ -86,6 +86,7 @@ run
 category: 'Rowan3 stub'
 method: RowanProjectService
 changes
+	"provide changes for all modified packages"
 	| jadeServer modifiedMCPackages |
 	jadeServer := Rowan jadeServerClassNamed: #'JadeServer'.	
 	modifiedMCPackages := MCWorkingCopy allManagers select: [:wc | wc modified ].

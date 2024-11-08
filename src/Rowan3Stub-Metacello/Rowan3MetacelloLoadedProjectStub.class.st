@@ -10,7 +10,6 @@ Class {
 { #category : 'accessing' }
 Rowan3MetacelloLoadedProjectStub class >> metacelloProjectRegistrations [
 
-	| projectRegistration |
 	^((Rowan globalNamed: 'MetacelloProjectRegistration') registry projectSpecs
     collect: [ :projectSpec | 
       (Rowan globalNamed: 'MetacelloProjectRegistration')
@@ -20,12 +19,17 @@ Rowan3MetacelloLoadedProjectStub class >> metacelloProjectRegistrations [
 ]
 
 { #category : 'accessing' }
-Rowan3MetacelloLoadedProjectStub >> loadedPackageNamed: aName ifAbsent: absentBlock [
-	(self packageNames includes: aName)
+Rowan3MetacelloLoadedProjectStub >> loadedPackageNamed: aPackageName ifAbsent: absentBlock [
+	| wc |
+	(self packageNames includes: aPackageName)
 		ifFalse: absentBlock.
+	wc := self projectRegistration workingCopies
+		detect: [ :each | each packageName = aPackageName ]
+		ifNone: absentBlock.
 	^ Rowan3MetacelloLoadedPackageStub new
-		name: aName;
+		name: aPackageName;
 		loadedProject: self;
+		workingCopy: wc;
 		yourself
 ]
 

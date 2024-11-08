@@ -43,6 +43,13 @@ Rowan3LoadedProjectStub >> loadedCommitId [
 ]
 
 { #category : 'accessing' }
+Rowan3LoadedProjectStub >> loadedPackageNamed: aString [
+	^ self
+		loadedPackageNamed: aString
+		ifAbsent: [ self error: 'No package named ' , aString printString , ' found' ]
+]
+
+{ #category : 'accessing' }
 Rowan3LoadedProjectStub >> loadSpecification [
 	^ nil
 ]
