@@ -191,7 +191,6 @@ loadedProjects
 category: 'querying'
 method: Rowan3ImageStub
 packageNamesForLoadedProjectNamed: projectName
-	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc packageName ]) sort
+	^ (self loadedProjectNamed: projectName) packageNames
 %
 
