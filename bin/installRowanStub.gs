@@ -9,7 +9,7 @@ login
 set INPUTPAUSEONERROR on
 
 #
-#	this method should be in GemStone-Interactions-Kernel package in Rowan 3 and should
+#	these 4 methods should be in GemStone-Interactions-Kernel package in Rowan 3 and should
 #		be when we hit masterV3.3
 #
 method: CharacterCollection
@@ -59,6 +59,40 @@ withoutGemstoneLineEndings
 
 	^ outString copyFrom: 1 to: newOutPos - 1
 %
+method: CharacterCollection
+indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlock
+
+	"returns the index of the first character in the given set, starting from start"
+
+	| ans |
+	ans := self class
+		findFirstInString: self
+		inSet: aByteArray asByteArray byteArrayMap
+		startingAt: start.
+	ans = 0
+		ifTrue: [ ^ aBlock value ]
+		ifFalse: [ ^ ans ]
+%
+method: ByteArray
+byteArrayMap
+
+	"return a ByteArray mapping each ascii value to a 1 if that ascii value is in the set, and a 0 if it isn't.  Intended for use by primitives only"
+
+	| map |
+	map := ByteArray new: 256 withAll: 0.
+	self do: [ :ascii | map at: ascii + 1 put: 1 ].
+	^ map
+%
+classmethod: SequenceableCollection
+new: size withAll: value
+
+	"Answer an instance of me, with number of elements equal to size, each 
+	of which refers to the argument, value."
+
+	^ (self new: size)
+		atAllPut: value;
+		yourself
+%
 
 # install JadeiteForPharo support in a non-Rowan stone
 
@@ -103,9 +137,13 @@ run
 	ifTrue: [
 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
+(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'metacello'
+	ifTrue: [
+		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMetacello.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'
 	ifTrue: [
-		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
+		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMetacello.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
 
 Published at: #Rowan put: Rowan3Stub new.

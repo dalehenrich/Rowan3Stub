@@ -1,11 +1,11 @@
 RwLoadComponent {
-	#name : 'Monticello',
+	#name : 'Metacello',
 	#projectNames : [ ],
 	#componentNames : [
 		'Core'
 	],
 	#packageNames : [
-		'Rowan3Stub-Monticello'
+		'Rowan3Stub-Metacello'
 	],
 	#comment : ''
 }

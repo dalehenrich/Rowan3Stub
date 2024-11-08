@@ -8,6 +8,7 @@ stoneName=$2
 if [ "$extentType" = "" ]; then
 	extentType="seaside"
  	extentType="tode"
+ 	extentType="metacello"
 	extentType="base"
 fi
 if [ "$stoneName" = "" ]; then
@@ -21,6 +22,9 @@ topazini_systemuser=".topazini_SU"
 topazini_seaside=".topazini_DC"
 
 if [ $extentType = "tode" ]; then
+	newExtent.solo -r tode -e snapshots/extent0.10-28-2024_14:21:33_tode_virgin.dbf $stoneName
+elif [ $extentType = "metacello" ]; then
+	# need to run `GsUpgrade upgradeGrease` to get Metacello installed in non-tode extent (see $l2tests/ernie/glass1tst.tpz for full details
 	newExtent.solo -r tode -e snapshots/extent0.10-28-2024_14:21:33_tode_virgin.dbf $stoneName
 elif [ $extentType = "seaside" ]; then
 	newExtent.solo -r 37x -e product/bin/extent0.seaside.dbf $stoneName
@@ -37,7 +41,9 @@ if [ "x" = "regenerate" ]; then
 
 	product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$ROWAN_PROJECTS_HOME/Rowan3Stub/rowan/specs/Rowan3Stub.ston --projectsHome=$ROWAN_PROJECTS_HOME --fileName=$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubServices.gs Rowan3Stub-Services
 
-	product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$ROWAN_PROJECTS_HOME/Rowan3Stub/rowan/specs/Rowan3Stub.ston --projectsHome=$ROWAN_PROJECTS_HOME --fileName=$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs Rowan3Stub-Monticello
+	product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$ROWAN_PROJECTS_HOME/Rowan3Stub/rowan/specs/Rowan3Stub_monticello.ston --projectsHome=$ROWAN_PROJECTS_HOME --fileName=$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs Rowan3Stub-Monticello
+
+	product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$ROWAN_PROJECTS_HOME/Rowan3Stub/rowan/specs/Rowan3Stub_metacello.ston --projectsHome=$ROWAN_PROJECTS_HOME --fileName=$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMetacello.gs Rowan3Stub-Monticello Rowan3Stub-Metacello
 
 	product/rowan3/bin/exportRowanProjectAsTopaz.solo file: --projectsHome=$ROWAN_PROJECTS_HOME $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
 
@@ -55,10 +61,12 @@ source customenv # set $GEMSTONE
 export ROWAN_STUB_EXTENT_TYPE=$extentType
 $ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub.gs -I $topazini_systemuser -L
 
-if [ $extentType = "seaside" ] || [ $extentType = "tode" ]; then
+if [ $extentType = "seaside" ] || [ $extentType = "metacello" ] || [ $extentType = "tode" ]; then
 	$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_seaside.gs -I $topazini_seaside -L
 	if [ $extentType = "tode" ]; then
 		$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_tode.gs -I $topazini_seaside -L
+	else	# "metacello"
+		$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_metacello.gs -I $topazini_seaside -L
 	fi
 else
 	$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_base.gs -I $topazini_systemuser -L

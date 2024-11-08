@@ -10178,8 +10178,14 @@ forSelector: sel class: theClass meta: boolean organizer: anOrganizer
 category: 'Accessing'
 method: RowanMethodService
 gsNMethod
-
-	^[self classOrMeta compiledMethodAt: selector ] on: Error do:[:ex | nil "removed method"]
+	| theName theClass theBehavior |
+	theName := self className.
+	theClass := (AllUsers userWithId: 'SystemUser') objectNamed: theName asSymbol.
+	theClass ifNil: [ "can't find class" ^ nil ].
+	theBehavior := self meta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	^ theBehavior compiledMethodAt: 'methodForTurningOffNativeCode' otherwise: nil
 %
 
 category: 'comparing'
