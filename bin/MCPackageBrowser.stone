@@ -45,6 +45,9 @@ OPTIONS
   --debugGem                 If terminal is connected to stdout, bring up debugger. If not,
                              dump stack to stdout and wait for topaz to attach using topaz
                              DEBUGGEM command.
+  -c, --changes              Dispaly the changes for the modified Monticello packages
+  -l, --list                 List the Monticello packages in the image
+  -m, --modified             List the modified Monticello packages in image
 
 EXAMPLES
   $basename --help                           -- gs_351             # with GS_HOME set
