@@ -3158,7 +3158,7 @@ executeCommand
 	Rowan commandResultClass initializeResults.
 	[ 
 	updateType := nil.	"Update type is only for returned commands"
-	command ifNil: [^self]. 
+	command ifNil: [ ^ self ].
 	self servicePerform: command withArguments: commandArgs ]
 		on: GsInteractionRequest
 		do: [ :ex | 
@@ -3169,11 +3169,13 @@ executeCommand
 	self postCommandExecution ]
 		on: Exception
 		do: [ :ex | 
-			GsFile
-				gciLogServer:
-					DateTime now asStringMs , ' {'
-						, Processor activeProcess identityHash printString , '}  - got error: '
-						, ex printString.
+			(ex isKindOf: Notification)
+				ifFalse: [ 
+					GsFile
+						gciLogServer:
+							DateTime now asStringMs , ' {'
+								, Processor activeProcess identityHash printString
+								, '}  - got exception: ' , ex printString ].
 			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
 			ex pass ].
 	^ self
@@ -4141,14 +4143,16 @@ basicPrintStringOf: oop toMaxSize: integer
 category: 'client command support'
 method: RowanAnsweringService
 basicPrintStringOfObject: object toMaxSize: integer
-  "avoid the oop conversion when we already have the object"
+	"avoid the oop conversion when we already have the object"
 
-  | printString |
-  printString := object printString asUnicodeString.
-  printString := printString size > integer
-    ifTrue: [ (printString copyFrom: 1 to: integer) , '...' ]
-    ifFalse: [ printString ].
-  ^ printString
+	| printString |
+	printString := [ object printString asUnicodeString ]
+		on: Error
+		do: [ :ex | 'Error printing object with oop - ' , object asOop printString, ': ', ex printString ].
+	printString := printString size > integer
+		ifTrue: [ (printString copyFrom: 1 to: integer) , '...' ]
+		ifFalse: [ printString ].
+	^ printString
 %
 
 category: 'client command support'
@@ -4790,7 +4794,8 @@ runMethodTests: methodServices
 	| behavior |
 	methodServices do:[:methodService |
 		(methodService selector asString matchPattern: #('test' $*)) ifTrue:[ 
-			behavior := methodService classFromName. 
+			behavior := methodService theClass. 
+			behavior ifNil: [^self]. 
 			behavior debug: methodService selector]].
 	answer := true. 
 	RowanCommandResult initializeResults. "squash any client updates during server test run"
@@ -5543,9 +5548,7 @@ packagesWithTests
 	self organizer: ClassOrganizer new.	"when we call this method, our world has changed from a reload, etc."
 	testPackages := Set new.
 	testCount := 0.
-	testPackages := Set new.
-	testCount := 0.
-	packageNames := Rowan image packageNames. 
+	packageNames := Rowan image packageNames.  
 	(self organizer allSubclassesOf: TestCase)
 		do: [ :sub | 
 			| packageName testMethodCount |
@@ -8688,7 +8691,7 @@ testClasses
 			(cls inheritsFrom: TestCase)
 				ifTrue: [ 
 					cls isAbstract
-						ifFalse: [ testClasses add: classService ] ] ].
+						ifFalse: [ testClasses add: classService update] ] ].
 	updateType := #'testClasses:browser:'.
 	testClasses := testClasses asArray.
 	RowanCommandResult addResult: self
@@ -9046,7 +9049,7 @@ inspect: anOop from: indexStart to: indexStop
   RowanCommandResult addResult: self
 %
 
-category: 'client commands'
+category: 'command support'
 method: RowanInspectorService
 inspect: oopOrObject inWindow: handle
 	| anObject |
@@ -9065,6 +9068,7 @@ inspect: oopOrObject inWindow: handle
 	self addDynamicInstVars: anObject.
 	self addFirstIndexedVars: anObject.
 	isStringObject := anObject class canUnderstand: #asByteArray.
+	nextIndices := Array new. 
 	RowanCommandResult addResult: self
 %
 
@@ -9913,16 +9917,6 @@ category: newValue
 
 category: 'Accessing'
 method: RowanMethodService
-classFromName
-  "the dictionary browser may have versions numbers in the name"
-
-  | nameSymbol |
-  nameSymbol := (className copyUpTo: Character space) asSymbol.
-  ^ (System myUserProfile resolveSymbol: nameSymbol) value
-%
-
-category: 'Accessing'
-method: RowanMethodService
 className
 	^className
 %
@@ -9936,10 +9930,11 @@ className: newValue
 category: 'Accessing'
 method: RowanMethodService
 classOrMeta
-
+	| theClass |
+	theClass := self theClass ifNil: [^nil]. 
 	^meta 
-			ifTrue:[self classFromName class] 
-			ifFalse: [self classFromName].
+			ifTrue:[theClass class] 
+			ifFalse: [theClass].
 %
 
 category: 'client commands'
@@ -10178,14 +10173,9 @@ forSelector: sel class: theClass meta: boolean organizer: anOrganizer
 category: 'Accessing'
 method: RowanMethodService
 gsNMethod
-	| theName theClass theBehavior |
-	theName := self className.
-	theClass := (AllUsers userWithId: 'SystemUser') objectNamed: theName asSymbol.
-	theClass ifNil: [ "can't find class" ^ nil ].
-	theBehavior := self meta
-		ifTrue: [ theClass class ]
-		ifFalse: [ theClass ].
-	^ theBehavior compiledMethodAt: 'methodForTurningOffNativeCode' otherwise: nil
+	| theBehavior |
+	theBehavior := self theClass ifNil: [^nil]. 
+	^ theBehavior compiledMethodAt: selector otherwise: nil
 %
 
 category: 'comparing'
@@ -10332,13 +10322,6 @@ method: RowanMethodService
 meta: aBoolean
 	"allow nil parameter for now" 
 	meta := aBoolean == true
-%
-
-category: 'Accessing'
-method: RowanMethodService
-method
-
-	^self classFromName compiledMethodAt: selector otherwise: nil
 %
 
 category: 'Accessing'
@@ -10674,6 +10657,27 @@ testResult
 	^testResult
 %
 
+category: 'accessing'
+method: RowanMethodService
+theClass
+	"the dictionary browser may have versions numbers in the name"
+
+	| theName theBehavior theClass |
+	theName := (className copyUpTo: Character space) asSymbol.
+	theClass := ((AllUsers userWithId: 'SystemUser') objectNamed: theName asSymbol)
+		ifNil: [ 
+			(AllUsers userWithId: GsCurrentSession currentSession userProfile userId)
+				objectNamed: theName asSymbol ].
+	theClass
+		ifNil: [ 
+			"can't find class"
+			^ nil ].
+	theBehavior := self meta
+		ifTrue: [ theClass class ]
+		ifFalse: [ theClass ].
+	^theBehavior
+%
+
 category: 'updates'
 method: RowanMethodService
 update
@@ -10719,7 +10723,7 @@ updatePackageProjectAfterCategoryChange: beforePackageName
 	self projectService update
 %
 
-category: '(as yet unclassified)'
+category: 'updates'
 method: RowanMethodService
 updateSource: string
 	source := string
@@ -11115,7 +11119,7 @@ testClasses
 						ifFalse: [ 
 							| classService |
 							classService := RowanClassService basicForClassNamed: cls name.
-							testClasses add: classService ] ] ].
+							testClasses add: classService update ] ] ].
 	self loadedClassExtensions
 		valuesDo: [ :loadedClass | 
 			| cls |
@@ -11126,7 +11130,7 @@ testClasses
 						ifFalse: [ 
 							| classService |
 							classService := RowanClassService basicForClassNamed: cls name.
-							testClasses add: classService ] ] ].
+							testClasses add: classService update ] ] ].
 	updateType := #'testClasses:browser:'.
 	testClasses := testClasses asArray.
 	RowanCommandResult addResult: self
