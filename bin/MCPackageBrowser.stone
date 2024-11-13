@@ -4,6 +4,7 @@ options
   SuperDoitOptionalOptionWithNoArg long: 'changes' short: 'c'.
   SuperDoitOptionalOptionWithNoArg long: 'list' short: 'l'.
   SuperDoitOptionalOptionWithNoArg long: 'modified' short: 'm'.
+  SuperDoitOptionalOptionWithNoArg long: 'repositories'.
 }
 %
 # Example options section
@@ -45,9 +46,10 @@ OPTIONS
   --debugGem                 If terminal is connected to stdout, bring up debugger. If not,
                              dump stack to stdout and wait for topaz to attach using topaz
                              DEBUGGEM command.
-  -c, --changes              Dispaly the changes for the modified Monticello packages
+  -c, --changes              Dispaly the changes for the modified Monticello packages in the image
   -l, --list                 List the Monticello packages in the image
   -m, --modified             List the modified Monticello packages in image
+  --repositories         List the repositories in the image
 
 EXAMPLES
   $basename --help                           -- gs_351             # with GS_HOME set
@@ -57,6 +59,10 @@ EXAMPLES
   $basename --list -- -I ./.topazini			# DataCurator login
   $basename --modified -- -I ./.topazini	# DataCurator login
   $basename --changes -- -I ./.topazini	# DataCurator login
+  # in directory containing a .topazini
+  $basename --list                        # DataCurator login
+  $basename --modified                    # DataCurator login
+  $basename --change                      # DataCurator login
 -----
 %
 method
@@ -94,12 +100,26 @@ showChanges
 		| patch |
 		patch := wc changesRelativeToRepository: wc repositoryGroup repositories first.
 		self stdout nextPutAll: wc packageName; lf.
-		patch operations do: [:op |
+		patch operations asArray sort do: [:op |
 			self stdout tab; nextPutAll: op sourceString; lf ].
  ].
 	^ self noResult
 %
+method
+listRepositories
+	| packageRepos descriptions |
+	packageRepos := Set new.
+	descriptions := Set new.
+	(Rowan globalNamed: 'MCWorkingCopy') allManagers do: [:wc |
+		packageRepos addAll: wc repositoryGroup repositories ].
+	packageRepos do: [:repos | descriptions add: repos description ].
+	descriptions asArray sort
+		do: [:repositoryDescription | 
+			self stdout tab; nextPutAll: repositoryDescription; lf ].
+	^self noResult
+%
 doit
+	self repositories ifTrue: [ ^ self listRepositories ].
 	self list ifTrue: [ ^ self listPackageNames ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
 	self changes ifTrue: [ ^ self showChanges ].
