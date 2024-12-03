@@ -107,7 +107,8 @@ showChanges
 %
 method
 listRepositories
-	| packageRepos descriptions |
+	| packageRepos descriptions listPackages |
+	listPackages := self list.
 	packageRepos := Set new.
 	descriptions := Set new.
 	(Rowan globalNamed: 'MCWorkingCopy') allManagers do: [:wc |
