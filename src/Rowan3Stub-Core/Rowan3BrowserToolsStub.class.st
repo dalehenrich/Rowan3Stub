@@ -22,3 +22,11 @@ Rowan3BrowserToolsStub >> classCreationTemplateForSubclassOf: superclassName cat
 Rowan3BrowserToolsStub >> isExtensionMethod: selector forClassNamed: className isMeta: meta [
 	^ false
 ]
+
+{ #category : 'accessing' }
+Rowan3BrowserToolsStub >> removeMethod: selector forClassNamed: name  isMeta: meta [
+	| beh |
+	beh := Rowan globalNamed: name.
+	meta ifTrue: [ beh := beh class ].
+	beh removeSelector: selector
+]

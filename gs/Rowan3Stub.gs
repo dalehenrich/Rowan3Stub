@@ -162,6 +162,15 @@ isExtensionMethod: selector forClassNamed: className isMeta: meta
 	^ false
 %
 
+category: 'accessing'
+method: Rowan3BrowserToolsStub
+removeMethod: selector forClassNamed: name  isMeta: meta
+	| beh |
+	beh := Rowan globalNamed: name.
+	meta ifTrue: [ beh := beh class ].
+	beh removeSelector: selector
+%
+
 ! Class implementation for 'Rowan3ImageStub'
 
 !		Instance methods for 'Rowan3ImageStub'

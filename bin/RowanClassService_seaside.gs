@@ -43,7 +43,23 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 		on: Error
 		do: [:ex | ex return: nil -> warnings]
 %
+category: 'Rowan3 stub'
+method: RowanClassService
+initialize
 
+	isExtension := false.
+	selectedMethods := Array new.
+	meta := false. "assume most of our work is on the instance side"
+	selectedPackageServices := Array new.
+	isNewClass := false.
+	methods := Array new.
+	isInSymbolList := true.
+	categories := Array new.
+	updateAfterCommand := true.
+	hasSubclasses := false.
+	"added for JfPwoR"
+	definedPackageName := 'not known'.
+%
 
 #
 # overwrite of RowanPackageService method that will need to change for JfPwoR

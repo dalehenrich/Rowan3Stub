@@ -1,7 +1,8 @@
 #!/usr/bin/env superdoit_stone
 options
 {
-  SuperDoitOptionalOptionWithNoArg long: 'changes' short: 'c'.
+  SuperDoitOptionalOptionWithNoArg long: 'diskChanges' short: 'd'.
+  SuperDoitOptionalOptionWithNoArg long: 'imageChanges' short: 'i'.
   SuperDoitOptionalOptionWithNoArg long: 'list' short: 'l'.
   SuperDoitOptionalOptionWithNoArg long: 'modified' short: 'm'.
   SuperDoitOptionalOptionWithNoArg long: 'repositories'.
@@ -62,7 +63,8 @@ EXAMPLES
   # in directory containing a .topazini
   $basename --list                        # DataCurator login
   $basename --modified                    # DataCurator login
-  $basename --change                      # DataCurator login
+  $basename --diskChanges                 # DataCurator login
+  $basename --imageChanges                # DataCurator login
 -----
 %
 method
@@ -96,13 +98,28 @@ listModifiedPackageNames
 %
 method
 showChanges
+	"inverted diffs describe changes in image relative to disk (outgoing changes), whereas, 
+		non-inverted diffs discribe changes on disk relative to image (incoming changes."
+
 	self modifiedPackages do: [:wc |
 		| patch |
-		patch := wc changesRelativeToRepository: wc repositoryGroup repositories first.
+		patch := self imageChanges
+			ifTrue: [ 
+				"image changes"
+				wc invertedChangesRelativeToRepository: wc repositoryGroup repositories first ]
+			ifFalse: [
+				"disk changes" 
+				wc changesRelativeToRepository: wc repositoryGroup repositories first ].
 		self stdout nextPutAll: wc packageName; lf.
 		patch operations asArray sort do: [:op |
-			self stdout tab; nextPutAll: op sourceString; lf ].
- ].
+			self stdout tab; nextPutAll: op summary.
+			op isAddition
+				ifTrue: [ self stdout nextPutAll: ' (Addition)'; lf ]
+				ifFalse: [ 
+					op isRemoval
+						ifTrue: [ self stdout nextPutAll: ' (Removal)'; lf ]
+						ifFalse: [ self stdout nextPutAll: ' (Modification)'; lf ] ].
+			"self stdout nextPutAll: '----', op printString" ] ].
 	^ self noResult
 %
 method
@@ -123,6 +140,9 @@ doit
 	self repositories ifTrue: [ ^ self listRepositories ].
 	self list ifTrue: [ ^ self listPackageNames ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
-	self changes ifTrue: [ ^ self showChanges ].
+	(self imageChanges and: [ self diskChanges ])
+		ifTrue: [ self error: 'Only one of --imageChanges and --diskChanages should be used' ].
+	self imageChanges ifTrue: [ ^ self showChanges ].
+	self diskChanges ifTrue: [ ^ self showChanges ].
 	^ 'no command selected'
 %
