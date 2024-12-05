@@ -6902,7 +6902,7 @@ refreshMethodsFor: classOrMeta
 				do: [ :gsNMethod | 
 					| service |
 					service := methods
-						detect: [ :methodService | methodService selector = gsNMethod selector ]
+						detect: [ :methodService | methodService selector = gsNMethod selector and:[methodService className = gsNMethod inClass name asString] ]
 						ifNone: [  ].
 					service ifNotNil: [ service accessedInstVars add: instVar asString ] ] ].
 	self initializeTestMethodsFor: classOrMeta thisClass.

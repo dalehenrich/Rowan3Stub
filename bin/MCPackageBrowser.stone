@@ -100,29 +100,28 @@ listModifiedPackageNames
 	^ self noResult
 %
 method
+changesForWorkingCopy: wc indent: indent
+	| patch |
+	patch := 	wc invertedChangesRelativeToRepository: wc repositoryGroup repositories first.
+	indent timesRepeat: [ self stdout nextPutAll: '    ' ].
+	self stdout nextPutAll: wc packageName; lf.
+	patch operations asArray sort do: [:op |
+		(indent + 1) timesRepeat: [ self stdout nextPutAll: '    ' ].
+		self stdout nextPutAll: op summary.
+		op isAddition
+			ifTrue: [ self stdout nextPutAll: ' (Addition)'; lf ]
+			ifFalse: [ 
+				op isRemoval
+					ifTrue: [ self stdout nextPutAll: ' (Removal)'; lf ]
+					ifFalse: [ self stdout nextPutAll: ' (Modification)'; lf ] ] ].
+%
+method
 showChanges
 	"inverted diffs describe changes in image relative to disk (outgoing changes), whereas, 
 		non-inverted diffs discribe changes on disk relative to image (incoming changes."
 
 	self modifiedPackages do: [:wc |
-		| patch |
-		patch := self imageChanges
-			ifTrue: [ 
-				"image changes"
-				wc invertedChangesRelativeToRepository: wc repositoryGroup repositories first ]
-			ifFalse: [
-				"disk changes" 
-				wc changesRelativeToRepository: wc repositoryGroup repositories first ].
-		self stdout nextPutAll: wc packageName; lf.
-		patch operations asArray sort do: [:op |
-			self stdout tab; nextPutAll: op summary.
-			op isAddition
-				ifTrue: [ self stdout nextPutAll: ' (Addition)'; lf ]
-				ifFalse: [ 
-					op isRemoval
-						ifTrue: [ self stdout nextPutAll: ' (Removal)'; lf ]
-						ifFalse: [ self stdout nextPutAll: ' (Modification)'; lf ] ].
-			"self stdout nextPutAll: '----', op printString" ] ].
+	 self changesForWorkingCopy: wc indent: 0].
 	^ self noResult
 %
 method
@@ -140,19 +139,19 @@ listRepositories
 						wc repositoryGroup repositories
 							do: [:repos | 
 								(modifications at: repos description ifAbsentPut: [ Set new ])
-									add: wc packageName ] ] ]
+									add: wc ] ] ]
 			ifFalse: [ 
 				packageRepos addAll: wc repositoryGroup repositories ].
 				packageRepos do: [:repos | descriptions add: repos description ].
 				descriptions asArray sort
 					do: [:repositoryDescription | 
-						self stdout tab; nextPutAll: repositoryDescription; lf ] ].
+						self stdout nextPutAll: repositoryDescription; lf ] ].
 	modifications ifNotNil: [ 
 		modifications 
-			keysAndValuesDo: [ :reposDescription :modifiedPackageNames |
-				self stdout tab; nextPutAll: reposDescription; lf.
-				modifiedPackageNames do: [:packageName |
-					self stdout tab; tab; nextPutAll: packageName; lf ] ] ].
+			keysAndValuesDo: [ :reposDescription :modifiedPackages |
+				self stdout nextPutAll: reposDescription; lf.
+				modifiedPackages do: [:wc |
+					self changesForWorkingCopy: wc indent: 1 ] ] ].
 	^self noResult
 %
 doit
