@@ -61,12 +61,11 @@ EXAMPLES
   $basename --modified -- -I ./.topazini	# DataCurator login
   $basename --changes -- -I ./.topazini	# DataCurator login
   # in directory containing a .topazini
-  $basename --list                        # DataCurator login
-  $basename --modified                    # DataCurator login
-  $basename --diskChanges                 # DataCurator login
-  $basename --imageChanges                # DataCurator login
-	$basename --diskChanges
-	$basename --repositories --modified
+  $basename --list
+  $basename --modified
+  $basename --imageChanges
+  $basename --diskChanges
+  $basename --repositories --modified
 modifications
 -----
 %
