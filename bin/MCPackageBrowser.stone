@@ -6,25 +6,12 @@ options
   SuperDoitOptionalOptionWithNoArg long: 'list' short: 'l'.
   SuperDoitOptionalOptionWithNoArg long: 'modified' short: 'm'.
   SuperDoitOptionalOptionWithNoArg long: 'repositories'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'write'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'repository'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'version'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'commitMessage'.
 }
 %
-# Example options section
-#
-#options
-#{
-#	SuperDoitOptionalOptionWithNoArg long: 'noarg'.
-#	SuperDoitOptionalOptionWithNoArg long: 'noarg' short: 'n'.
-#
-#	SuperDoitOptionalOptionWithRequiredArg long: 'optional'.
-#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' default: 'default'.
-#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o'.
-#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o' default: 'default'.
-#
-#	SuperDoitRequiredOptionWithRequiredArg long: 'required'.
-#	SuperDoitRequiredOptionWithRequiredArg long: 'required' short: 'r'.
-#}
-#%
-#
 usage
 -----
 USAGE 
@@ -67,6 +54,11 @@ EXAMPLES
   $basename --diskChanges
   $basename --repositories
   $basename --repositories --modified
+  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
+            --write=ConfigurationOfGsOB --version=ConfigurationOfGsOB.dkh.98 \
+            --commitMessage='testing the MCPackageBrowser.stone --write option'
+  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
+            --write=ConfigurationOfGsOB --commitMessage='testing the MCPackageBrowser.stone --write option'
 modifications
 -----
 %
@@ -157,7 +149,30 @@ listRepositories
 						self changesForWorkingCopy: wc indent: 1 ] ] ].
 	^self noResult
 %
+method
+packageNamed: packageName
+	"return a list of the loaded Monticello package names in the image"
+	| col |
+	col := MCWorkingCopy allManagers select: [:wc | wc packageName = packageName ].
+	col isEmpty ifTrue: [ ^ nil ].
+	^ col first
+%
+method
+writePackage: packageName
+	| repositoryDescription versionName version commitComment wc repository |
+	wc := (self packageNamed: packageName) ifNil: [ ^ 'No package named ', packageName printString, ' found.' ].
+	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
+	repository := wc repositoryGroup repositories detect: [:each | each description = repositoryDescription].
+	commitComment := self commitMessage ifNil: [ ^ 'Missing required argument ''commitMessage''' ].
+	versionName := self version 
+		ifNil: [ wc uniqueVersionName ].
+	version := wc 
+		newVersionWithName: versionName
+		message: commitComment.
+	repository storeVersion: version.
+%
 doit
+	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
 	self repositories ifTrue: [ ^ self listRepositories ].
 	self list ifTrue: [ ^ self listPackageNames ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
