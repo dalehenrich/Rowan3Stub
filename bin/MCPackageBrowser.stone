@@ -65,6 +65,9 @@ EXAMPLES
   $basename --modified                    # DataCurator login
   $basename --diskChanges                 # DataCurator login
   $basename --imageChanges                # DataCurator login
+	$basename --diskChanges
+	$basename --repositories --modified
+modifications
 -----
 %
 method
@@ -124,16 +127,32 @@ showChanges
 %
 method
 listRepositories
-	| packageRepos descriptions listPackages |
+	| packageRepos descriptions listPackages modifications |
 	listPackages := self list.
 	packageRepos := Set new.
 	descriptions := Set new.
 	(Rowan globalNamed: 'MCWorkingCopy') allManagers do: [:wc |
-		packageRepos addAll: wc repositoryGroup repositories ].
-	packageRepos do: [:repos | descriptions add: repos description ].
-	descriptions asArray sort
-		do: [:repositoryDescription | 
-			self stdout tab; nextPutAll: repositoryDescription; lf ].
+		self modified
+			ifTrue: [
+				modifications ifNil: [ modifications := Dictionary new ].
+				wc modified
+					ifTrue: [ 
+						wc repositoryGroup repositories
+							do: [:repos | 
+								(modifications at: repos description ifAbsentPut: [ Set new ])
+									add: wc packageName ] ] ]
+			ifFalse: [ 
+				packageRepos addAll: wc repositoryGroup repositories ].
+				packageRepos do: [:repos | descriptions add: repos description ].
+				descriptions asArray sort
+					do: [:repositoryDescription | 
+						self stdout tab; nextPutAll: repositoryDescription; lf ] ].
+	modifications ifNotNil: [ 
+		modifications 
+			keysAndValuesDo: [ :reposDescription :modifiedPackageNames |
+				self stdout tab; nextPutAll: reposDescription; lf.
+				modifiedPackageNames do: [:packageName |
+					self stdout tab; tab; nextPutAll: packageName; lf ] ] ].
 	^self noResult
 %
 doit
