@@ -65,6 +65,7 @@ EXAMPLES
   $basename --modified
   $basename --imageChanges
   $basename --diskChanges
+  $basename --repositories
   $basename --repositories --modified
 modifications
 -----
@@ -140,17 +141,20 @@ listRepositories
 								(modifications at: repos description ifAbsentPut: [ Set new ])
 									add: wc ] ] ]
 			ifFalse: [ 
-				packageRepos addAll: wc repositoryGroup repositories ].
+				packageRepos addAll: wc repositoryGroup repositories.
 				packageRepos do: [:repos | descriptions add: repos description ].
-				descriptions asArray sort
-					do: [:repositoryDescription | 
-						self stdout nextPutAll: repositoryDescription; lf ] ].
-	modifications ifNotNil: [ 
-		modifications 
-			keysAndValuesDo: [ :reposDescription :modifiedPackages |
-				self stdout nextPutAll: reposDescription; lf.
-				modifiedPackages do: [:wc |
-					self changesForWorkingCopy: wc indent: 1 ] ] ].
+				 ] ].
+	modifications 
+		ifNil: [
+			descriptions asArray sort
+				do: [:repositoryDescription | 
+					self stdout nextPutAll: repositoryDescription; lf ] ]
+		ifNotNil: [ 
+			modifications 
+				keysAndValuesDo: [ :reposDescription :modifiedPackages |
+					self stdout nextPutAll: reposDescription; lf.
+					modifiedPackages do: [:wc |
+						self changesForWorkingCopy: wc indent: 1 ] ] ].
 	^self noResult
 %
 doit
