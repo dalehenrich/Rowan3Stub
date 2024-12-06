@@ -56,7 +56,7 @@ EXAMPLES
   $basename --repositories --packages
   $basename --repositories --modified
   $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
-            --write=ConfigurationOfGsOB --version=ConfigurationOfGsOB.dkh.98 \
+            --write=ConfigurationOfGsOB --version=ConfigurationOfGsOB-dkh.98 \
             --commitMessage='testing the MCPackageBrowser.stone --write option'
   $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
             --write=ConfigurationOfGsOB --commitMessage='testing the MCPackageBrowser.stone --write option'
