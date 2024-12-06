@@ -3,7 +3,7 @@ options
 {
   SuperDoitOptionalOptionWithNoArg long: 'diskChanges' short: 'd'.
   SuperDoitOptionalOptionWithNoArg long: 'imageChanges' short: 'i'.
-  SuperDoitOptionalOptionWithNoArg long: 'list' short: 'l'.
+  SuperDoitOptionalOptionWithNoArg long: 'packages' short: 'p'.
   SuperDoitOptionalOptionWithNoArg long: 'modified' short: 'm'.
   SuperDoitOptionalOptionWithNoArg long: 'repositories'.
   SuperDoitOptionalOptionWithRequiredArg long: 'write'.
@@ -35,7 +35,7 @@ OPTIONS
                              dump stack to stdout and wait for topaz to attach using topaz
                              DEBUGGEM command.
   -c, --changes              Dispaly the changes for the modified Monticello packages in the image
-  -l, --list                 List the Monticello packages in the image
+  -p, --packages             List the Monticello packages in the image
   -m, --modified             List the modified Monticello packages in image
   --repositories         List the repositories in the image
 
@@ -44,15 +44,16 @@ EXAMPLES
   $basename -h                               -- -l -I ./.topazini  # with GEMSTONE set
   $basename -D <script-arguments>            <topaz-arguments>
   $basename --debugGem <script-arguments>    <topaz-arguments>
-  $basename --list -- -I ./.topazini			# DataCurator login
+  $basename --packages -- -I ./.topazini			# DataCurator login
   $basename --modified -- -I ./.topazini	# DataCurator login
   $basename --changes -- -I ./.topazini	# DataCurator login
   # in directory containing a .topazini
-  $basename --list
+  $basename --packages
   $basename --modified
   $basename --imageChanges
   $basename --diskChanges
   $basename --repositories
+  $basename --repositories --packages
   $basename --repositories --modified
   $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
             --write=ConfigurationOfGsOB --version=ConfigurationOfGsOB.dkh.98 \
@@ -118,8 +119,8 @@ showChanges
 %
 method
 listRepositories
-	| packageRepos descriptions listPackages modifications |
-	listPackages := self list.
+	| packageRepos descriptions listPackages modifications packages |
+	listPackages := self packages.
 	packageRepos := Set new.
 	descriptions := Set new.
 	(Rowan globalNamed: 'MCWorkingCopy') allManagers do: [:wc |
@@ -133,14 +134,35 @@ listRepositories
 								(modifications at: repos description ifAbsentPut: [ Set new ])
 									add: wc ] ] ]
 			ifFalse: [ 
-				packageRepos addAll: wc repositoryGroup repositories.
-				packageRepos do: [:repos | descriptions add: repos description ].
-				 ] ].
+				self packages
+					ifTrue: [
+						packages ifNil: [ packages := Dictionary new ].
+						wc repositoryGroup repositories
+							do: [:repos | 
+								repos description ~= 'cache'
+									ifTrue: [ 
+										(packages at: repos description ifAbsentPut: [ Set new ])
+											add: wc ] ] ]
+					ifFalse: [ 
+						packageRepos addAll: wc repositoryGroup repositories.
+						packageRepos do: [:repos | descriptions add: repos description ] ] ] ].
 	modifications 
 		ifNil: [
-			descriptions asArray sort
-				do: [:repositoryDescription | 
-					self stdout nextPutAll: repositoryDescription; lf ] ]
+			packages 
+				ifNil: [ 
+					descriptions asArray sort
+						do: [:repositoryDescription | 
+							self stdout nextPutAll: repositoryDescription; lf ] ]
+				ifNotNil: [
+					packages
+						keysAndValuesDo: [ :reposDescription :thePackages |
+							thePackages isEmpty
+								ifFalse: [ 
+									self stdout nextPutAll: reposDescription; lf.
+									(thePackages asArray collect: 
+										[:each | each packageName ])sort 
+											do: [:pName |
+												self stdout nextPutAll: '    ', pName; lf ] ] ] ] ]
 		ifNotNil: [ 
 			modifications 
 				keysAndValuesDo: [ :reposDescription :modifiedPackages |
@@ -162,7 +184,9 @@ writePackage: packageName
 	| repositoryDescription versionName version commitComment wc repository |
 	wc := (self packageNamed: packageName) ifNil: [ ^ 'No package named ', packageName printString, ' found.' ].
 	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
-	repository := wc repositoryGroup repositories detect: [:each | each description = repositoryDescription].
+	repository := wc repositoryGroup repositories 
+		detect: [:each | 
+			each description ~= 'cache' and: [ each description = repositoryDescription ] ].
 	commitComment := self commitMessage ifNil: [ ^ 'Missing required argument ''commitMessage''' ].
 	versionName := self version 
 		ifNil: [ wc uniqueVersionName ].
@@ -170,11 +194,12 @@ writePackage: packageName
 		newVersionWithName: versionName
 		message: commitComment.
 	repository storeVersion: version.
+	^self noResult
 %
 doit
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
 	self repositories ifTrue: [ ^ self listRepositories ].
-	self list ifTrue: [ ^ self listPackageNames ].
+	self packages ifTrue: [ ^ self listPackageNames ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
 	(self imageChanges and: [ self diskChanges ])
 		ifTrue: [ self error: 'Only one of --imageChanges and --diskChanages should be used' ].
