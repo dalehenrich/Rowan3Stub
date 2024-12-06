@@ -35,13 +35,29 @@ OPTIONS
   --debugGem                 If terminal is connected to stdout, bring up debugger. If not,
                              dump stack to stdout and wait for topaz to attach using topaz
                              DEBUGGEM command.
-  --packages                 List the Monticello packages in the image
-  --modified                 List the modified Monticello packages in image
+  --packages                 List the Monticello packages in the image.
+  --modified                 List the modified Monticello packages in image.
   --changes                  Display the changes for the modified Monticello packages in the image
   --repositories             List the repositories in the image. If the --packages option
                              is included, then the list of packages in each repository are listed.
                              If the --modified option is included then only the repositories with
                              modified along with the names of the modified packages.
+  --write=<packageName>      Write the given package to the given repository (--repository) with
+                             the given commit message (--commitMessage). If the --version
+                             option is used, you may specify a custom package version. The default
+                             is to generate a unique version name.
+  --commitMessage=<commitMessage>
+														 Commit message to be used with --write option.
+  --repository=<repositoryDescription>
+                             The description of the repository to which the package will be written
+                             (--write option) or the repository from which the package will be loaded
+                             (--load option).
+  --load=<packageVersion>    Load the package version from the given repository (--repository).  By 
+                             default a commit is performed when the load is complete, but if you are
+                             simply testing the load, you may use the --noCommit option to avoid the
+                             commit.
+  --noCommit                 Used with the --load option to basically abort the load after a successful
+                             completion of the load.
 
 EXAMPLES
   $basename --help                           -- gs_351             # with GS_HOME set
@@ -56,13 +72,13 @@ EXAMPLES
   $basename --repositories
   $basename --repositories --packages
   $basename --repositories --modified
-  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
+  $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
             --write=ConfigurationOfGsOB --version=ConfigurationOfGsOB-dkh.98 \
             --commitMessage='testing the MCPackageBrowser.stone --write option'
-  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
+  $basename --repository=server:///bosch1/users/dhenrich/_stones/repo --noCommit\
             --write=ConfigurationOfGsOB --commitMessage='testing the MCPackageBrowser.stone --write option'
-  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
-            --load=ConfigurationOfGsOB-dkh.3
+  $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
+            --load=ConfigurationOfGsOB-dkh.98
 -----
 %
 method
@@ -120,6 +136,18 @@ showChanges
 	^ self noResult
 %
 method
+cleanupRepoDescription: repoDescription
+	"the repository descript for disk based repos can include the hostname as a prefix ... 
+		replace hostname prefix with the generic prefix 'server'"
+	| prefix |
+	prefix := repoDescription copyUpTo: $:.
+	(prefix size = repoDescription size or: [prefix = 'http'])
+		ifTrue: [ 
+			"no cleanup needed"
+			^ repoDescription].
+	^ 'server://', (repoDescription copyFrom: prefix size + 2 to: repoDescription size)
+%
+method
 listRepositories
 	| packageRepos descriptions listPackages modifications packages |
 	listPackages := self packages.
@@ -143,11 +171,11 @@ listRepositories
 							do: [:repos | 
 								repos description ~= 'cache'
 									ifTrue: [ 
-										(packages at: repos description ifAbsentPut: [ Set new ])
+										(packages at: (self cleanupRepoDescription: repos description) ifAbsentPut: [ Set new ])
 											add: wc ] ] ]
 					ifFalse: [ 
 						packageRepos addAll: wc repositoryGroup repositories.
-						packageRepos do: [:repos | descriptions add: repos description ] ] ] ].
+						packageRepos do: [:repos | descriptions add: (self cleanupRepoDescription: repos description) ] ] ] ].
 	modifications 
 		ifNil: [
 			packages 
@@ -211,7 +239,7 @@ loadPackage: packageVersion
 		version: packageVersion;
 		repository: repository;
 		load.
-	self commit ifTrue: [ System commitTransaction ]. 
+	self noCommit ifFalse: [ System commitTransaction ]. 
 	^self noResult
 %
 doit
