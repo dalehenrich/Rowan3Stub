@@ -3669,7 +3669,7 @@ servicePerform: commandSymbol withArguments: collection shouldUpdate: possiblyUp
 	shouldUpdate := possiblyUpdate.	"let the command decide if an update is actually needed"
 	shouldUpdate ifNil: [^self]. 
 	super perform: commandSymbol withArguments: collection.
-	(shouldUpdate and: [self organizer notNil])
+	(self shouldUpdate and: [self organizer notNil])
 		ifTrue: [ "a nil organizer implies that this process is in the process of terminating" self update ]
 %
 
@@ -3758,6 +3758,12 @@ setDebugActionBlock
 							ex tag: #'rsrProcessTerminated'.
 							RsrUnhandledException signal: ex	"stop processing the exception but let rsr return" ].
 					ex resume ]
+%
+
+category: 'accessing'
+method: RowanService
+shouldUpdate
+	^shouldUpdate ifNil: [shouldUpdate := false].
 %
 
 category: 'replication'
@@ -7372,12 +7378,19 @@ updateClass
 category: 'updates'
 method: RowanClassService
 updateDirtyState
-	| projectService | 
-	selectedPackageServices do:[:packageService | 
-		packageService update. 
-		RowanCommandResult addResult: packageService].
-	projectService := RowanProjectService newNamed: self theClass rowanProjectName. 
-	RowanCommandResult addResult: projectService.
+	| projectService wasDirty |
+	selectedPackageServices
+		do: [ :packageService | 
+			wasDirty := packageService isDirty.
+			wasDirty
+				ifFalse: [ 
+					packageService update.
+					(packageService isDirty and: [ wasDirty not ])
+						ifTrue: [ 
+							RowanCommandResult addResult: packageService.
+							projectService := RowanProjectService
+								newNamed: self theClass rowanProjectName.
+							RowanCommandResult addResult: projectService ] ] ]
 %
 
 category: 'initialization'
@@ -11575,7 +11588,6 @@ basicRefresh
 	name = Rowan unpackagedName
 		ifTrue: [ 
 			isLoaded := false.
-			RowanBrowserService new updateDictionaries.
 			^ self ].
 	(isLoaded := self projectIsLoaded)
 		ifFalse: [ 

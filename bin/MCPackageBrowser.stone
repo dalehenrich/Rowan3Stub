@@ -7,9 +7,11 @@ options
   SuperDoitOptionalOptionWithNoArg long: 'modified' short: 'm'.
   SuperDoitOptionalOptionWithNoArg long: 'repositories'.
   SuperDoitOptionalOptionWithRequiredArg long: 'write'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'load'.
   SuperDoitOptionalOptionWithRequiredArg long: 'repository'.
   SuperDoitOptionalOptionWithRequiredArg long: 'version'.
   SuperDoitOptionalOptionWithRequiredArg long: 'commitMessage'.
+  SuperDoitOptionalOptionWithNoArg long: 'commit'.
 }
 %
 usage
@@ -60,7 +62,8 @@ EXAMPLES
             --commitMessage='testing the MCPackageBrowser.stone --write option'
   $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
             --write=ConfigurationOfGsOB --commitMessage='testing the MCPackageBrowser.stone --write option'
-modifications
+  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
+            --load=ConfigurationOfGsOB-dkh.3 --commit \
 -----
 %
 method
@@ -196,7 +199,24 @@ writePackage: packageName
 	repository storeVersion: version.
 	^self noResult
 %
+method
+loadPackage: packageVersion
+	| repositoryDescription repository project repositorySpec |
+	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
+
+  project := MetacelloMCProject new.
+  repositorySpec := project repositorySpec.
+  repositorySpec description: repositoryDescription.
+  repository := repositorySpec createRepository.
+	Gofer new 
+		version: packageVersion;
+		repository: repository;
+		load.
+	self commit ifTrue: [ System commitTransaction ]. 
+	^self noResult
+%
 doit
+	self load ifNotNil: [:packageName | ^ self loadPackage: packageName ].
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
 	self repositories ifTrue: [ ^ self listRepositories ].
 	self packages ifTrue: [ ^ self listPackageNames ].
