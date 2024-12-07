@@ -6,6 +6,7 @@ options
   SuperDoitOptionalOptionWithNoArg long: 'repositories'.
   SuperDoitOptionalOptionWithNoArg long: 'modified'.
   SuperDoitOptionalOptionWithNoArg long: 'noCommit'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'createRepository'.
   SuperDoitOptionalOptionWithRequiredArg long: 'write'.
   SuperDoitOptionalOptionWithRequiredArg long: 'load'.
   SuperDoitOptionalOptionWithRequiredArg long: 'repository'.
@@ -56,6 +57,12 @@ OPTIONS
                              default a commit is performed when the load is complete, but if you are
                              simply testing the load, you may use the --noCommit option to avoid the
                              commit.
+  --createRepository=<repositoryDescription>
+                             Create repository matching the given <repositoryDescription>. If the repository
+                             is a disk-based repository, the disk artifacts will be created along with
+                             in-image artifacts. If the --noCommit option is specified, the disk artifacts
+                             will be created, but the in-image artifacts will not be stored. If the --noCommit
+                             option is not specified a commit will be performed.
   --noCommit                 Used with the --load option to basically abort the load after a successful
                              completion of the load.
 
@@ -79,6 +86,7 @@ EXAMPLES
             --write=ConfigurationOfGsOB --commitMessage='testing the MCPackageBrowser.stone --write option'
   $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
             --load=ConfigurationOfGsOB-dkh.98
+  $basename --createRepository=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
 -----
 %
 method
@@ -131,6 +139,7 @@ showChanges
 	"inverted diffs describe changes in image relative to disk (outgoing changes), whereas, 
 		non-inverted diffs discribe changes on disk relative to image (incoming changes."
 
+	self stdout nextPutAll: '=============== Changes ==============='; lf.
 	self modifiedPackages do: [:wc |
 	 self changesForWorkingCopy: wc indent: 0].
 	^ self noResult
@@ -141,7 +150,7 @@ cleanupRepoDescription: repoDescription
 		replace hostname prefix with the generic prefix 'server'"
 	| prefix |
 	prefix := repoDescription copyUpTo: $:.
-	(prefix size = repoDescription size or: [prefix = 'http'])
+	(prefix size = repoDescription size or: [prefix = 'http' or: [ prefix = 'filetree' ]])
 		ifTrue: [ 
 			"no cleanup needed"
 			^ repoDescription].
@@ -153,29 +162,35 @@ listRepositories
 	listPackages := self packages.
 	packageRepos := Set new.
 	descriptions := Set new.
-	(Rowan globalNamed: 'MCWorkingCopy') allManagers do: [:wc |
-		self modified
-			ifTrue: [
-				modifications ifNil: [ modifications := Dictionary new ].
-				wc modified
-					ifTrue: [ 
-						wc repositoryGroup repositories
-							do: [:repos | 
-								(modifications at: repos description ifAbsentPut: [ Set new ])
-									add: wc ] ] ]
-			ifFalse: [ 
-				self packages
+	(self modified or: [ self packages ])
+		ifTrue: [ 
+			(Rowan globalNamed: 'MCWorkingCopy') allManagers do: [:wc |
+				self modified
 					ifTrue: [
-						packages ifNil: [ packages := Dictionary new ].
-						wc repositoryGroup repositories
-							do: [:repos | 
-								repos description ~= 'cache'
-									ifTrue: [ 
-										(packages at: (self cleanupRepoDescription: repos description) ifAbsentPut: [ Set new ])
+						modifications ifNil: [ modifications := Dictionary new ].
+						wc modified
+							ifTrue: [ 
+								wc repositoryGroup repositories
+									do: [:repos | 
+										(modifications at: repos description ifAbsentPut: [ Set new ])
 											add: wc ] ] ]
 					ifFalse: [ 
-						packageRepos addAll: wc repositoryGroup repositories.
-						packageRepos do: [:repos | descriptions add: (self cleanupRepoDescription: repos description) ] ] ] ].
+						self packages
+							ifTrue: [
+								packages ifNil: [ packages := Dictionary new ].
+								wc repositoryGroup repositories
+									do: [:repos | 
+										repos description ~= 'cache'
+											ifTrue: [ 
+												(packages at: (self cleanupRepoDescription: repos description) ifAbsentPut: [ Set new ])
+													add: wc ] ] ]
+							ifFalse: [ 
+								packageRepos addAll: wc repositoryGroup repositories.
+								packageRepos do: [:repos | descriptions add: (self cleanupRepoDescription: repos description) ] ] ] ] ]
+		ifFalse: [
+			"list only repositories, including ones without any loaded packages"
+			MCRepositoryGroup default repositoriesDo: [:repo |
+				descriptions add: (self cleanupRepoDescription: repo description) ] ].
 	modifications 
 		ifNil: [
 			packages 
@@ -242,12 +257,26 @@ loadPackage: packageVersion
 	self noCommit ifFalse: [ System commitTransaction ]. 
 	^self noResult
 %
+method
+createRepositoryNamed: repositoryDescription
+  | project repositorySpec repository |
+  project := MetacelloMCProject new.
+  repositorySpec := project repositorySpec.
+  repositorySpec description: repositoryDescription.
+  repository := repositorySpec createRepository.
+	repository isValid
+		ifFalse: [ repository directory assureExistence ].
+	MCRepositoryGroup default addRepository: repository.
+	self noCommit ifFalse: [ System commitTransaction ].
+	^ self noResult
+%
 doit
 	self load ifNotNil: [:packageName | ^ self loadPackage: packageName ].
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
 	self repositories ifTrue: [ ^ self listRepositories ].
 	self packages ifTrue: [ ^ self listPackageNames ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
-	self changes ifTrue: [ ^ self showChanges ].
-	^ 'no command selected'
+	self changes ifTrue: [ ^ self showChanges ].<Mouse>
+	self createRepository ifNotNil: [:repositoryDescription |  ^ self createRepositoryNamed: repositoryDescription ].
+	^ 'no command (load, write, repositories, packages, modified, createRepository, or changes) specified'
 %
