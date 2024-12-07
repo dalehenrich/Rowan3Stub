@@ -87,6 +87,7 @@ EXAMPLES
   $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
             --load=ConfigurationOfGsOB-dkh.98
   $basename --createRepository=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
+  $basename --createRepository=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
 -----
 %
 method
