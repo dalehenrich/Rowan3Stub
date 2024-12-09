@@ -10,6 +10,7 @@ options
   SuperDoitOptionalOptionWithRequiredArg long: 'createRepository'.
   SuperDoitOptionalOptionWithRequiredArg long: 'write'.
   SuperDoitOptionalOptionWithRequiredArg long: 'load'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'unload'.
   SuperDoitOptionalOptionWithRequiredArg long: 'repository'.
   SuperDoitOptionalOptionWithRequiredArg long: 'versions'.
   SuperDoitOptionalOptionWithRequiredArg long: 'version'.
@@ -61,6 +62,9 @@ OPTIONS
                              default a commit is performed when the load is complete, but if you are
                              simply testing the load, you may use the --noCommit option to avoid the
                              commit.
+  --unload=<packageName>     Unload the named package from the image. By default a commit is performed 
+                             when the load is complete, but if you are simply testing the load, you 
+                             may use the --noCommit option to avoid the commit.
   --createRepository=<repositoryDescription>
                              Create repository matching the given <repositoryDescription>. If the repository
                              is a disk-based repository, the disk artifacts will be created along with
@@ -275,6 +279,14 @@ loadPackage: packageVersion
 	^self noResult
 %
 method
+unloadPackage: packageName
+	Gofer new 
+		package: packageName;
+		unload.
+	self noCommit ifFalse: [ System commitTransaction ]. 
+	^self noResult
+%
+method
 createRepositoryNamed: repositoryDescription
   | project repositorySpec repository |
   project := MetacelloMCProject new.
@@ -294,7 +306,8 @@ createPackageNamed: packageName
 	^ self noResult
 %
 doit
-	self load ifNotNil: [:packageName | ^ self loadPackage: packageName ].
+	self load ifNotNil: [:packageVersion | ^ self loadPackage: packageVersion ].
+	self unload ifNotNil: [:packageName | ^ self unloadPackage: packageName ].
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
 	self versions ifNotNil: [:packageName | ^ self listVersionsOfPackageNamed: packageName ].
 	self repositories ifTrue: [ ^ self listRepositories ].
