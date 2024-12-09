@@ -15,6 +15,9 @@ options
   SuperDoitOptionalOptionWithRequiredArg long: 'versions'.
   SuperDoitOptionalOptionWithRequiredArg long: 'version'.
   SuperDoitOptionalOptionWithRequiredArg long: 'commitMessage'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'copyVersion'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'from'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'to'.
 }
 %
 usage
@@ -42,13 +45,17 @@ OPTIONS
   --packages                 List the Monticello packages in the image.
   --modified                 List the modified Monticello packages in image.
   --changes                  Display the changes for the modified Monticello packages in the image
-  --versions=<packageName>   Display the list of versions for the given package name
+  --versions=<packageName> --repository=<repositoryDescription>
+                             Display the list of versions for the given package name
                              in the repository specified by the --repository option.
-  --repositories             List the repositories in the image. If the --packages option
+  --repositories [--modified | --packages]           
+                             List the repositories in the image. If the --packages option
                              is included, then the list of packages in each repository are listed.
                              If the --modified option is included then only the repositories with
                              modified along with the names of the modified packages.
-  --write=<packageName>      Write the given package to the given repository (--repository) with
+
+  --write=<packageName> --repository=<repositoryDescription> --commitMessage=<commitMessage>
+                            Write the given package to the given repository (--repository) with
                              the given commit message (--commitMessage). If the --version
                              option is used, you may specify a custom package version. The default
                              is to generate a unique version name.
@@ -58,22 +65,30 @@ OPTIONS
                              The description of the repository to which the package will be written
                              (--write option) or the repository from which the package will be loaded
                              (--load option).
-  --load=<packageVersion>    Load the package version from the given repository (--repository).  By 
+
+  --load=<packageVersion> --repository=<repositoryDescription> [--noCommit]
+                             Load the package version from the given repository (--repository).  By 
                              default a commit is performed when the load is complete, but if you are
                              simply testing the load, you may use the --noCommit option to avoid the
                              commit.
-  --unload=<packageName>     Unload the named package from the image. By default a commit is performed 
+
+  --unload=<packageName> [--noCommit]    
+                             Unload the named package from the image. By default a commit is performed 
                              when the load is complete, but if you are simply testing the load, you 
                              may use the --noCommit option to avoid the commit.
-  --createRepository=<repositoryDescription>
+
+  --createRepository=<repositoryDescription> [--noCommit]
                              Create repository matching the given <repositoryDescription>. If the repository
                              is a disk-based repository, the disk artifacts will be created along with
                              in-image artifacts. If the --noCommit option is specified, the disk artifacts
                              will be created, but the in-image artifacts will not be stored. If the --noCommit
                              option is specified no commit will be performed.
-  --createPackage=<packageName>
+
+  --createPackage=<packageName> [--noCommit]
                              Create a new package with the given packageName. If the --noCommit option is 
                              specified no commit will be performed and the package will be lost.
+
+  --copyVersion=<packageVersion> from=<repositoryDescription> to=<repositoryDescription>
   --noCommit                 Used with the --load and --createPackage options  abort the load or package creation.
 
 EXAMPLES
@@ -100,6 +115,9 @@ EXAMPLES
   $basename --createRepository=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
   $basename --createRepository=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
   $basename --createPackage=XXX-Core
+  $basename --copyVersion=ConfigurationOfGsOB-dkh.98 \
+            --from=bosch:/bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
+            --to=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
 -----
 %
 method
@@ -305,6 +323,9 @@ createPackageNamed: packageName
 	self noCommit ifFalse: [ System commitTransaction ].
 	^ self noResult
 %
+method
+copyVersion: packageVersion
+%
 doit
 	self load ifNotNil: [:packageVersion | ^ self loadPackage: packageVersion ].
 	self unload ifNotNil: [:packageName | ^ self unloadPackage: packageName ].
@@ -316,5 +337,6 @@ doit
 	self changes ifTrue: [ ^ self showChanges ].<Mouse>
 	self createPackage ifNotNil: [:packageName |  ^ self createPackageNamed: packageName ].
 	self createRepository ifNotNil: [:repositoryDescription |  ^ self createRepositoryNamed: repositoryDescription ].
+	self copyVersion ifNotNil: [:packageVersion | ^ self copyVersion: packageVersion ].
 	^ 'no command (load, write, repositories, packages, modified, createRepository, or changes) specified'
 %
