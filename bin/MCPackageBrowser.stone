@@ -236,11 +236,14 @@ packageNamed: packageName
 method
 writePackage: packageName
 	| repositoryDescription versionName version commitComment wc repository |
-	wc := (self packageNamed: packageName) ifNil: [ ^ 'No package named ', packageName printString, ' found.' ].
+	wc := (self packageNamed: packageName) 
+		ifNil: [ ^ 'No package named ', packageName printString, ' found.' ].
 	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
 	repository := wc repositoryGroup repositories 
 		detect: [:each | 
-			each description ~= 'cache' and: [ each description = repositoryDescription ] ].
+			each description ~= 'cache' and: [ each description = repositoryDescription ] ]
+		ifNone: [ 
+			self error: 'The repository ', repositoryDescription printString, ' is not present in the image' ].
 	commitComment := self commitMessage ifNil: [ ^ 'Missing required argument ''commitMessage''' ].
 	versionName := self version 
 		ifNil: [ wc uniqueVersionName ].
@@ -301,7 +304,7 @@ createRepositoryNamed: repositoryDescription
 %
 method
 createPackageNamed: packageName
-	PackageInfo registerPackageName: packageName.
+	MCWorkingCopy forPackage: (MCPackage named: packageName).
 	self noCommit ifFalse: [ System commitTransaction ].
 	^ self noResult
 %
