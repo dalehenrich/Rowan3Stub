@@ -239,7 +239,7 @@ writePackage: packageName
 	wc := (self packageNamed: packageName) 
 		ifNil: [ ^ 'No package named ', packageName printString, ' found.' ].
 	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
-	repository := wc repositoryGroup repositories 
+	repository := MCRepositoryGroup default repositories 
 		detect: [:each | 
 			each description ~= 'cache' and: [ each description = repositoryDescription ] ]
 		ifNone: [ 
