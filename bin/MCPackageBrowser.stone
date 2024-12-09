@@ -6,6 +6,7 @@ options
   SuperDoitOptionalOptionWithNoArg long: 'repositories'.
   SuperDoitOptionalOptionWithNoArg long: 'modified'.
   SuperDoitOptionalOptionWithNoArg long: 'noCommit'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'createPackage'.
   SuperDoitOptionalOptionWithRequiredArg long: 'createRepository'.
   SuperDoitOptionalOptionWithRequiredArg long: 'write'.
   SuperDoitOptionalOptionWithRequiredArg long: 'load'.
@@ -65,9 +66,11 @@ OPTIONS
                              is a disk-based repository, the disk artifacts will be created along with
                              in-image artifacts. If the --noCommit option is specified, the disk artifacts
                              will be created, but the in-image artifacts will not be stored. If the --noCommit
-                             option is not specified a commit will be performed.
-  --noCommit                 Used with the --load option to basically abort the load after a successful
-                             completion of the load.
+                             option is specified no commit will be performed.
+  --createPackage=<packageName>
+                             Create a new package with the given packageName. If the --noCommit option is 
+                             specified no commit will be performed and the package will be lost.
+  --noCommit                 Used with the --load and --createPackage options  abort the load or package creation.
 
 EXAMPLES
   $basename --help                           -- gs_351             # with GS_HOME set
@@ -92,6 +95,7 @@ EXAMPLES
             --load=ConfigurationOfGsOB-dkh.98
   $basename --createRepository=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
   $basename --createRepository=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
+  $basename --createPackage=XXX-Core
 -----
 %
 method
@@ -295,6 +299,12 @@ createRepositoryNamed: repositoryDescription
 	self noCommit ifFalse: [ System commitTransaction ].
 	^ self noResult
 %
+method
+createPackageNamed: packageName
+	PackageInfo registerPackageName: packageName.
+	self noCommit ifFalse: [ System commitTransaction ].
+	^ self noResult
+%
 doit
 	self load ifNotNil: [:packageName | ^ self loadPackage: packageName ].
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
@@ -303,6 +313,7 @@ doit
 	self packages ifTrue: [ ^ self listPackageNames ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
 	self changes ifTrue: [ ^ self showChanges ].<Mouse>
+	self createPackage ifNotNil: [:packageName |  ^ self createPackageNamed: packageName ].
 	self createRepository ifNotNil: [:repositoryDescription |  ^ self createRepositoryNamed: repositoryDescription ].
 	^ 'no command (load, write, repositories, packages, modified, createRepository, or changes) specified'
 %
