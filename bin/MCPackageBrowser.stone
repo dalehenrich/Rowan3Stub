@@ -91,7 +91,7 @@ EXAMPLES
             --commitMessage='testing the MCPackageBrowser.stone --write option'
   $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo --noCommit\
             --write=ConfigurationOfGsOB --commitMessage='testing the MCPackageBrowser.stone --write option'
-  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
+  $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
             --load=ConfigurationOfGsOB-dkh.98
   $basename --createRepository=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
   $basename --createRepository=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
@@ -154,18 +154,6 @@ showChanges
 	^ self noResult
 %
 method
-cleanupRepoDescription: repoDescription
-	"the repository descript for disk based repos can include the hostname as a prefix ... 
-		replace hostname prefix with the generic prefix 'server'"
-	| prefix |
-	prefix := repoDescription copyUpTo: $:.
-	(prefix size = repoDescription size or: [prefix = 'http' or: [ prefix = 'filetree' ]])
-		ifTrue: [ 
-			"no cleanup needed"
-			^ repoDescription].
-	^ 'server://', (repoDescription copyFrom: prefix size + 2 to: repoDescription size)
-%
-method
 listRepositories
 	| packageRepos descriptions listPackages modifications packages |
 	listPackages := self packages.
@@ -191,15 +179,15 @@ listRepositories
 									do: [:repos | 
 										repos description ~= 'cache'
 											ifTrue: [ 
-												(packages at: (self cleanupRepoDescription: repos description) ifAbsentPut: [ Set new ])
+												(packages at: repos description ifAbsentPut: [ Set new ])
 													add: wc ] ] ]
 							ifFalse: [ 
 								packageRepos addAll: wc repositoryGroup repositories.
-								packageRepos do: [:repos | descriptions add: (self cleanupRepoDescription: repos description) ] ] ] ] ]
+								packageRepos do: [:repos | descriptions add: repos description ] ] ] ] ]
 		ifFalse: [
 			"list only repositories, including ones without any loaded packages"
 			MCRepositoryGroup default repositoriesDo: [:repo |
-				descriptions add: (self cleanupRepoDescription: repo description) ] ].
+				descriptions add: repo description ] ].
 	modifications 
 		ifNil: [
 			packages 
