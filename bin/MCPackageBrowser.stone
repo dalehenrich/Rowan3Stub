@@ -40,7 +40,7 @@ OPTIONS
   --packages                 List the Monticello packages in the image.
   --modified                 List the modified Monticello packages in image.
   --changes                  Display the changes for the modified Monticello packages in the image
-  --versions=<package-name>  Display the list of versions for the given package name
+  --versions=<packageName>   Display the list of versions for the given package name
                              in the repository specified by the --repository option.
   --repositories             List the repositories in the image. If the --packages option
                              is included, then the list of packages in each repository are listed.
