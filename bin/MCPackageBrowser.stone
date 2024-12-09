@@ -10,6 +10,7 @@ options
   SuperDoitOptionalOptionWithRequiredArg long: 'write'.
   SuperDoitOptionalOptionWithRequiredArg long: 'load'.
   SuperDoitOptionalOptionWithRequiredArg long: 'repository'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'versions'.
   SuperDoitOptionalOptionWithRequiredArg long: 'version'.
   SuperDoitOptionalOptionWithRequiredArg long: 'commitMessage'.
 }
@@ -39,6 +40,8 @@ OPTIONS
   --packages                 List the Monticello packages in the image.
   --modified                 List the modified Monticello packages in image.
   --changes                  Display the changes for the modified Monticello packages in the image
+  --versions=<package-name>  Display the list of versions for the given package name
+                             in the repository specified by the --repository option.
   --repositories             List the repositories in the image. If the --packages option
                              is included, then the list of packages in each repository are listed.
                              If the --modified option is included then only the repositories with
@@ -79,6 +82,7 @@ EXAMPLES
   $basename --repositories
   $basename --repositories --packages
   $basename --repositories --modified
+  $basename --versions=ConfigurationOfGLASS --repository=http://seaside.gemtalksystems.com/ss/MetacelloRepository
   $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
             --write=ConfigurationOfGsOB --version=ConfigurationOfGsOB-dkh.98 \
             --commitMessage='testing the MCPackageBrowser.stone --write option'
@@ -243,6 +247,26 @@ writePackage: packageName
 	^self noResult
 %
 method
+listVersionsOfPackageNamed: packageName
+	| repositoryDescription repository project repositorySpec versionNames |
+	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
+
+  project := MetacelloMCProject new.
+  repositorySpec := project repositorySpec.
+  repositorySpec description: repositoryDescription.
+  repository := repositorySpec createRepository.
+	versionNames := {}.
+	repository allVersionNames 
+		do: [:versionName | 
+			| reference aPackageName |
+			reference := GoferResolvedReference name: versionName repository: repository.
+			aPackageName := reference metacelloPackageNameWithBranch at: 2.
+			aPackageName = packageName
+				ifTrue: [ versionNames add: reference name ] ].
+	versionNames sort do: [:versionName | self stdout nextPutAll: versionName; lf ].
+	^self noResult
+%
+method
 loadPackage: packageVersion
 	| repositoryDescription repository project repositorySpec |
 	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
@@ -274,6 +298,7 @@ createRepositoryNamed: repositoryDescription
 doit
 	self load ifNotNil: [:packageName | ^ self loadPackage: packageName ].
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
+	self versions ifNotNil: [:packageName | ^ self listVersionsOfPackageNamed: packageName ].
 	self repositories ifTrue: [ ^ self listRepositories ].
 	self packages ifTrue: [ ^ self listPackageNames ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
