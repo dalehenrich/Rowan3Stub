@@ -86,12 +86,12 @@ EXAMPLES
   $basename --repositories --packages
   $basename --repositories --modified
   $basename --versions=ConfigurationOfGLASS --repository=http://seaside.gemtalksystems.com/ss/MetacelloRepository
-  $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
+  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
             --write=ConfigurationOfGsOB --version=ConfigurationOfGsOB-dkh.98 \
             --commitMessage='testing the MCPackageBrowser.stone --write option'
-  $basename --repository=server:///bosch1/users/dhenrich/_stones/repo --noCommit\
+  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo --noCommit\
             --write=ConfigurationOfGsOB --commitMessage='testing the MCPackageBrowser.stone --write option'
-  $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
+  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
             --load=ConfigurationOfGsOB-dkh.98
   $basename --createRepository=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
   $basename --createRepository=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
