@@ -145,9 +145,6 @@ changesForWorkingCopy: wc indent: indent
 %
 method
 showChanges
-	"inverted diffs describe changes in image relative to disk (outgoing changes), whereas, 
-		non-inverted diffs discribe changes on disk relative to image (incoming changes."
-
 	self stdout nextPutAll: '=============== Changes ==============='; lf.
 	self modifiedPackages do: [:wc |
 	 self changesForWorkingCopy: wc indent: 0].
