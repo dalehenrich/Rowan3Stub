@@ -42,6 +42,8 @@ OPTIONS
   --debugGem                 If terminal is connected to stdout, bring up debugger. If not,
                              dump stack to stdout and wait for topaz to attach using topaz
                              DEBUGGEM command.
+
+  --noCommit                 Used with the --load and --createPackage options  abort the load or package creation.
   --packages                 List the Monticello packages in the image.
   --modified                 List the modified Monticello packages in image.
   --changes                  Display the changes for the modified Monticello packages in the image
@@ -89,7 +91,9 @@ OPTIONS
                              specified no commit will be performed and the package will be lost.
 
   --copyVersion=<packageVersion> from=<repositoryDescription> to=<repositoryDescription>
-  --noCommit                 Used with the --load and --createPackage options  abort the load or package creation.
+                             Copy a package version from one repository to another ... Note that .mcz 
+                             package versions will not be overwritten, while filetree package versions
+                             can be overwritten.
 
 EXAMPLES
   $basename --help                           -- gs_351             # with GS_HOME set
@@ -117,7 +121,7 @@ EXAMPLES
   $basename --createPackage=XXX-Core
   $basename --copyVersion=ConfigurationOfGsOB-dkh.98 \
             --from=bosch:/bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
-            --to=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
+            --to=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
 -----
 %
 method
@@ -196,8 +200,8 @@ listRepositories
 								packages ifNil: [ packages := Dictionary new ].
 								wc repositoryGroup repositories
 									do: [:repos | 
-										repos description ~= 'cache'
-											ifTrue: [ 
+										(repos description ~= 'cache' and: [ (repos description endsWith: 'package-cache') not ])
+										ifTrue: [ 
 												(packages at: repos description ifAbsentPut: [ Set new ])
 													add: wc ] ] ]
 							ifFalse: [ 
@@ -248,7 +252,7 @@ writePackage: packageName
 	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
 	repository := MCRepositoryGroup default repositories 
 		detect: [:each | 
-			each description ~= 'cache' and: [ each description = repositoryDescription ] ]
+			(each description ~= 'cache' and: [ (each description endsWith: 'package-cache') not ]) and: [ each description = repositoryDescription ] ]
 		ifNone: [ 
 			self error: 'The repository ', repositoryDescription printString, ' is not present in the image' ].
 	commitComment := self commitMessage ifNil: [ ^ 'Missing required argument ''commitMessage''' ].
@@ -282,13 +286,10 @@ listVersionsOfPackageNamed: packageName
 %
 method
 loadPackage: packageVersion
-	| repositoryDescription repository project repositorySpec |
+	| repositoryDescription repository |
 	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
 
-  project := MetacelloMCProject new.
-  repositorySpec := project repositorySpec.
-  repositorySpec description: repositoryDescription.
-  repository := repositorySpec createRepository.
+  repository := self _repositoryFromDescription: repositoryDescription.
 	Gofer new 
 		version: packageVersion;
 		repository: repository;
@@ -324,7 +325,23 @@ createPackageNamed: packageName
 	^ self noResult
 %
 method
+_repositoryFromDescription: repositoryDescription
+	| project repositorySpec |
+  project := MetacelloMCProject new.
+  repositorySpec := project repositorySpec.
+  repositorySpec description: repositoryDescription.
+  ^ repositorySpec createRepository.
+%
+method
 copyVersion: packageVersion
+	| fromDescription toDescription version toRepo fromRepo |
+	fromDescription := self from ifNil: [ self error: 'Missing required --from option' ].
+	toDescription := self to ifNil: [ self error: 'Missing required --to option' ].
+	fromRepo := self _repositoryFromDescription: fromDescription.
+	version := (GoferResolvedReference name: packageVersion repository: fromRepo) version.
+	toRepo :=  self _repositoryFromDescription: toDescription.
+	toRepo storeVersion: version.
+	^ self noResult
 %
 doit
 	self load ifNotNil: [:packageVersion | ^ self loadPackage: packageVersion ].
