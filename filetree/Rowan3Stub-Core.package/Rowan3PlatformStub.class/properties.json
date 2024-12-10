@@ -1,0 +1,13 @@
+{
+	"commentStamp" : "",
+	"super" : "Object",
+	"category" : "Rowan3Stub-Core",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"image"
+	],
+	"name" : "Rowan3PlatformStub",
+	"type" : "normal"
+}

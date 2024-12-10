@@ -1,0 +1,3 @@
+accessing
+projectRegistration: aTDMetacelloRegistrationDefinition
+	projectRegistration := aTDMetacelloRegistrationDefinition

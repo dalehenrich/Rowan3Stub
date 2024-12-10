@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "Rowan3LoadedPackageStub",
+	"category" : "Rowan3Stub-Base",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "Rowan3BaseLoadedPackageStub",
+	"type" : "normal"
+}

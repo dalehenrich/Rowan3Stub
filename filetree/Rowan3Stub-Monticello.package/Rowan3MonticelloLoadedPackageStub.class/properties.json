@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "",
+	"super" : "Rowan3LoadedPackageStub",
+	"category" : "Rowan3Stub-Monticello",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "Rowan3MonticelloLoadedPackageStub",
+	"type" : "normal"
+}

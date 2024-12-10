@@ -1,0 +1,14 @@
+{
+	"commentStamp" : "",
+	"super" : "Rowan3LoadedPackageStub",
+	"category" : "Rowan3Stub-Metacello",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [
+		"workingCopy",
+		"loadedProject"
+	],
+	"name" : "Rowan3MetacelloLoadedPackageStub",
+	"type" : "normal"
+}

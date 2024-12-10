@@ -1,0 +1,3 @@
+accessing
+baseProjectName
+	^ 'Image'
