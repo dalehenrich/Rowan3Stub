@@ -1,0 +1,15 @@
+RwLoadSpecificationV2 {
+	#projectName : 'Rowan3Stub',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'MonticelloPackageBrowser'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'UserGlobals'
+			}
+		}
+	},
+	#comment : ''
+}

@@ -1,0 +1,380 @@
+#!/usr/bin/env superdoit_stone
+options
+{
+  SuperDoitOptionalOptionWithNoArg long: 'changes'.
+  SuperDoitOptionalOptionWithNoArg long: 'packages'.
+  SuperDoitOptionalOptionWithNoArg long: 'repositories'.
+  SuperDoitOptionalOptionWithNoArg long: 'modified'.
+  SuperDoitOptionalOptionWithNoArg long: 'noCommit'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'createPackage'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'createRepository'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'write'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'load'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'unload'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'repository'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'versions'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'version'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'commitMessage'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'copyVersion'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'from'.
+  SuperDoitOptionalOptionWithRequiredArg long: 'to'.
+}
+%
+usage
+-----
+USAGE 
+  # with GS_HOME set (<stone-name> optional if run in $GS_HOME/servers/stones/<stone-name> directory)
+  $basename [--help | -h] [--debug | -D]  [--debugGem] [-- [<stone-name> [<topaz-command-line-args>] ] ]
+  # with GEMSTONE set
+  $basename [--help | -h] [--debug | -D]  [--debugGem] -- (-r | -l | -L) -I <path-to-.topazini> [<topaz-command-line-args>]
+
+DESCRIPTION
+  <put your description here>
+
+OPTIONS
+  <stone-name>               Name of the GsDevKit_home stone. <stone-name> argument
+                             may be skipped if the script is run in a GsDevKit_home
+                             stone directory (i.e., $GS_HOME/server/stones/<stone-name>
+  <topaz-command-line-args>  topaz options that should be passed to topaz when running
+                             running the script
+  -h, --help                 display usage message
+  -D, --debug                bring up topaz debugger in the event of a script error
+  --debugGem                 If terminal is connected to stdout, bring up debugger. If not,
+                             dump stack to stdout and wait for topaz to attach using topaz
+                             DEBUGGEM command.
+
+  --noCommit                 Used with the --load and --createPackage options  abort the load or package creation.
+  --packages                 List the Monticello packages in the image.
+  --modified                 List the modified Monticello packages in image.
+  --changes                  Display the changes for the modified Monticello packages in the image
+  --versions=<packageName> --repository=<repositoryDescription>
+                             Display the list of versions for the given package name
+                             in the repository specified by the --repository option.
+  --repositories [--modified | --packages]           
+                             List the repositories in the image. If the --packages option
+                             is included, then the list of packages in each repository are listed.
+                             If the --modified option is included then only the repositories with
+                             modified along with the names of the modified packages.
+
+  --write=<packageName> --repository=<repositoryDescription> --commitMessage=<commitMessage>
+                            Write the given package to the given repository (--repository) with
+                             the given commit message (--commitMessage). If the --version
+                             option is used, you may specify a custom package version. The default
+                             is to generate a unique version name.
+  --commitMessage=<commitMessage>
+														 Commit message to be used with --write option.
+  --repository=<repositoryDescription>
+                             The description of the repository to which the package will be written
+                             (--write option) or the repository from which the package will be loaded
+                             (--load option).
+
+  --load=<packageVersion> --repository=<repositoryDescription> [--noCommit]
+                             Load the package version from the given repository (--repository).  By 
+                             default a commit is performed when the load is complete, but if you are
+                             simply testing the load, you may use the --noCommit option to avoid the
+                             commit.
+
+  --unload=<packageName> [--noCommit]    
+                             Unload the named package from the image. By default a commit is performed 
+                             when the load is complete, but if you are simply testing the load, you 
+                             may use the --noCommit option to avoid the commit.
+
+  --createRepository=<repositoryDescription> [--noCommit]
+                             Create repository matching the given <repositoryDescription>. If the repository
+                             is a disk-based repository, the disk artifacts will be created along with
+                             in-image artifacts. If the --noCommit option is specified, the disk artifacts
+                             will be created, but the in-image artifacts will not be stored. If the --noCommit
+                             option is specified no commit will be performed.
+
+  --createPackage=<packageName> [--noCommit]
+                             Create a new package with the given packageName. If the --noCommit option is 
+                             specified no commit will be performed and the package will be lost.
+
+  --copyVersion=<packageVersion> from=<repositoryDescription> to=<repositoryDescription>
+                             Copy a package version from one repository to another ... Note that .mcz 
+                             package versions will not be overwritten, while filetree package versions
+                             can be overwritten.
+
+EXAMPLES
+  $basename --help                           -- gs_351             # with GS_HOME set
+  $basename -h                               -- -l -I ./.topazini  # with GEMSTONE set
+  $basename -D <script-arguments>            <topaz-arguments>
+  $basename --debugGem <script-arguments>    <topaz-arguments>
+
+  # in directory containing a .topazini
+  $basename --packages
+  $basename --modified
+  $basename --changes
+  $basename --repositories
+  $basename --repositories --packages
+  $basename --repositories --modified
+  $basename --versions=ConfigurationOfGLASS --repository=http://seaside.gemtalksystems.com/ss/MetacelloRepository
+  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
+            --write=ConfigurationOfGsOB --version=ConfigurationOfGsOB-dkh.98 \
+            --commitMessage='testing the MCPackageBrowser.stone --write option'
+  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo --noCommit\
+            --write=ConfigurationOfGsOB --commitMessage='testing the MCPackageBrowser.stone --write option'
+  $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
+            --load=ConfigurationOfGsOB-dkh.98
+  $basename --createRepository=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
+  $basename --createRepository=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
+  $basename --createPackage=XXX-Core
+  $basename --copyVersion=ConfigurationOfGsOB-dkh.98 \
+            --from=bosch:/bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
+            --to=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
+-----
+%
+instvars
+packageBrowser
+%
+method
+modifiedPackages
+	"return a modified Monticello packages in the image"
+	^ MCWorkingCopy allManagers select: [:wc | wc modified ]
+%
+method
+modifiedPackageNames
+	"return a list of the modified Monticello package names in the image"
+	^ (self modifiedPackages collect: [:wc | wc packageName ]) sort.
+%
+method
+packageNames
+	"return a list of the loaded Monticello package names in the image"
+	^ (MCWorkingCopy allManagers collect: [:wc | wc packageName ]) sort.
+%
+method
+listNames: names
+	names do: [:name | 	self stdout nextPutAll: name; lf ]
+%
+method
+listPackageNames
+	self listNames: self packageNames.
+	^ self noResult
+%
+method
+listModifiedPackageNames
+	self listNames: self modifiedPackageNames.
+	^ self noResult
+%
+method
+changesForWorkingCopy: wc indent: indent
+	| patch |
+	patch := 	wc invertedChangesRelativeToRepository: wc repositoryGroup repositories first.
+	indent timesRepeat: [ self stdout nextPutAll: '    ' ].
+	self stdout nextPutAll: wc packageName; lf.
+	patch operations asArray sort do: [:op |
+		(indent + 1) timesRepeat: [ self stdout nextPutAll: '    ' ].
+		self stdout nextPutAll: op summary.
+		op isAddition
+			ifTrue: [ self stdout nextPutAll: ' (Addition)'; lf ]
+			ifFalse: [ 
+				op isRemoval
+					ifTrue: [ self stdout nextPutAll: ' (Removal)'; lf ]
+					ifFalse: [ self stdout nextPutAll: ' (Modification)'; lf ] ] ].
+%
+method
+showChanges
+	self stdout nextPutAll: '=============== Changes ==============='; lf.
+	self modifiedPackages do: [:wc |
+	 self changesForWorkingCopy: wc indent: 0].
+	^ self noResult
+%
+method
+listRepositories
+	| packageRepos descriptions listPackages modifications packages |
+	listPackages := self packages.
+	packageRepos := Set new.
+	descriptions := Set new.
+	(self modified or: [ self packages ])
+		ifTrue: [ 
+			(Rowan globalNamed: 'MCWorkingCopy') allManagers do: [:wc |
+				self modified
+					ifTrue: [
+						modifications ifNil: [ modifications := Dictionary new ].
+						wc modified
+							ifTrue: [ 
+								wc repositoryGroup repositories
+									do: [:repos | 
+										(modifications at: repos description ifAbsentPut: [ Set new ])
+											add: wc ] ] ]
+					ifFalse: [ 
+						self packages
+							ifTrue: [
+								packages ifNil: [ packages := Dictionary new ].
+								wc repositoryGroup repositories
+									do: [:repos | 
+										(repos description ~= 'cache' and: [ (repos description endsWith: 'package-cache') not ])
+										ifTrue: [ 
+												(packages at: repos description ifAbsentPut: [ Set new ])
+													add: wc ] ] ]
+							ifFalse: [ 
+								packageRepos addAll: wc repositoryGroup repositories.
+								packageRepos do: [:repos | descriptions add: repos description ] ] ] ] ]
+		ifFalse: [
+			"list only repositories, including ones without any loaded packages"
+			MCRepositoryGroup default repositoriesDo: [:repo |
+				descriptions add: repo description ] ].
+	modifications 
+		ifNil: [
+			packages 
+				ifNil: [ 
+					descriptions asArray sort
+						do: [:repositoryDescription | 
+							self stdout nextPutAll: repositoryDescription; lf ] ]
+				ifNotNil: [
+					packages
+						keysAndValuesDo: [ :reposDescription :thePackages |
+							thePackages isEmpty
+								ifFalse: [ 
+									self stdout nextPutAll: reposDescription; lf.
+									(thePackages asArray collect: 
+										[:each | each packageName ])sort 
+											do: [:pName |
+												self stdout nextPutAll: '    ', pName; lf ] ] ] ] ]
+		ifNotNil: [ 
+			modifications 
+				keysAndValuesDo: [ :reposDescription :modifiedPackages |
+					self stdout nextPutAll: reposDescription; lf.
+					modifiedPackages do: [:wc |
+						self changesForWorkingCopy: wc indent: 1 ] ] ].
+	^self noResult
+%
+method
+packageNamed: packageName
+	"return a list of the loaded Monticello package names in the image"
+	| col |
+	col := MCWorkingCopy allManagers select: [:wc | wc packageName = packageName ].
+	col isEmpty ifTrue: [ ^ nil ].
+	^ col first
+%
+method
+writePackage: packageName
+	| repositoryDescription versionName version commitComment wc repository |
+	wc := (self packageNamed: packageName) 
+		ifNil: [ ^ 'No package named ', packageName printString, ' found.' ].
+	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
+	repository := MCRepositoryGroup default repositories 
+		detect: [:each | 
+			(each description ~= 'cache' and: [ (each description endsWith: 'package-cache') not ]) and: [ each description = repositoryDescription ] ]
+		ifNone: [ 
+			self error: 'The repository ', repositoryDescription printString, ' is not present in the image' ].
+	commitComment := self commitMessage ifNil: [ ^ 'Missing required argument ''commitMessage''' ].
+	versionName := self version 
+		ifNil: [ wc uniqueVersionName ].
+	version := wc 
+		newVersionWithName: versionName
+		message: commitComment.
+	repository storeVersion: version.
+	^self noResult
+%
+method
+listVersionsOfPackageNamed: packageName
+	| repositoryDescription repository project repositorySpec versionNames |
+	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
+
+  project := MetacelloMCProject new.
+  repositorySpec := project repositorySpec.
+  repositorySpec description: repositoryDescription.
+  repository := repositorySpec createRepository.
+	versionNames := {}.
+	repository allVersionNames 
+		do: [:versionName | 
+			| reference aPackageName |
+			reference := GoferResolvedReference name: versionName repository: repository.
+			aPackageName := reference metacelloPackageNameWithBranch at: 2.
+			aPackageName = packageName
+				ifTrue: [ versionNames add: reference name ] ].
+	versionNames sort do: [:versionName | self stdout nextPutAll: versionName; lf ].
+	^self noResult
+%
+method
+loadPackage: packageVersion
+	| repositoryDescription repository |
+	repositoryDescription := self repository ifNil: [ ^ 'Missing required argument ''repository''' ].
+
+  repository := self _repositoryFromDescription: repositoryDescription.
+	Gofer new 
+		version: packageVersion;
+		repository: repository;
+		load.
+	self noCommit ifFalse: [ System commitTransaction ]. 
+	^self noResult
+%
+method
+unloadPackage: packageName
+	Gofer new 
+		package: packageName;
+		unload.
+	self noCommit ifFalse: [ System commitTransaction ]. 
+	^self noResult
+%
+method
+createRepositoryNamed: repositoryDescription
+  | project repositorySpec repository |
+  project := MetacelloMCProject new.
+  repositorySpec := project repositorySpec.
+  repositorySpec description: repositoryDescription.
+  repository := repositorySpec createRepository.
+	repository isValid
+		ifFalse: [ repository directory assureExistence ].
+	MCRepositoryGroup default addRepository: repository.
+	self noCommit ifFalse: [ System commitTransaction ].
+	^ self noResult
+%
+method
+createPackageNamed: packageName
+	MCWorkingCopy forPackage: (MCPackage named: packageName).
+	self noCommit ifFalse: [ System commitTransaction ].
+	^ self noResult
+%
+method
+_repositoryFromDescription: repositoryDescription
+	| project repositorySpec |
+  project := MetacelloMCProject new.
+  repositorySpec := project repositorySpec.
+  repositorySpec description: repositoryDescription.
+  ^ repositorySpec createRepository.
+%
+method
+copyVersion: packageVersion
+	| fromDescription toDescription version toRepo fromRepo |
+	fromDescription := self from ifNil: [ self error: 'Missing required --from option' ].
+	toDescription := self to ifNil: [ self error: 'Missing required --to option' ].
+	fromRepo := self _repositoryFromDescription: fromDescription.
+	version := (GoferResolvedReference name: packageVersion repository: fromRepo) version.
+	toRepo :=  self _repositoryFromDescription: toDescription.
+	toRepo storeVersion: version.
+	^ self noResult
+%
+method
+instalRowan3MCPackageBrowserSupport
+	GsFileIn fromServerPath: (self scriptPath asFileReference parent parent / 'gs' / 'Rowan3StubPackageBrowser.gs') pathString.
+	packageBrowser := ((GsSession currentSession objectNamed: 'Rowan3MCPackageBrowser') new)
+		changes: self changes;
+		packages: self packages;
+		repositories: self repositories;
+		noCommit: self noCommit;
+		yourself.
+%
+doit
+	self instalRowan3MCPackageBrowserSupport.
+	self repositories 
+		ifTrue: [
+			packageBrowser listRepositoriesOn: self stdout.
+			^ self noResult ].
+	self packages 
+		ifTrue: [ 
+			packageBrowser listPackageNamesOn: self stdout.
+			^ self noResult ].
+self halt.
+	self load ifNotNil: [:packageVersion | ^ self loadPackage: packageVersion ].
+	self unload ifNotNil: [:packageName | ^ self unloadPackage: packageName ].
+	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
+	self versions ifNotNil: [:packageName | ^ self listVersionsOfPackageNamed: packageName ].
+	self modified ifTrue: [ ^ self listModifiedPackageNames ].
+	self changes ifTrue: [ ^ self showChanges ].<Mouse>
+	self createPackage ifNotNil: [:packageName |  ^ self createPackageNamed: packageName ].
+	self createRepository ifNotNil: [:repositoryDescription |  ^ self createRepositoryNamed: repositoryDescription ].
+	self copyVersion ifNotNil: [:packageVersion | ^ self copyVersion: packageVersion ].
+	^ 'no command (load, write, repositories, packages, modified, createRepository, or changes) specified'
+%
