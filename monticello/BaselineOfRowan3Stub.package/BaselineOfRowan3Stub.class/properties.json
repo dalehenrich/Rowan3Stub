@@ -1,0 +1,14 @@
+{
+	"category" : "BaselineOfRowan3Stub",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "BaselineOfRowan3Stub",
+	"pools" : [
+		 ],
+	"super" : "BaselineOf",
+	"type" : "normal" }
