@@ -1,0 +1,9 @@
+RwLoadComponent {
+	#name : 'MonticelloPackageBrowser',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'Rowan3Stub-Monticello-PackageBrowser'
+	],
+	#comment : 'API for MCPackageBrowser functionality (create/write/load/unload/list) Monticello packages; create Monticello repositories (disk and filetree). Loaded as SystemUser as part of Core component for JfPwoR browser support. Loaded as DataCurator for MCPackageBrowser.stone support.'
+}

@@ -28,10 +28,12 @@ Rowan3MonticelloLoadedPackageStub >> loadedClasses [
 
 { #category : 'accessing' }
 Rowan3MonticelloLoadedPackageStub >> loadedClassExtensions [
-	| theExtendedClasses packageInfo extensionClasses |
+	| theExtendedClasses packageInfo extensionClasses packageInfoClass |
 	theExtendedClasses := KeyValueDictionary new.
 	extensionClasses := IdentitySet new.
-	packageInfo := (Rowan globalNamed: 'PackageInfo') named: self name.
+	packageInfoClass := Rowan globalNamed: 'PackageInfo'.
+	packageInfoClass ifNil: [ ^ theExtendedClasses ].
+	packageInfo := packageInfoClass named: self name.
 	packageInfo extensionClasses
 		do: [ :aBehavior | extensionClasses add: aBehavior theNonMetaClass ].
 	extensionClasses

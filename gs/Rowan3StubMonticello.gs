@@ -62,10 +62,12 @@ loadedClasses
 category: 'accessing'
 method: Rowan3MonticelloLoadedPackageStub
 loadedClassExtensions
-	| theExtendedClasses packageInfo extensionClasses |
+	| theExtendedClasses packageInfo extensionClasses packageInfoClass |
 	theExtendedClasses := KeyValueDictionary new.
 	extensionClasses := IdentitySet new.
-	packageInfo := (Rowan globalNamed: 'PackageInfo') named: self name.
+	packageInfoClass := Rowan globalNamed: 'PackageInfo'.
+	packageInfoClass ifNil: [ ^ theExtendedClasses ].
+	packageInfo := packageInfoClass named: self name.
 	packageInfo extensionClasses
 		do: [ :aBehavior | extensionClasses add: aBehavior theNonMetaClass ].
 	extensionClasses
@@ -121,8 +123,9 @@ method: Rowan3MonticelloLoadedProjectStub
 packageNames
 	self name = self class monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' self name ].
-	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc packageName ]) sort
+	^ (Rowan globalNamed: 'MCWorkingCopy')
+		ifNil: [ #() ]
+		ifNotNil: [ :workingCopyClass | (workingCopyClass allManagers collect: [ :wc | wc packageName ]) sort ]
 %
 
 ! Class extensions for 'Rowan3ImageStub'
@@ -150,7 +153,8 @@ method: Rowan3ImageStub
 packageNamesForLoadedProjectNamed: projectName
 	projectName = Rowan3MonticelloLoadedProjectStub monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' projectName ].
-	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc packageName ]) sort
+	^ (Rowan globalNamed: 'MCWorkingCopy')
+		ifNil: [ #() ]
+		ifNotNil: [ :workingCopyClass | (workingCopyClass allManagers collect: [ :wc | wc packageName ]) sort ]
 %
 

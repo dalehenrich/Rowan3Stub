@@ -1,7 +1,9 @@
 RwLoadComponent {
 	#name : 'Core',
 	#projectNames : [ ],
-	#componentNames : [ ],
+	#componentNames : [
+		'MonticelloPackageBrowser'
+	],
 	#packageNames : [
 		'Rowan3Stub-Core',
 		'Rowan3Stub-Services'

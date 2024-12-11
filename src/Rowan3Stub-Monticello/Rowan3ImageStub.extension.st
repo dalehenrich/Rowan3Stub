@@ -19,6 +19,7 @@ Rowan3ImageStub >> loadedProjects [
 Rowan3ImageStub >> packageNamesForLoadedProjectNamed: projectName [
 	projectName = Rowan3MonticelloLoadedProjectStub monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' projectName ].
-	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc packageName ]) sort
+	^ (Rowan globalNamed: 'MCWorkingCopy')
+		ifNil: [ #() ]
+		ifNotNil: [ :workingCopyClass | (workingCopyClass allManagers collect: [ :wc | wc packageName ]) sort ]
 ]

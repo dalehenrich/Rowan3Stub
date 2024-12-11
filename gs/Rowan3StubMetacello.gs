@@ -62,10 +62,12 @@ loadedClasses
 category: 'accessing'
 method: Rowan3MetacelloLoadedPackageStub
 loadedClassExtensions
-	| theExtendedClasses packageInfo extensionClasses |
+	| theExtendedClasses packageInfo extensionClasses packageInfoClass |
 	theExtendedClasses := KeyValueDictionary new.
 	extensionClasses := IdentitySet new.
-	packageInfo := (Rowan globalNamed: 'PackageInfo') named: self name.
+	packageInfoClass := Rowan globalNamed: 'PackageInfo'.
+	packageInfoClass ifNil: [ ^ theExtendedClasses ].
+	packageInfo := packageInfoClass named: self name.
 	packageInfo extensionClasses
 		do: [ :aBehavior | extensionClasses add: aBehavior theNonMetaClass ].
 	extensionClasses
@@ -113,13 +115,17 @@ workingCopy: aMCWorkingCopy
 category: 'accessing'
 classmethod: Rowan3MetacelloLoadedProjectStub
 metacelloProjectRegistrations
-
-	^((Rowan globalNamed: 'MetacelloProjectRegistration') registry projectSpecs
+	| metacelloProjectRegistrationClass |
+	metacelloProjectRegistrationClass := Rowan globalNamed: 'MetacelloProjectRegistration'.
+	metacelloProjectRegistrationClass ifNil: [ ^ #() ].
+	^(metacelloProjectRegistrationClass registry projectSpecs
     collect: [ :projectSpec | 
-      (Rowan globalNamed: 'MetacelloProjectRegistration')
+      metacelloProjectRegistrationClass
         registrationForProjectSpec: projectSpec
         ifAbsent: [ self error: 'registration for projectSpec: ' projectSpec name , ' not found' ]
-        ifPresent: [ :registration :ignored | (Rowan globalNamed: 'TDMetacelloRegistrationDefinition') registration: registration ] ])
+        ifPresent: [ :registration :ignored | 
+					"If MetacelloProjectRegistration is present then TDMetacelloRegistrationDefinition is present"
+					(Rowan globalNamed: 'TDMetacelloRegistrationDefinition') registration: registration ] ])
 %
 
 !		Instance methods for 'Rowan3MetacelloLoadedProjectStub'
