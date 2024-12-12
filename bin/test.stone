@@ -101,27 +101,12 @@ EXAMPLES
   $basename -D <script-arguments>            <topaz-arguments>
   $basename --debugGem <script-arguments>    <topaz-arguments>
 
-  # in directory containing a .topazini
+  $basename --repostories
   $basename --packages
-  $basename --modified
-  $basename --changes
-  $basename --repositories
-  $basename --repositories --packages
-  $basename --repositories --modified
   $basename --versions=ConfigurationOfGLASS --repository=http://seaside.gemtalksystems.com/ss/MetacelloRepository
-  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo \
-            --write=ConfigurationOfGsOB --version=ConfigurationOfGsOB-dkh.98 \
-            --commitMessage='testing the MCPackageBrowser.stone --write option'
-  $basename --repository=bosch:/bosch1/users/dhenrich/_stones/repo --noCommit\
-            --write=ConfigurationOfGsOB --commitMessage='testing the MCPackageBrowser.stone --write option'
-  $basename --repository=server:///bosch1/users/dhenrich/_stones/repo \
-            --load=ConfigurationOfGsOB-dkh.98
-  $basename --createRepository=filetree:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
-  $basename --createRepository=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
-  $basename --createPackage=XXX-Core
-  $basename --copyVersion=ConfigurationOfGsOB-dkh.98 \
-            --from=bosch:/bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/mcz
-            --to=server:///bosch1/users/dhenrich/_stones/37x/stones/gs_372_j/filetree
+
+
+
 -----
 %
 instvars
@@ -366,11 +351,16 @@ doit
 		ifTrue: [ 
 			packageBrowser listPackageNamesOn: self stdout.
 			^ self noResult ].
+	self versions 
+		ifNotNil: [:packageName |
+			| repository |
+			repository := self repository ifNil: [ ^ 'Missing required argument ''repository''' ]. 
+			packageBrowser listVersionsOfPackageNamed: packageName for: self repository on: self stdout.
+			^ self noResult ].
 self halt.
 	self load ifNotNil: [:packageVersion | ^ self loadPackage: packageVersion ].
 	self unload ifNotNil: [:packageName | ^ self unloadPackage: packageName ].
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
-	self versions ifNotNil: [:packageName | ^ self listVersionsOfPackageNamed: packageName ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
 	self changes ifTrue: [ ^ self showChanges ].<Mouse>
 	self createPackage ifNotNil: [:packageName |  ^ self createPackageNamed: packageName ].
