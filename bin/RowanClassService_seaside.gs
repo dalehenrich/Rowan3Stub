@@ -155,6 +155,15 @@ defaultSymbolDictionaryFromLoadSpec
 	^ #UserGlobals
 %
 
+# install Rowan3StubPackageBrowser.gs and Rowan3StubPackageBrowserTests.gs into image as seaside user (DataCurator)
+run
+	| filePath |
+	filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubPackageBrowser.gs' asFileReference pathString.
+	GsFileIn fromServerPath: filePath.
+	filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubPackageBrowserTests.gs' asFileReference pathString.
+	GsFileIn fromServerPath: filePath 
+%
+
 
 commit
 

@@ -8,7 +8,7 @@ doit
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: Globals
+	inDictionary: UserGlobals
 	options: #()
 )
 		category: 'Rowan3Stub-Monticello-PackageBrowser';
@@ -22,7 +22,19 @@ true.
 
 category: 'tests'
 method: Rowan3MCPackageBrowserTests
-test
+testListPackages
+	| packageBrowser stream |
+	packageBrowser := Rowan3MCPackageBrowser new
+		noCommit: true;
+		yourself.
+	stream := WriteStream on: String new.
+	packageBrowser listPackageNamesOn: stream.
+	self _assertListMatchesExpectedPackagesList: stream contents equals: self _expectedPackageNamesList
+%
+
+category: 'tests'
+method: Rowan3MCPackageBrowserTests
+testListRepositories
 	| packageBrowser stream |
 	packageBrowser := Rowan3MCPackageBrowser new
 		noCommit: true;
