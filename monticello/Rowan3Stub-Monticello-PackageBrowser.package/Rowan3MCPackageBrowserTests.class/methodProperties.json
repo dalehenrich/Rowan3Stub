@@ -1,0 +1,8 @@
+{
+	"class" : {
+		 },
+	"instance" : {
+		"_assertListMatchesExpectedRepositoryList:equals:" : "DataCurator 12/12/2024 14:01",
+		"_expectedHttpRepositoryList" : "DataCurator 12/12/2024 14:01",
+		"testListPackages" : "DataCurator 12/12/2024 14:01",
+		"testListRepositories" : "DataCurator 12/12/2024 14:01" } }

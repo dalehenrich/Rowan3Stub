@@ -1,0 +1,14 @@
+{
+	"category" : "Rowan3Stub-Monticello-PackageBrowser",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		 ],
+	"name" : "Rowan3MCPackageBrowserTests",
+	"pools" : [
+		 ],
+	"super" : "TestCase",
+	"type" : "normal" }
