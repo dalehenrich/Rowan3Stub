@@ -101,10 +101,12 @@ EXAMPLES
   $basename -D <script-arguments>            <topaz-arguments>
   $basename --debugGem <script-arguments>    <topaz-arguments>
 
-  $basename --repostories
   $basename --packages
   $basename --versions=ConfigurationOfGLASS --repository=http://seaside.gemtalksystems.com/ss/MetacelloRepository
-
+--NEXT UP--
+  $basename --repostories
+  $basename --repositories --packages
+  $basename --repositories --modified
 
 
 -----
@@ -335,9 +337,6 @@ method
 instalRowan3MCPackageBrowserSupport
 	GsFileIn fromServerPath: (self scriptPath asFileReference parent parent / 'gs' / 'Rowan3StubPackageBrowser.gs') pathString.
 	packageBrowser := ((GsSession currentSession objectNamed: 'Rowan3MCPackageBrowser') new)
-		changes: self changes;
-		packages: self packages;
-		repositories: self repositories;
 		noCommit: self noCommit;
 		yourself.
 %

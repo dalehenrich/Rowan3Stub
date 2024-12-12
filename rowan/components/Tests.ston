@@ -1,0 +1,11 @@
+RwLoadComponent {
+	#name : 'Tests',
+	#projectNames : [ ],
+	#componentNames : [
+		'Core'
+	],
+	#packageNames : [
+		'Rowan3Stub-Tests'
+	],
+	#comment : 'Top-Level conponent for load project plus tests'
+}

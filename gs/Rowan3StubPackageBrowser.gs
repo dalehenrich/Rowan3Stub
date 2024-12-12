@@ -4,7 +4,7 @@
 doit
 (Object
 	subclass: 'Rowan3MCPackageBrowser'
-	instVarNames: #(changes packages repositories modified noCommit)
+	instVarNames: #(noCommit)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -46,18 +46,6 @@ _repositoryDescriptions
 %
 
 !		Instance methods for 'Rowan3MCPackageBrowser'
-
-category: 'accessing'
-method: Rowan3MCPackageBrowser
-changes
-	^changes
-%
-
-category: 'accessing'
-method: Rowan3MCPackageBrowser
-changes: object
-	changes := object
-%
 
 category: 'operations'
 method: Rowan3MCPackageBrowser
@@ -108,18 +96,6 @@ listVersionsOfPackageNamed: packageName for: repositoryDescription on: stream
 
 category: 'accessing'
 method: Rowan3MCPackageBrowser
-modified
-	^modified
-%
-
-category: 'accessing'
-method: Rowan3MCPackageBrowser
-modified: object
-	modified := object
-%
-
-category: 'accessing'
-method: Rowan3MCPackageBrowser
 modifiedPackageNames
 	"return a list of modified Monticello package names in the image"
 
@@ -152,29 +128,5 @@ packageNames
 	"return a list of Monticello package names in the image"
 
 	^ self class _allWorkingCopies collect: [ :wc | wc packageName ]
-%
-
-category: 'accessing'
-method: Rowan3MCPackageBrowser
-packages
-	^packages
-%
-
-category: 'accessing'
-method: Rowan3MCPackageBrowser
-packages: object
-	packages := object
-%
-
-category: 'accessing'
-method: Rowan3MCPackageBrowser
-repositories
-	^repositories
-%
-
-category: 'accessing'
-method: Rowan3MCPackageBrowser
-repositories: object
-	repositories := object
 %
 

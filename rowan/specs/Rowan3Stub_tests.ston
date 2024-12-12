@@ -2,7 +2,7 @@ RwLoadSpecificationV2 {
 	#projectName : 'Rowan3Stub',
 	#projectSpecFile : 'rowan/project.ston',
 	#componentNames : [
-		'Base'
+		'Tests'
 	],
 	#platformProperties : {
 		'gemstone' : {
@@ -11,5 +11,5 @@ RwLoadSpecificationV2 {
 			}
 		}
 	},
-	#comment : ''
+	#comment : 'Load Core plus Tests'
 }

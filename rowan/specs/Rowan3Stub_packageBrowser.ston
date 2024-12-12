@@ -11,5 +11,5 @@ RwLoadSpecificationV2 {
 			}
 		}
 	},
-	#comment : ''
+	#comment : 'Used to create a standalone .gs file of just the MonticelloPackageBrowser code'
 }
