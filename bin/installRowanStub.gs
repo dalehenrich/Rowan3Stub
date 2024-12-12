@@ -136,6 +136,10 @@ run
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside'
 	ifTrue: [
 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath.
+		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubPackageBrowser.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath.
+		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubPackageBrowserTests.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'metacello'
 	ifTrue: [

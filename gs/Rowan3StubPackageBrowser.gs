@@ -8,7 +8,7 @@ doit
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
-	inDictionary: UserGlobals
+	inDictionary: Globals
 	options: #()
 )
 		category: 'Rowan3Stub-Monticello-PackageBrowser';
