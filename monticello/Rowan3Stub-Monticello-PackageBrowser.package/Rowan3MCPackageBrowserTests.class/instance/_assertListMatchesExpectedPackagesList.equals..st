@@ -1,0 +1,4 @@
+private
+_assertListMatchesExpectedPackagesList: packageNamesListList equals: expectedPackageNameList
+
+  self assert: packageNamesListList equals: expectedPackageNameList

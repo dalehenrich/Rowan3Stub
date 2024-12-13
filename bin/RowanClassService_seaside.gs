@@ -157,11 +157,21 @@ defaultSymbolDictionaryFromLoadSpec
 
 # install Rowan3StubPackageBrowser.gs and Rowan3StubPackageBrowserTests.gs into image as seaside user (DataCurator)
 run
-	| filePath |
-	filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubPackageBrowser.gs' asFileReference pathString.
-	GsFileIn fromServerPath: filePath.
-	filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubPackageBrowserTests.gs' asFileReference pathString.
-	GsFileIn fromServerPath: filePath 
+| projectsHome |
+projectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'.
+true
+	ifTrue: [
+		"use Metacello to load the packages"
+		Metacello new
+			baseline:'Rowan3Stub';
+			repository: 'filetree://', projectsHome,'/Rowan3Stub/monticello';
+  		load ]
+	ifFalse: [ 
+		| filePath |
+		filePath := projectsHome,'/Rowan3Stub/gs/Rowan3StubPackageBrowser.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath.
+		filePath := projectsHome,'/Rowan3Stub/gs/Rowan3StubPackageBrowserTests.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath ].
 %
 
 

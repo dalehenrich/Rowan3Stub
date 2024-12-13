@@ -2,7 +2,9 @@
 	"class" : {
 		 },
 	"instance" : {
+		"_assertListMatchesExpectedPackagesList:equals:" : "DataCurator 12/12/2024 15:56",
 		"_assertListMatchesExpectedRepositoryList:equals:" : "DataCurator 12/12/2024 14:01",
 		"_expectedHttpRepositoryList" : "DataCurator 12/12/2024 14:01",
+		"_expectedPackageNamesList" : "DataCurator 12/12/2024 15:58",
 		"testListPackages" : "DataCurator 12/12/2024 14:01",
 		"testListRepositories" : "DataCurator 12/12/2024 14:01" } }
