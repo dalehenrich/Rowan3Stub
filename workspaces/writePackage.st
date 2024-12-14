@@ -9,7 +9,7 @@
 			(each description ~= 'cache' and: [ (each description endsWith: 'package-cache') not ]) and: [ each description = repositoryDescription ] ]
 		ifNone: [ 
 			self error: 'The repository ', repositoryDescription printString, ' is not present in the image' ].
-	commitComment := 'remove a method and category'.
+	commitComment := 'checkpoint'.
 	versionName :=  'Rowan3Stub-Monticello-PackageBrowser-dkh.1'.
 	version := wc 
 		newVersionWithName: versionName

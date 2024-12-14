@@ -363,8 +363,8 @@ doit
 			repository := self repository ifNil: [ ^ 'Missing required argument ''repository''' ]. 
 			packageBrowser loadPackageVersion: packageVersion from: self repository.
 			^ self noResult ].
+	self unload ifNotNil: [:packageName | ^ packageBrowser unloadPackage: packageName ].
 self halt.
-	self unload ifNotNil: [:packageName | ^ self unloadPackage: packageName ].
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
 	self changes ifTrue: [ ^ self showChanges ].<Mouse>
