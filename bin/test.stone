@@ -335,7 +335,8 @@ copyVersion: packageVersion
 %
 method
 instalRowan3MCPackageBrowserSupport
-	GsFileIn fromServerPath: (self scriptPath asFileReference parent parent / 'gs' / 'Rowan3StubPackageBrowser.gs') pathString.
+	(Rowan globalNamed: 'Rowan3MCPackageBrowser') 
+		ifNil: [ GsFileIn fromServerPath: (self scriptPath asFileReference parent parent / 'gs' / 'Rowan3StubPackageBrowser.gs') pathString ].
 	packageBrowser := ((GsSession currentSession objectNamed: 'Rowan3MCPackageBrowser') new)
 		noCommit: self noCommit;
 		yourself.
@@ -356,8 +357,13 @@ doit
 			repository := self repository ifNil: [ ^ 'Missing required argument ''repository''' ]. 
 			packageBrowser listVersionsOfPackageNamed: packageName for: self repository on: self stdout.
 			^ self noResult ].
+	self load 
+		ifNotNil: [:packageVersion |
+			| repository |
+			repository := self repository ifNil: [ ^ 'Missing required argument ''repository''' ]. 
+			packageBrowser loadPackageVersion: packageVersion from: self repository.
+			^ self noResult ].
 self halt.
-	self load ifNotNil: [:packageVersion | ^ self loadPackage: packageVersion ].
 	self unload ifNotNil: [:packageName | ^ self unloadPackage: packageName ].
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].

@@ -427,40 +427,17 @@ classCreationTemplateUsing: packageNames
 	^ result
 %
 
-#
-# overwrites of RowanBrowserService methods that will need to change for JfPwoR
-#
 category: 'Rowan3 stub'
-method: RowanBrowserService
-recompileMethodsAfterClassCompilation
-	"compileClass: must be run first"
-
-	| theClass classService packageService projectService |
-	theClass := [ 
-	[ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
-		on: CompileWarning , CompileError
-		do: [ :ex | 
-			(ex isKindOf: CompileError)
-				ifTrue: [ 
-					| compileErrorService |
-					self postCommandExecutionWithoutAutoCommit.
-					compileErrorService := RowanCompileErrorServiceServer new.
-					compileErrorService gsArguments: ex errorDetails.
-					updates := Array with: compileErrorService.
-					^ RowanCommandResult addResult: compileErrorService ]
-				ifFalse: [ ex resume ] ] ]
-		ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
-	classService := RowanClassService new name: theClass name.
-	classService update.
-	classService updateSubclasses.
-	classService isNewClass: true.	"if nothing else, the dirty state of the package/project services
-	should be updated. Would like a less heavy weight solution than this, though."
-	RowanCommandResult addResult: classService.
-	selectedClass := classService.
-	updateType := #'none'.
-	self updateSymbols: (Array with: theClass name asString).
-	RowanCommandResult addResult: self.
-	^classService
+method: RowanClassService
+removeCategories: theCategories
+	| theClass  | 
+	self refreshFrom: self theClass. 
+	theClass := self theClass.
+	meta ifTrue:[theClass := theClass class]. 
+	theCategories do: [:category |
+		theClass removeCategory: category.
+		].
+	shouldUpdate := true.
 %
 
 #

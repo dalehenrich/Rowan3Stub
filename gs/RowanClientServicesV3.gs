@@ -5588,7 +5588,7 @@ method: RowanBrowserService
 recompileMethodsAfterClassCompilation
 	"compileClass: must be run first"
 
-	| theClass classService packageService projectService |
+	| theClass classService packageService projectService dictionaryService |
 	theClass := [ 
 	[ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
 		on: CompileWarning , CompileError
@@ -5620,6 +5620,10 @@ recompileMethodsAfterClassCompilation
 	selectedClass := classService.
 	updateType := #'none'.
 	self updateSymbols: (Array with: theClass name asString).
+	dictionaryService := RowanDictionaryService new name: classService dictionaryName. 
+	dictionaryService update. 
+	dictionaryService classes do: [:aService | aService fastRefresh]. 
+	RowanCommandResult addResult: dictionaryService. 
 	RowanCommandResult addResult: self.
 	^classService
 %
