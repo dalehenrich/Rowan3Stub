@@ -1,12 +1,9 @@
 operations
 listVersionsOfPackageNamed: packageName for: repositoryDescription on: stream
-	| repository project repositorySpec versionNames metacelloMCProjectClass |
+	| repository versionNames metacelloMCProjectClass |
 	metacelloMCProjectClass := (Rowan globalNamed: 'MetacelloMCProject')
 		ifNil: [ ^ #() ].
-	project := metacelloMCProjectClass new.
-	repositorySpec := project repositorySpec.
-	repositorySpec description: repositoryDescription.
-	repository := repositorySpec createRepository.
+	repository := self repositoryFromDescription: repositoryDescription.
 	versionNames := {}.
 	repository allVersionNames
 		do: [ :versionName | 
