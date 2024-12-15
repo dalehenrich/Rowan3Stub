@@ -8,4 +8,5 @@ testCreatePackage
 	self assert: (packageBrowser packageNamed: packageName ifAbsent: []) equals: nil.
 	packageBrowser createPackageNamed: packageName.
 	self assert: (packageBrowser packageNamed: packageName)  packageName equals: packageName.
-	packageBrowser unloadPackageNamed: packageName
+	packageBrowser unloadPackageNamed: packageName.
+	self assert: (packageBrowser packageNamed: packageName ifAbsent: [nil ]) equals: nil

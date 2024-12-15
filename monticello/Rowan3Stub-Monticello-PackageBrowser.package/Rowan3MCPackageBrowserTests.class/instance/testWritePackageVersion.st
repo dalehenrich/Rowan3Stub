@@ -13,4 +13,7 @@ testWritePackageVersion
 		writePackageNamed: packageName 
 		to: repositoryDescription 
 		commitComment: 'testing' 
-		versionName: versionName
+		versionName: versionName.
+	packageBrowser unloadPackageNamed: packageName.
+	self assert: (packageBrowser packageNamed: packageName ifAbsent: [nil ]) equals: nil.
+	UserGlobals removeKey: #Rowan3MC_test_repository

@@ -6,4 +6,5 @@ testCreateRepository
 		yourself.
 	repoGlobalName := #'Rowan3MC_test_repository'.
 	packageBrowser createRepositoryFromDescription: 'dictionary://', repoGlobalName asString.
-	self assert: (Rowan globalNamed: repoGlobalName) class name equals: #'MCDictionaryRepository'
+	self assert: (Rowan globalNamed: repoGlobalName) class name equals: #'MCDictionaryRepository'.
+	UserGlobals removeKey: repoGlobalName

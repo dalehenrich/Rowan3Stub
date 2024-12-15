@@ -1,3 +1,3 @@
 accessing
 noCommit
-	^noCommit
+	^noCommit ifNil: [ noCommit := false ]
