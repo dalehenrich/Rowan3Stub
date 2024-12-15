@@ -9,3 +9,4 @@ testPackageNamed
 	self assert: notFound description: 'Package ''BogusPackageName'' unexpectedly found'.
 	packageName := packageBrowser packageNames asArray first.
 	packageBrowser packageNamed: packageName ifAbsent: [ self assert: false description: 'Package ', packageName printString, ' was unexpectedly not found' ].
+	packageBrowser unloadPackageNamed: packageName.

@@ -363,13 +363,19 @@ doit
 			repository := self repository ifNil: [ ^ 'Missing required argument ''repository''' ]. 
 			packageBrowser loadPackageVersion: packageVersion from: self repository.
 			^ self noResult ].
-	self unload ifNotNil: [:packageName | ^ packageBrowser unloadPackage: packageName ].
-	self createRepository ifNotNil: [:repositoryDescription |  ^ self createRepositoryNamed: repositoryDescription ].
+	self unload 
+		ifNotNil: [:packageName | 
+			^ packageBrowser unloadPackage: packageName ].
+	self createRepository 
+		ifNotNil: [:repositoryDescription |  
+			^ packageBrowser createRepositoryFromDescription:: repositoryDescription ].
+	self createPackage 
+		ifNotNil: [:packageName |  
+			^ packageBrowser createPackageNamed: packageName ].
 self halt.
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
 	self changes ifTrue: [ ^ self showChanges ].<Mouse>
-	self createPackage ifNotNil: [:packageName |  ^ self createPackageNamed: packageName ].
 	self copyVersion ifNotNil: [:packageVersion | ^ self copyVersion: packageVersion ].
 	^ 'no command (load, write, repositories, packages, modified, createRepository, or changes) specified'
 %
