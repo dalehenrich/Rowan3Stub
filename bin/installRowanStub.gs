@@ -137,14 +137,6 @@ run
 	ifTrue: [
 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'metacello'
-	ifTrue: [
-		self error: 'metacello extent type not supported' ].
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'
-	ifTrue: [
-		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMetacello.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath ].
-
 Published at: #Rowan put: Rowan3Stub new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
 %

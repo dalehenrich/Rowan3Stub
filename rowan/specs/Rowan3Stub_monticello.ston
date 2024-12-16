@@ -2,14 +2,14 @@ RwLoadSpecificationV2 {
 	#projectName : 'Rowan3Stub',
 	#projectSpecFile : 'rowan/project.ston',
 	#componentNames : [
-		'Tests'
+		'Monticello'
 	],
 	#platformProperties : {
 		'gemstone' : {
 			'allusers' : {
-				#defaultSymbolDictName : 'UserGlobals'
+				#defaultSymbolDictName : 'Globals'
 			}
 		}
 	},
-	#comment : 'Load Core plus Tests'
+	#comment : ''
 }

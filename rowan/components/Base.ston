@@ -1,0 +1,11 @@
+RwLoadComponent {
+	#name : 'Base',
+	#projectNames : [ ],
+	#componentNames : [
+		'Core'
+	],
+	#packageNames : [
+		'Rowan3Stub-Base'
+	],
+	#comment : ''
+}
