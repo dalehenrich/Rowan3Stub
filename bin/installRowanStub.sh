@@ -28,7 +28,8 @@ elif [ $extentType = "metacello" ]; then
 	echo "metacello extent type not currently supported"
 	exit 1
 elif [ $extentType = "seaside" ]; then
-	newExtent.solo -r 37x -e product/bin/extent0.seaside.dbf $stoneName
+	newExtent.solo -r tode -e snapshots/extent0.10-28-2024_14:21:33_tode_virgin.dbf $stoneName
+	# newExtent.solo -r 37x -e product/bin/extent0.seaside.dbf $stoneName
 else
 	newExtent.solo -r 37x -e product/bin/extent0.dbf $stoneName
 fi
