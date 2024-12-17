@@ -20,6 +20,7 @@
 		"packageNames" : "DataCurator 12/16/2024 13:26",
 		"packageVersions" : "DataCurator 12/13/2024 16:49",
 		"packages" : "DataCurator 12/16/2024 13:26",
+		"patchesForPackageNamed:" : "DataCurator 12/17/2024 10:39",
 		"projectClass" : "DataCurator 12/12/2024 14:29:26",
 		"removeRepository:" : "DataCurator 12/16/2024 09:57",
 		"repositoryFromDescription:" : "DataCurator 12/16/2024 14:00",
@@ -27,4 +28,4 @@
 		"unloadPackageNamed:" : "DataCurator 12/14/2024 10:23",
 		"versionsOfPackageNamed:for:" : "DataCurator 12/16/2024 14:04",
 		"writePackageNamed:to:commitComment:" : "DataCurator 12/14/2024 17:18",
-		"writePackageNamed:to:commitComment:versionName:" : "DataCurator 12/14/2024 17:18" } }
+		"writePackageNamed:to:commitComment:versionName:" : "DataCurator 12/17/2024 13:54" } }

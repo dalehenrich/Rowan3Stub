@@ -14,6 +14,11 @@ testWritePackageVersion
 		to: repositoryDescription 
 		commitComment: 'testing' 
 		versionName: versionName.
+	packageBrowser
+		writePackageNamed: packageName 
+		to: repositoryDescription 
+		commitComment: 'testing part 2'.
+	(Smalltalk at: #Rowan3MC_test_repository).
 	packageBrowser unloadPackageNamed: packageName.
 	self assert: (packageBrowser packageNamed: packageName ifAbsent: [nil ]) equals: nil.
 	packageBrowser removeRepository: repository.
