@@ -3,7 +3,9 @@ versionsOfPackageNamed: packageName for: repositoryDescription
 	| repository versionNames metacelloMCProjectClass |
 	metacelloMCProjectClass := (Rowan globalNamed: 'MetacelloMCProject')
 		ifNil: [ ^ #() ].
-	repository := self repositoryFromDescription: repositoryDescription.
+	repository := self 
+		repositoryFromDescription: repositoryDescription 
+			ifAbsent: [ self error: 'The repository ', repositoryDescription printString, ' has not been created' ].
 	versionNames := {}.
 	repository allVersionNames
 		do: [ :versionName | 

@@ -373,9 +373,9 @@ doit
 		ifNotNil: [:packageName |  
 			^ packageBrowser createPackageNamed: packageName ].
 	self write ifNotNil: [:packageName | ^ self writePackage: packageName ].
-self halt.
 	self modified ifTrue: [ ^ self listModifiedPackageNames ].
 	self copyVersion ifNotNil: [:packageVersion | ^ self copyVersion: packageVersion ].
+self halt.
 	self changes ifTrue: [ ^ self showChanges ].
 	^ 'no command (load, write, repositories, packages, modified, createRepository, or changes) specified'
 %

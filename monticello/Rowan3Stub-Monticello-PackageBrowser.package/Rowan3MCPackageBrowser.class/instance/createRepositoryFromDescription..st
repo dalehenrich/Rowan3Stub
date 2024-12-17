@@ -1,9 +1,12 @@
 operations
 createRepositoryFromDescription: repositoryDescription
 	|  repository |
-	repository := self repositoryFromDescription: repositoryDescription.
+	repository :=  (self
+		repositoryFromDescription: repositoryDescription 
+		ifAbsent: [  ]) ifNotNil: [:newRepository |  
+			MCRepositoryGroup default addRepository: newRepository.
+			newRepository ].
 	repository isValid
 		ifFalse: [ repository directory assureExistence ].
-	MCRepositoryGroup default addRepository: repository.
 	self noCommit ifFalse: [ System commitTransaction ].
 	^ repository
