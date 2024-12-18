@@ -42,9 +42,9 @@ $ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub.gs -I $topazini_systemuser 
 
 if [ $extentType = "seaside" ] || [ $extentType = "tode" ]; then
 	$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_seaside.gs -I $topazini_seaside -L
-	if [ $extentType = "tode" ]; then
-		$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_tode.gs -I $topazini_seaside -L
-	fi
+#	if [ $extentType = "tode" ]; then
+#		$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_tode.gs -I $topazini_seaside -L
+#	fi
 else
 	$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_base.gs -I $topazini_systemuser -L
 fi

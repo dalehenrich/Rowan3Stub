@@ -133,7 +133,7 @@ run
 	ifTrue: [
  		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubBase.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside'
+((System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside' or: [(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'])
 	ifTrue: [
 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
