@@ -1,4 +1,7 @@
 
+# installRowanStub.sh seaside gs_372_j
+# installRowanStub.sh tode tode_3.7.2_j
+
 set -ex
 
 export ROWAN_PROJECTS_HOME=/bosch1/users/dhenrich/_stones/37x/j_37x_externals_st/
