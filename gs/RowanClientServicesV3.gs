@@ -137,6 +137,21 @@ true.
 
 doit
 (RowanService
+	subclass: 'Foobar'
+	instVarNames: #(answer)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: RowanClientServices
+	options: #()
+)
+		category: 'Rowan-Services-Core';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanService
 	subclass: 'RowanAnsweringService'
 	instVarNames: #(answer)
 	classVars: #()
@@ -5588,7 +5603,7 @@ method: RowanBrowserService
 recompileMethodsAfterClassCompilation
 	"compileClass: must be run first"
 
-	| theClass classService packageService projectService dictionaryService |
+	| theClass classService packageService projectService |
 	theClass := [ 
 	[ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
 		on: CompileWarning , CompileError
@@ -5618,12 +5633,9 @@ recompileMethodsAfterClassCompilation
 	packageService selectedClass: classService.
 	RowanCommandResult addResult: classService.
 	selectedClass := classService.
-	updateType := #'none'.
+	classService updateType: #'newClass:browser:'.
 	self updateSymbols: (Array with: theClass name asString).
-	dictionaryService := RowanDictionaryService new name: classService dictionaryName. 
-	dictionaryService update. 
-	dictionaryService classes do: [:aService | aService fastRefresh]. 
-	RowanCommandResult addResult: dictionaryService. 
+	self classHierarchy. 
 	RowanCommandResult addResult: self.
 	^classService
 %
