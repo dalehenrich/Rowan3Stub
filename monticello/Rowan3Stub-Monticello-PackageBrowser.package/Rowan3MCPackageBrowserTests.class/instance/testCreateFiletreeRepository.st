@@ -7,6 +7,4 @@ testCreateFiletreeRepository
 	filetreeDir := FileReference newTempFilePrefix: 'r3mc' suffix: '.filetree'.
 	filetreeDir ensureCreateDirectory.
 	repository := packageBrowser createRepositoryFromDescription: 'filetree://',  filetreeDir pathString.
-	repository setNoMetadata.
-	repository halt.
 	packageBrowser removeRepository: repository.

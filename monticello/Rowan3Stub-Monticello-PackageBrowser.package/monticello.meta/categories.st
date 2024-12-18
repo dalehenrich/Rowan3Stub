@@ -1,1 +1,1 @@
-SystemOrganization addCategory: #'Rowan3Stub-Monticello-PackageBrowser'!
+SystemOrganization addCategory: 'Rowan3Stub-Monticello-PackageBrowser'!
