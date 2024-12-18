@@ -205,6 +205,13 @@ isExtensionMethod: selector forClassNamed: className isMeta: meta
 
 category: 'accessing'
 method: Rowan3BrowserToolsStub
+removeClassNamed: className
+	(GsSession currentSession objectNamed: 'MCPlatformSupport')
+		removeClassNamed: className
+%
+
+category: 'accessing'
+method: Rowan3BrowserToolsStub
 removeMethod: selector forClassNamed: name  isMeta: meta
 	| beh |
 	beh := Rowan globalNamed: name.
