@@ -299,7 +299,7 @@ executeCommand
 	"RSR -> RowanServices primary api."
 
 	self checkForDeadProcesses.
-	self setDebugActionBlock.	"<===== patch here ====="
+	self setDebugActionBlock.	"<===== comment out this line to be able to use `System waitForDebug` ====="
 	[ 
 	Rowan commandResultClass initializeResults.
 	[ 

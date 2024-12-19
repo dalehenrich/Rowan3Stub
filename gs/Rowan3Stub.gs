@@ -686,6 +686,12 @@ projectTools
 
 category: 'accessing'
 method: Rowan3Stub
+stubbed
+	^ true
+%
+
+category: 'accessing'
+method: Rowan3Stub
 unpackagedName
 	"Answer the name used for projects and packages that are not in a package ... unpackaged projects and packages are where pacakge things go by default."
 

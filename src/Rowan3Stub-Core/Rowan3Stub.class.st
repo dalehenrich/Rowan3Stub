@@ -67,6 +67,11 @@ Rowan3Stub >> projectTools [
 ]
 
 { #category : 'accessing' }
+Rowan3Stub >> stubbed [
+	^ true
+]
+
+{ #category : 'accessing' }
 Rowan3Stub >> unpackagedName [
 	"Answer the name used for projects and packages that are not in a package ... unpackaged projects and packages are where pacakge things go by default."
 
