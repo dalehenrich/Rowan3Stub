@@ -1,3 +1,73 @@
+! Class Declarations
+! Generated file, do not Edit
+
+doit
+(RowanService
+	subclass: 'RowanMonticelloService'
+	instVarNames: #(packages changes)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Rowan3Stub-Services';
+		immediateInvariant.
+true.
+%
+
+doit
+(RowanMonticelloService
+	subclass: 'RowanMonticelloServiceServer'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'Rowan3Stub-Services';
+		immediateInvariant.
+true.
+%
+
+! Class implementation for 'RowanMonticelloService'
+
+!		Class methods for 'RowanMonticelloService'
+
+category: 'accesing'
+classmethod: RowanMonticelloService
+templateClassName
+
+	^#RowanMonticelloService
+%
+
+!		Instance methods for 'RowanMonticelloService'
+
+category: 'client commands'
+method: RowanMonticelloService
+changes
+	| jadeServer modifiedMCPackages |
+	jadeServer := Rowan jadeServerClassNamed: #'JadeServer'.
+	modifiedMCPackages := (Rowan globalNamed: 'MCWorkingCopy') allManagers
+		select: [ :wc | wc modified ].
+	changes := Array new.
+	modifiedMCPackages
+		collect: [ :wc | 
+			| patch packageName |
+			patch := wc
+				changesRelativeToRepository: wc repositoryGroup repositories first.
+			packageName := wc packageName.
+			changes
+				add:
+					(jadeServer new
+						_mcDescriptionOfPatch: patch
+						baseName: 'closest ancestor'
+						alternateName: nil) ].
+	self refresh.
+	RowanCommandResult addResult: self
+%
+
 ! Class extensions for 'Rowan3PlatformStub'
 
 !		Instance methods for 'Rowan3PlatformStub'
@@ -44,6 +114,7 @@ serviceClasses
 		add: RowanLoggingService;
 		add: RowanMethodService;
 		add: RowanMethodDefinitionService; 
+		add: RowanMonticelloService;
 		add: RowanPackageService;
 		add: RowanPackageDefinitionService;
 		add: RowanPackageGroupService;
@@ -77,6 +148,7 @@ serviceClasses
 		"add: RowanLoggingServiceServer;"
 		add: RowanMethodServiceServer;
 		"add: RowanMethodDefinitionServiceServer; "
+		add: RowanMonticelloServiceServer;
 		add: RowanPackageServiceServer;
 		add: RowanPackageDefinitionServiceServer;
 		"add: RowanPackageGroupServiceServer;"
