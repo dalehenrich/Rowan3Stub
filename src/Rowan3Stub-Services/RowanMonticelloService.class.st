@@ -2,7 +2,6 @@ Class {
 	#name : 'RowanMonticelloService',
 	#superclass : 'RowanService',
 	#instVars : [
-		'packages',
 		'changes'
 	],
 	#category : 'Rowan3Stub-Services'
@@ -32,7 +31,7 @@ RowanMonticelloService >> changes [
 					(jadeServer new
 						_mcDescriptionOfPatch: patch
 						baseName: 'closest ancestor'
-						alternateName: nil) ].
-	self refresh.
+						alternateName: nil
+						packageName: packageName) ].
 	RowanCommandResult addResult: self
 ]

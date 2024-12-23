@@ -4,7 +4,7 @@
 doit
 (RowanService
 	subclass: 'RowanMonticelloService'
-	instVarNames: #(packages changes)
+	instVarNames: #(changes)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -63,8 +63,8 @@ changes
 					(jadeServer new
 						_mcDescriptionOfPatch: patch
 						baseName: 'closest ancestor'
-						alternateName: nil) ].
-	self refresh.
+						alternateName: nil
+						packageName: packageName) ].
 	RowanCommandResult addResult: self
 %
 
