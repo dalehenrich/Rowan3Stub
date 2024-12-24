@@ -56,7 +56,7 @@ changes
 		collect: [ :wc | 
 			| patch packageName |
 			patch := wc
-				changesRelativeToRepository: wc repositoryGroup repositories first.
+				changesRelativeToRepository: wc repositoryGroup repositories last.
 			packageName := wc packageName.
 			changes
 				add:
