@@ -35,3 +35,21 @@ RowanMonticelloService >> changes [
 						packageName: packageName) ].
 	RowanCommandResult addResult: self
 ]
+
+{ #category : 'client commands' }
+RowanMonticelloService >> write: commitComment [
+	|  modifiedMCPackages browser |
+	modifiedMCPackages := (Rowan globalNamed: 'MCWorkingCopy') allManagers
+		select: [ :wc | wc modified ].
+	browser := (Rowan globalNamed: 'Rowan3MCPackageBrowser') new.
+	modifiedMCPackages
+		do: [ :wc | 
+			| repository |
+			repository := wc repositoryGroup repositories last.
+			browser 
+				writePackageNamed: wc  packageName 
+				toRepository: repository 
+				commitComment: commitComment
+].
+	RowanCommandResult addResult: self
+]
