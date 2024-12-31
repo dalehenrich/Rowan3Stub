@@ -44,6 +44,8 @@ export ROWAN_STUB_EXTENT_TYPE=$extentType
 
 
 $ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub_common.topaz -I $topazini_systemuser -L
+$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub.gs -I $topazini_systemuser -L
+
 if [ $extentType = "seaside" ] || [ $extentType = "tode" ]; then
 	$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub_seaside.topaz -I $topazini_systemuser -L
 	$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_seaside.topaz -I $topazini_seaside -L
@@ -55,4 +57,3 @@ else
 	$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_base.topaz -I $topazini_systemuser -L
 fi
 
-$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub.gs -I $topazini_systemuser -L
