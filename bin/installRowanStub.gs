@@ -3,161 +3,12 @@
 # to run as superdoit script with $GEMSTONE set :
 #		./installRowanStub.gs -I <path-to-topazini> -L
 # 
+# beginning of installRowanSub.gs
 # as SystemUser
 login
 
 set INPUTPAUSEONERROR on
 
-#
-#	these 4 methods should be in GemStone-Interactions-Kernel package in Rowan 3 and should
-#		be when we hit masterV3.3
-#
-method: CharacterCollection
-withoutGemstoneLineEndings
-
-	"assume the string is textual, and that CR, LF, and CRLF are all 
-	valid line endings.  Remove each occurence. "
-
-	| cr lf crlf inPos outPos outString lineEndPos newOutPos |
-	cr := Character cr.
-	lf := Character lf.
-	crlf := ByteArray new.
-	crlf
-		add: cr asciiValue;
-		add: lf asciiValue.
-
-	inPos := 1.
-	outPos := 1.
-	outString := self class _newString: self size.
-
-	[ 
-	lineEndPos := self indexOfAnyOf: crlf startingAt: inPos ifAbsent: [ 0 ].
-	lineEndPos ~= 0 ]
-		whileTrue: [ 
-			newOutPos := outPos + (lineEndPos - inPos + 1).
-			outString
-				replaceFrom: outPos
-				to: newOutPos - 2
-				with: self
-				startingAt: inPos.
-			outPos := newOutPos - 1.
-
-			((self at: lineEndPos) = cr
-				and: [ lineEndPos < self size and: [ (self at: lineEndPos + 1) = lf ] ])
-				ifTrue: [ 
-					"CRLF ending"
-					inPos := lineEndPos + 2 ]
-				ifFalse: [ 
-					"CR or LF ending"
-					inPos := lineEndPos + 1 ] ].	"no more line endings.  copy the rest"
-	newOutPos := outPos + (self size - inPos + 1).
-	outString
-		replaceFrom: outPos
-		to: newOutPos - 1
-		with: self
-		startingAt: inPos.
-
-	^ outString copyFrom: 1 to: newOutPos - 1
-%
-method: CharacterCollection
-indexOfAnyOf: aByteArray startingAt: start ifAbsent: aBlock
-
-	"returns the index of the first character in the given set, starting from start"
-
-	| ans |
-	ans := self class
-		findFirstInString: self
-		inSet: aByteArray asByteArray byteArrayMap
-		startingAt: start.
-	ans = 0
-		ifTrue: [ ^ aBlock value ]
-		ifFalse: [ ^ ans ]
-%
-method: ByteArray
-byteArrayMap
-
-	"return a ByteArray mapping each ascii value to a 1 if that ascii value is in the set, and a 0 if it isn't.  Intended for use by primitives only"
-
-	| map |
-	map := ByteArray new: 256 withAll: 0.
-	self do: [ :ascii | map at: ascii + 1 put: 1 ].
-	^ map
-%
-classmethod: SequenceableCollection
-new: size withAll: value
-
-	"Answer an instance of me, with number of elements equal to size, each 
-	of which refers to the argument, value."
-
-	^ (self new: size)
-		atAllPut: value;
-		yourself
-%
-
-# install JadeiteForPharo support in a non-Rowan stone
-
-run
-(Published at: #Rowan ifAbsent: [])
-	ifNotNil: [ self error: 'Rowan is already installed!!' ].
-Published at: #Rowan put: nil.	"make the compiler happy"
-%
-
-run
-| symbolList |
-symbolList := GsCurrentSession currentSession symbolList.
-#( #RowanKernel) "needed by GemStoneInteractions"
-  do: [:symbolName | 
-    (symbolList resolveSymbol: symbolName) ifNotNil: [:val | System waitForDebug ] ifNil: [
-      | newDict size |
-      newDict := SymbolDictionary new
-        name: symbolName;
-        objectSecurityPolicy: symbolList objectSecurityPolicy;
-        yourself.
-      size := System myUserProfile symbolList size.
-      System myUserProfile insertDictionary: newDict at: size + 1 .
-      GsFile gciLogServer:'created ', symbolName . 
-] ]. 
-%
-
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Announcements.gs
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RemoteServiceReplication.gs
-
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/GemStoneInteractions.gs
-
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
-
-# install Monticello package support for Rowan3Stub
-run
-| filePath |
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'base'
-	ifTrue: [
- 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubBase.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath ].
-((System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside' or: [(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'])
-	ifTrue: [
-		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath ].
-Published at: #Rowan put: Rowan3Stub new.
-Published at: #STON put: (RowanKernel_tonel at: #STON).
-%
-
-# the following 4 methods cannot be packaged, since they conflict with the Rowan implementation
-method: Behavior
-rowanPackageName
-	^  '(NONE)'
-%
-method: Behavior
-rowanProjectName
-	^  '(NONE)'
-%
-method: GsNMethod
-rowanPackageName
-	^  '(NONE)'
-%
-method: GsNMethod
-rowanProjectName
-	^  '(NONE)'
-%
 
 run
 (TestCase
@@ -509,3 +360,5 @@ _describeMCOrganizationDefinition: anMCOrganizationDefinition on: aStream packag
 %
 
 commit
+
+## end of installRowanSub.gs

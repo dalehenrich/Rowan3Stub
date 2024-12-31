@@ -1,8 +1,9 @@
 #!/usr/bin/env superdoit_topaz
 #
 # to run as superdoit script with $GEMSTONE set :
-#		./installRowanClassService_tode.gs -I <path-to-topazini> -L
+#		./installRowanClassService_tode.topaz -I <path-to-topazini> -L
 # 
+# beginning of RowanClassService_tode.topaz
 # as SystemUser
 login
 
@@ -37,4 +38,4 @@ changes
 %
 commit
 
-## end of RowanClassService_metacello.gs
+## end of RowanClassService_tode.topaz

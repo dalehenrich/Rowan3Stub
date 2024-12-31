@@ -1,0 +1,15 @@
+#!/usr/bin/env superdoit_topaz
+#
+# to run as superdoit script with $GEMSTONE set :
+#		./installRowanStub_seaside.topaz -I <path-to-topazini> -L
+# 
+# beginning of installRowanSub_seaside.topaz
+# as SystemUser
+login
+
+
+set INPUTPAUSEONERROR on
+
+commit
+## end of installRowanSub_seaside.topaz
+

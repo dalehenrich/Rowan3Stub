@@ -1,8 +1,9 @@
 #!/usr/bin/env superdoit_topaz
 #
 # to run as superdoit script with $GEMSTONE set :
-#		./installRowanClassService_seaside.gs -I <path-to-topazini> -L
+#		./RowanClassService_seaside.topaz -I <path-to-topazini> -L
 # 
+# beginning of RowanClassService_seaside.topaz
 # as seaside user (DataCurator)
 login
 
@@ -177,4 +178,4 @@ true
 
 commit
 
-## end of RowanClassService_seaside.gs
+## end of RowanClassService_seaside.topaz

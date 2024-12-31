@@ -1,0 +1,61 @@
+#!/usr/bin/env superdoit_topaz
+#
+# to run as superdoit script with $GEMSTONE set :
+#		./installRowanStub_common.topaz -I <path-to-topazini> -L
+# 
+# beginning of installRowanSub_common.topaz
+# as SystemUser
+login
+
+set INPUTPAUSEONERROR on
+
+# install JadeiteForPharo support in a non-Rowan stone
+
+run
+(Published at: #Rowan ifAbsent: [])
+	ifNotNil: [ self error: 'Rowan is already installed!!' ].
+Published at: #Rowan put: nil.	"make the compiler happy"
+%
+
+run
+| symbolList |
+symbolList := GsCurrentSession currentSession symbolList.
+#( #RowanKernel) "needed by GemStoneInteractions"
+  do: [:symbolName | 
+    (symbolList resolveSymbol: symbolName) ifNotNil: [:val | System waitForDebug ] ifNil: [
+      | newDict size |
+      newDict := SymbolDictionary new
+        name: symbolName;
+        objectSecurityPolicy: symbolList objectSecurityPolicy;
+        yourself.
+      size := System myUserProfile symbolList size.
+      System myUserProfile insertDictionary: newDict at: size + 1 .
+      GsFile gciLogServer:'created ', symbolName . 
+] ]. 
+%
+
+input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Announcements.gs
+input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RemoteServiceReplication.gs
+
+input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/GemStoneInteractions.gs
+
+input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
+
+# install Monticello package support for Rowan3Stub
+run
+| filePath |
+(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'base'
+	ifTrue: [
+ 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubBase.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath ].
+((System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside' or: [(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'])
+	ifTrue: [
+		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath ].
+Published at: #Rowan put: Rowan3Stub new.
+Published at: #STON put: (RowanKernel_tonel at: #STON).
+%
+
+commit
+
+## end of installRowanSub_common.topaz
