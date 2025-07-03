@@ -1465,7 +1465,7 @@ true.
 doit
 (RsrChannel
 	subclass: 'RsrBinaryStreamChannel'
-	instVarNames: #(sink source inStream outStream)
+	instVarNames: #(sink source inStream outStream wireProtocol)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1566,7 +1566,7 @@ true.
 
 doit
 (RsrCodec
-	subclass: 'RsrCommandCodec'
+	subclass: 'RsrProtocolCodec'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -1580,8 +1580,38 @@ true.
 %
 
 doit
-(RsrCommandCodec
-	subclass: 'RsrCommandDecoder'
+(RsrProtocolCodec
+	subclass: 'RsrProtocolDecoder'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolDecoder
+	subclass: 'RsrProtocolDecoderV1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolDecoder
+	subclass: 'RsrProtocolDecoderV2'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -1601,8 +1631,38 @@ true.
 %
 
 doit
-(RsrCommandCodec
-	subclass: 'RsrCommandEncoder'
+(RsrProtocolCodec
+	subclass: 'RsrProtocolEncoder'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolEncoder
+	subclass: 'RsrProtocolEncoderV1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolEncoder
+	subclass: 'RsrProtocolEncoderV2'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -1813,7 +1873,7 @@ true.
 doit
 (RsrInternalConnectionSpecification
 	subclass: 'RsrInternalSocketConnectionSpecification'
-	instVarNames: #()
+	instVarNames: #(wireProtocols)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1828,7 +1888,7 @@ true.
 doit
 (RsrConnectionSpecification
 	subclass: 'RsrSocketConnectionSpecification'
-	instVarNames: #(host port)
+	instVarNames: #(host wireProtocols)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1876,7 +1936,7 @@ true.
 doit
 (RsrSocketConnectionSpecification
 	subclass: 'RsrInitiateConnection'
-	instVarNames: #(token)
+	instVarNames: #(port token)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -1975,7 +2035,7 @@ true.
 doit
 (RsrObject
 	subclass: 'RsrHandshake'
-	instVarNames: #(steps stream)
+	instVarNames: #(steps stream wireProtocol)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -2005,7 +2065,7 @@ true.
 doit
 (RsrHandshakeStep
 	subclass: 'RsrProtocolVersionNegotiation'
-	instVarNames: #()
+	instVarNames: #(wireProtocols)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -3212,6 +3272,51 @@ true.
 %
 
 doit
+(RsrObject
+	subclass: 'RsrWireProtocol'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrWireProtocol
+	subclass: 'RsrWireProtocolV1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrWireProtocol
+	subclass: 'RsrWireProtocolV2'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication';
+		immediateInvariant.
+true.
+%
+
+doit
 (Object
 	subclass: 'RsrProcessModel'
 	instVarNames: #()
@@ -3283,67 +3388,6 @@ doit
 	options: #()
 )
 		category: 'RemoteServiceReplication-Platform-Test';
-		immediateInvariant.
-true.
-%
-
-doit
-(RsrTestCase
-	subclass: 'RsrCommandCodecTest'
-	instVarNames: #(connection)
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'RemoteServiceReplication-Test';
-		immediateInvariant.
-true.
-%
-
-doit
-(RsrCommandCodecTest
-	subclass: 'RsrCommandDecoderTest'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'RemoteServiceReplication-Test';
-		comment: 'No class-specific documentation for RsrDecoderTest, hierarchy is:
-Object
-  TestAsserter
-    TestCase( testSelector)
-      RsrTestCase
-        RsrCodecTest( registry decoder)
-          RsrDecoderTest
-';
-		immediateInvariant.
-true.
-%
-
-doit
-(RsrCommandCodecTest
-	subclass: 'RsrCommandEncoderTest'
-	instVarNames: #()
-	classVars: #()
-	classInstVars: #()
-	poolDictionaries: #()
-	inDictionary: Globals
-	options: #()
-)
-		category: 'RemoteServiceReplication-Test';
-		comment: 'No class-specific documentation for RsrEncoderTest, hierarchy is:
-Object
-  TestAsserter
-    TestCase( testSelector)
-      RsrTestCase
-        RsrCodecTest( registry decoder)
-          RsrEncoderTest( connection)
-';
 		immediateInvariant.
 true.
 %
@@ -3434,6 +3478,127 @@ doit
 	options: #()
 )
 		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrTestCase
+	subclass: 'RsrProtocolCodecTest'
+	instVarNames: #(connection)
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolCodecTest
+	subclass: 'RsrProtocolDecoderTest'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolDecoderTest
+	subclass: 'RsrProtocolDecoderV1Test'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolDecoderTest
+	subclass: 'RsrProtocolDecoderV2Test'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		comment: 'No class-specific documentation for RsrDecoderTest, hierarchy is:
+Object
+  TestAsserter
+    TestCase( testSelector)
+      RsrTestCase
+        RsrCodecTest( registry decoder)
+          RsrDecoderTest
+';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolCodecTest
+	subclass: 'RsrProtocolEncoderTest'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolEncoderTest
+	subclass: 'RsrProtocolEncoderV1Test'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrProtocolEncoderTest
+	subclass: 'RsrProtocolEncoderV2Test'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		comment: 'No class-specific documentation for RsrEncoderTest, hierarchy is:
+Object
+  TestAsserter
+    TestCase( testSelector)
+      RsrTestCase
+        RsrCodecTest( registry decoder)
+          RsrEncoderTest( connection)
+';
 		immediateInvariant.
 true.
 %
@@ -3566,6 +3731,36 @@ true.
 %
 
 doit
+(RsrSocketConnectionTestCase
+	subclass: 'RsrSocketConnectionTestCaseV1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrSocketConnectionTestCase
+	subclass: 'RsrSocketConnectionTestCaseV2'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
 (RsrSystemTestCase
 	subclass: 'RsrEphemeronMourningDeadlock'
 	instVarNames: #()
@@ -3626,6 +3821,36 @@ true.
 %
 
 doit
+(RsrSocketLifetimeTest
+	subclass: 'RsrSocketLifetimeTestV1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrSocketLifetimeTest
+	subclass: 'RsrSocketLifetimeTestV2'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
 (RsrSystemTestCase
 	subclass: 'RsrMessageSendingTest'
 	instVarNames: #()
@@ -3658,6 +3883,36 @@ true.
 doit
 (RsrMessageSendingTest
 	subclass: 'RsrSocketMessageSendingTest'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrSocketMessageSendingTest
+	subclass: 'RsrSocketMessageSendingTestV1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrSocketMessageSendingTest
+	subclass: 'RsrSocketMessageSendingTestV2'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -3716,6 +3971,36 @@ true.
 %
 
 doit
+(RsrSocketServiceTest
+	subclass: 'RsrSocketServiceTestV1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrSocketServiceTest
+	subclass: 'RsrSocketServiceTestV2'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
 (RsrSystemTestCase
 	subclass: 'RsrSpeciesEquality'
 	instVarNames: #()
@@ -3761,6 +4046,36 @@ true.
 %
 
 doit
+(RsrSocketSpeciesEquality
+	subclass: 'RsrSocketSpeciesEqualityV1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrSocketSpeciesEquality
+	subclass: 'RsrSocketSpeciesEqualityV2'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
 (RsrSystemTestCase
 	subclass: 'RsrStressTest'
 	instVarNames: #(client server)
@@ -3793,6 +4108,36 @@ true.
 doit
 (RsrStressTest
 	subclass: 'RsrSocketStressTest'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrSocketStressTest
+	subclass: 'RsrSocketStressTestV1'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RemoteServiceReplication-Test';
+		immediateInvariant.
+true.
+%
+
+doit
+(RsrSocketStressTest
+	subclass: 'RsrSocketStressTestV2'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -5800,15 +6145,18 @@ process
 	^process
 %
 
-category: 'other'
+category: 'lifecycle'
 method: RsrAsyncMournHandler
 runLoop
 
 	[[self isActive]
 		whileTrue:
 			[[notifier readNotification]
-				on: GcFinalizeNotification
-				do: [:ex | ex _finalizeEphemerons]]]
+				onException: { GcFinalizeNotification. TransactionBacklog. }
+				do: {
+					[:ex | ex _finalizeEphemerons].
+					[:ex | System abortTransaction].
+				}]]
 		on: SocketError
 		do: [:ex | ex return]
 %
@@ -5817,7 +6165,7 @@ category: 'lifecycle'
 method: RsrAsyncMournHandler
 start
 
-	[notifier := GsSignalingSocket newForAsyncExceptions: {GcFinalizeNotification }.
+	[notifier := GsSignalingSocket newForAsyncExceptions: {GcFinalizeNotification. TransactionBacklog. }.
 	notifier interrupting: true]
 		on: SocketError
 		do:
@@ -5937,7 +6285,20 @@ classmethod: RsrBinaryStreamChannel
 inStream: inStream
 outStream: outStream
 
+	^self
+		wireProtocol: RsrWireProtocolV2 new
+		inStream: inStream
+		outStream: outStream
+%
+
+category: 'instance creation'
+classmethod: RsrBinaryStreamChannel
+wireProtocol: aWireProtocol
+inStream: inStream
+outStream: outStream
+
 	^self new
+		wireProtocol: aWireProtocol;
 		inStream: inStream;
 		outStream: outStream;
 		yourself
@@ -6052,6 +6413,22 @@ method: RsrBinaryStreamChannel
 source
 
 	^source
+%
+
+category: 'accessing'
+method: RsrBinaryStreamChannel
+wireProtocol
+	"Returns the wire protocol instance."
+	
+	^wireProtocol
+%
+
+category: 'accessing'
+method: RsrBinaryStreamChannel
+wireProtocol: aWireProtocol
+	"Set the wire protocol instance to use"
+	
+	wireProtocol := aWireProtocol
 %
 
 ! Class implementation for 'RsrInMemoryChannel'
@@ -6310,62 +6687,201 @@ sizeOfInteger
 	^8
 %
 
-! Class implementation for 'RsrCommandCodec'
+! Class implementation for 'RsrProtocolCodec'
 
-!		Instance methods for 'RsrCommandCodec'
+!		Instance methods for 'RsrProtocolCodec'
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+arrayIdentifier
+
+	^9
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+byteArrayIdentifier
+
+	^10
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+characterIdentifier
+
+	^5
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+dateAndTimeIdentifier
+
+	^14
+%
 
 category: 'private-accessing-commands'
-method: RsrCommandCodec
+method: RsrProtocolCodec
 deliverErrorResponseCommand
 
 	^4
 %
 
 category: 'private-accessing-commands'
-method: RsrCommandCodec
+method: RsrProtocolCodec
 deliverResponseCommand
 
 	^2
 %
 
+category: 'accessing-types'
+method: RsrProtocolCodec
+dictionaryIdentifier
+
+	^13
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+doubleIdentifier
+
+	^15
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+falseIdentifier
+
+	^8
+%
+
 category: 'private-accessing'
-method: RsrCommandCodec
+method: RsrProtocolCodec
 immediateOID
 
 	^0
 %
 
+category: 'accessing-types'
+method: RsrProtocolCodec
+negativeIntegerIdentifier
+
+	^4
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+nilIdentifier
+
+	^6
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+orderedCollectionIdentifier
+
+	^12
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+positiveIntegerIdentifier
+
+	^3
+%
+
 category: 'private-accessing-commands'
-method: RsrCommandCodec
+method: RsrProtocolCodec
 releaseObjectsCommand
 
 	^3
 %
 
 category: 'private-accessing-commands'
-method: RsrCommandCodec
+method: RsrProtocolCodec
 sendMessageCommand
 
 	^1
 %
 
-! Class implementation for 'RsrCommandDecoder'
+category: 'accessing-types'
+method: RsrProtocolCodec
+setIdentifier
 
-!		Class methods for 'RsrCommandDecoder'
-
-category: 'instance creation'
-classmethod: RsrCommandDecoder
-registry: aRegistry
-
-	^self new
-		registry: aRegistry;
-		yourself
+	^11
 %
 
-!		Instance methods for 'RsrCommandDecoder'
+category: 'accessing-types'
+method: RsrProtocolCodec
+snapshotIdentifier
+
+	^0
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+stringIdentifier
+
+	^2
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+symbolIdentifier
+
+	^1
+%
+
+category: 'accessing-types'
+method: RsrProtocolCodec
+trueIdentifier
+
+	^7
+%
+
+! Class implementation for 'RsrProtocolDecoder'
+
+!		Instance methods for 'RsrProtocolDecoder'
+
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeByteArrayReference: aByteArrayReference
+from: aStream
+
+	| length |
+	length := self decodeControlWord: aStream.
+	aByteArrayReference intermediate: (aStream next: length)
+%
+
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeCharacterArrayReference: aCharacterArrayReference
+from: aStream
+
+	| length |
+	length := self decodeControlWord: aStream.
+	aCharacterArrayReference intermediate: (aStream next: length)
+%
+
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeCharacterReference: aCharacterReference
+from: aStream
+
+	aCharacterReference intermediate: (self decodeControlWord: aStream)
+%
+
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeCollectionReference: aCollectionReference
+from: aStream
+
+	| size |
+	size := self decodeControlWord: aStream.
+	aCollectionReference intermediate: ((1 to: size) collect: [:i | self decodeReference: aStream])
+%
 
 category: 'decoding-commands'
-method: RsrCommandDecoder
+method: RsrProtocolDecoder
 decodeCommand: aStream
 	"Decode an object from the stream"
 
@@ -6377,8 +6893,16 @@ decodeCommand: aStream
 	^RsrError signal: 'Unknown command identifier: ', command printString
 %
 
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeDateAndTimeReference: aDateAndTimeReference
+from: aStream
+
+	aDateAndTimeReference intermediate: (self decodeControlWord: aStream)
+%
+
 category: 'decoding-commands'
-method: RsrCommandDecoder
+method: RsrProtocolDecoder
 decodeDeliverResponse: aStream
 
     | transaction numServices serviceSnapshots response |
@@ -6393,8 +6917,33 @@ decodeDeliverResponse: aStream
         yourself
 %
 
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeDictionaryReference: aDictionaryReference
+from: aStream
+
+	| size |
+	size := self decodeControlWord: aStream.
+	aDictionaryReference intermediate: ((1 to: size * 2) collect: [:each | self decodeReference: aStream])
+%
+
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeDoubleReference: aDoubleReference
+from: aStream
+
+	aDoubleReference intermediate: (aStream next: 8)
+%
+
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeFalseReference: aTrueReference
+from: aStream
+	"No additional information to decode."
+%
+
 category: 'decoding-services'
-method: RsrCommandDecoder
+method: RsrProtocolDecoder
 decodeImmediateReference: aStream
 
 	| referenceType |
@@ -6404,8 +6953,25 @@ decodeImmediateReference: aStream
 		using: self
 %
 
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeIntegerReference: anIntegerReference
+from: aStream
+
+	| length |
+	length := self decodeControlWord: aStream.
+	anIntegerReference intermediate: (aStream next: length)
+%
+
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeNilReference: aNilReference
+from: aStream
+	"No additional information to decode."
+%
+
 category: 'decoding'
-method: RsrCommandDecoder
+method: RsrProtocolDecoder
 decodeReference: aStream
 
 	| oid |
@@ -6415,7 +6981,7 @@ decodeReference: aStream
 %
 
 category: 'decoding-commands'
-method: RsrCommandDecoder
+method: RsrProtocolDecoder
 decodeReleaseServices: aStream
 
 	| count oids |
@@ -6431,7 +6997,7 @@ decodeReleaseServices: aStream
 %
 
 category: 'decoding-commands'
-method: RsrCommandDecoder
+method: RsrProtocolDecoder
 decodeSendMessage: aStream
 
 	| transaction argCount receiverReference selector numServices serviceSnapshots arguments instance |
@@ -6452,67 +7018,207 @@ decodeSendMessage: aStream
 %
 
 category: 'decoding-services'
-method: RsrCommandDecoder
+method: RsrProtocolDecoder
 decodeServiceSnapshot: aStream
+	"This is different between protocol version."
+	
+	self subclassResponsibility
+%
 
-	| snapshot |
-	snapshot := RsrServiceSnapshot new.
-	snapshot
-		decode: aStream
-		using: self.
-	^snapshot
+category: 'decoding-references'
+method: RsrProtocolDecoder
+decodeTrueReference: aTrueReference
+from: aStream
+	"No additional information to decode."
 %
 
 category: 'decoding-services'
-method: RsrCommandDecoder
+method: RsrProtocolDecoder
 instanceOfImmediate: aReferenceType
 
-	aReferenceType = 1
+	aReferenceType = self symbolIdentifier
 		ifTrue: [^RsrSymbolReference new].
-	aReferenceType = 2
+	aReferenceType = self stringIdentifier
 		ifTrue: [^RsrStringReference new].
-	aReferenceType = 3
+	aReferenceType = self positiveIntegerIdentifier
 		ifTrue: [^RsrPositiveIntegerReference new].
-	aReferenceType = 4
+	aReferenceType = self negativeIntegerIdentifier
 		ifTrue: [^RsrNegativeIntegerReference new].
-	aReferenceType = 5
+	aReferenceType = self characterIdentifier
 		ifTrue: [^RsrCharacterReference new].
-	aReferenceType = 6
+	aReferenceType = self nilIdentifier
 		ifTrue: [^RsrNilReference new].
-	aReferenceType = 7
+	aReferenceType = self trueIdentifier
 		ifTrue: [^RsrTrueReference new].
-	aReferenceType = 8
+	aReferenceType = self falseIdentifier
 		ifTrue: [^RsrFalseReference new].
-	aReferenceType = 9
+	aReferenceType = self arrayIdentifier
 		ifTrue: [^RsrArrayReference new].
-	aReferenceType = 10
+	aReferenceType = self byteArrayIdentifier
 		ifTrue: [^RsrByteArrayReference new].
-	aReferenceType = 11
+	aReferenceType = self setIdentifier
 		ifTrue: [^RsrSetReference new].
-	aReferenceType = 12
+	aReferenceType = self orderedCollectionIdentifier
 		ifTrue: [^RsrOrderedCollectionReference new].
-	aReferenceType = 13
+	aReferenceType = self dictionaryIdentifier
 		ifTrue: [^RsrDictionaryReference new].
-	aReferenceType = 14
+	aReferenceType = self dateAndTimeIdentifier
 		ifTrue: [^RsrDateAndTimeReference new].
-	aReferenceType = 15
+	aReferenceType = self doubleIdentifier
 		ifTrue: [^RsrDoubleReference new].
 	self error: 'ReferenceType(', aReferenceType printString, ') not yet implemented'.
 %
 
-! Class implementation for 'RsrCommandEncoder'
+! Class implementation for 'RsrProtocolDecoderV1'
 
-!		Instance methods for 'RsrCommandEncoder'
+!		Instance methods for 'RsrProtocolDecoderV1'
 
-category: 'private-encoding'
-method: RsrCommandEncoder
-encodeDeliverResponse: aDeliverResponse
+category: 'decoding-services'
+method: RsrProtocolDecoderV1
+decodeServiceSnapshot: aStream
 
-	^ByteArray streamContents: [:stream | self encodeDeliverResponse: aDeliverResponse onto: stream]
+	| species sid targetClassName slots instVarCount templateName targetClass template persona |
+	species := self decodeControlWord: aStream.
+	sid := self decodeControlWord: aStream.
+	instVarCount := self decodeControlWord: aStream.
+	targetClassName := (self decodeReference: aStream) resolve: nil.
+	slots := OrderedCollection new: instVarCount.
+	instVarCount timesRepeat: [slots add: (self decodeReference: aStream)].
+	
+	"This is an effort to duplicate old behavior and quirks.
+	See: https://github.com/GemTalk/RemoteServiceReplication/blob/f84398f10f4bebe213450ee80ef35c1813287903/src/RemoteServiceReplication/RsrServiceSnapshot.class.st#L93"
+	targetClass := RsrClassResolver
+		classNamed: targetClassName
+		ifAbsent: [^nil].
+	templateName := targetClass templateClassName.
+	template := RsrClassResolver
+		classNamed: templateName
+		ifAbsent: [^nil].
+	persona := targetClassName == template serverClassName
+		ifTrue: [#server]
+		ifFalse: [#client].
+
+	^RsrServiceSnapshot new
+		sid: sid;
+		templateName: templateName;
+		persona: persona;
+		slots: slots;
+		yourself
 %
 
-category: 'private-encoding'
-method: RsrCommandEncoder
+! Class implementation for 'RsrProtocolDecoderV2'
+
+!		Class methods for 'RsrProtocolDecoderV2'
+
+category: 'instance creation'
+classmethod: RsrProtocolDecoderV2
+registry: aRegistry
+
+	^self new
+		registry: aRegistry;
+		yourself
+%
+
+!		Instance methods for 'RsrProtocolDecoderV2'
+
+category: 'decoding-services'
+method: RsrProtocolDecoderV2
+decodeServiceSnapshot: aStream
+
+	| species sid templateName persona slots instVarCount |
+	species := self decodeControlWord: aStream.
+	sid := self decodeControlWord: aStream.
+	instVarCount := self decodeControlWord: aStream.
+	templateName := (self decodeReference: aStream) resolve: nil.
+	persona := (self decodeReference: aStream) resolve: nil.
+	slots := OrderedCollection new: instVarCount.
+	instVarCount timesRepeat: [slots add: (self decodeReference: aStream)].
+
+	^RsrServiceSnapshot new
+		sid: sid;
+		templateName: templateName;
+		persona: persona;
+		slots: slots;
+		yourself
+%
+
+! Class implementation for 'RsrProtocolEncoder'
+
+!		Instance methods for 'RsrProtocolEncoder'
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeArrayReference: aArrayReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self arrayIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aArrayReference intermediate size
+		onto: aStream.
+	aArrayReference intermediate
+		do:
+			[:each |
+			each
+				encode: aStream
+				using: self]
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeByteArrayReference: aByteArrayReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self byteArrayIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aByteArrayReference intermediate size
+		onto: aStream.
+	aStream nextPutAll: aByteArrayReference intermediate
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeCharacterReference: aCharacterReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self characterIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aCharacterReference intermediate
+		onto: aStream
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeDateAndTimeReference: aDateAndTimeReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self dateAndTimeIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aDateAndTimeReference intermediate
+		onto: aStream
+%
+
+category: 'encoding-commands'
+method: RsrProtocolEncoder
 encodeDeliverResponse: aDeliverResponse
 onto: aStream
 
@@ -6531,8 +7237,121 @@ onto: aStream
 		onto: aStream
 %
 
-category: 'private-encoding'
-method: RsrCommandEncoder
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeDictionaryReference: aDictionaryReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self dictionaryIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aDictionaryReference intermediate size / 2
+		onto: aStream.
+	aDictionaryReference intermediate do: [:each | each encode: aStream using: self]
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeDoubleReference: aDoubleReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self doubleIdentifier
+		onto: aStream.
+	aStream nextPutAll: aDoubleReference intermediate
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeFalseReference: aFalseReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self falseIdentifier
+		onto: aStream
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeNegativeIntegerReference: aNegativeIntegerReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self negativeIntegerIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aNegativeIntegerReference intermediate size
+		onto: aStream.
+	aStream nextPutAll: aNegativeIntegerReference intermediate
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeNilReference: aNilReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self nilIdentifier
+		onto: aStream
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeOrderedCollectionReference: anOrderedCollectionReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self orderedCollectionIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: anOrderedCollectionReference intermediate size
+		onto: aStream.
+	anOrderedCollectionReference intermediate
+		do:
+			[:each |
+			each
+				encode: aStream
+				using: self]
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodePositiveIntegerReference: aPositiveIntegerReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self positiveIntegerIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aPositiveIntegerReference intermediate size
+		onto: aStream.
+	aStream nextPutAll: aPositiveIntegerReference intermediate
+%
+
+category: 'encoding-commands'
+method: RsrProtocolEncoder
 encodeReference: aReference
 onto: aStream
 
@@ -6541,15 +7360,8 @@ onto: aStream
 		using: self
 %
 
-category: 'private-encoding'
-method: RsrCommandEncoder
-encodeReleaseServices: aReleaseServices
-
-	^ByteArray streamContents: [:stream | self encodeReleaseServices: aReleaseServices onto: stream]
-%
-
-category: 'private-encoding'
-method: RsrCommandEncoder
+category: 'encoding-commands'
+method: RsrProtocolEncoder
 encodeReleaseServices: aReleaseServices
 onto: aStream
 
@@ -6567,15 +7379,8 @@ onto: aStream
 				onto: aStream]
 %
 
-category: 'private-encoding'
-method: RsrCommandEncoder
-encodeSendMessage: aSendMessage
-
-	^ByteArray streamContents: [:stream | self encodeSendMessage: aSendMessage onto: stream]
-%
-
-category: 'private-encoding'
-method: RsrCommandEncoder
+category: 'encoding-commands'
+method: RsrProtocolEncoder
 encodeSendMessage: aSendMessage
 onto: aStream
 
@@ -6611,26 +7416,155 @@ onto: aStream
 				onto: aStream]
 %
 
-category: 'encoding'
-method: RsrCommandEncoder
-encodeServiceSnapshot: aServiceSnapshot
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeServiceReference: aServiceReference
+onto: aStream
 
-	^ByteArray
-		streamContents:
-			[:stream |
-			self
-				encodeServiceSnapshot: aServiceSnapshot
-				onto: stream]
+	self
+		encodeControlWord: aServiceReference sid
+		onto: aStream
 %
 
-category: 'private-encoding'
-method: RsrCommandEncoder
+category: 'encoding-services'
+method: RsrProtocolEncoder
+encodeServiceSnapshot: aServiceSnapshot
+onto: aStream
+	"Service encoding differs between protocol version."
+	
+	self subclassResponsibility
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeSetReference: aSetReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self setIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aSetReference intermediate size
+		onto: aStream.
+	aSetReference intermediate
+		do:
+			[:each |
+			each
+				encode: aStream
+				using: self]
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeStringReference: aStringReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self stringIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aStringReference intermediate size
+		onto: aStream.
+	aStream nextPutAll: aStringReference intermediate
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeSymbolReference: aSymbolReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self symbolIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aSymbolReference intermediate size
+		onto: aStream.
+	aStream nextPutAll: aSymbolReference intermediate
+%
+
+category: 'encoding-references'
+method: RsrProtocolEncoder
+encodeTrueReference: aTrueReference
+onto: aStream
+
+	self
+		encodeControlWord: self immediateOID
+		onto: aStream.
+	self
+		encodeControlWord: self trueIdentifier
+		onto: aStream
+%
+
+! Class implementation for 'RsrProtocolEncoderV1'
+
+!		Instance methods for 'RsrProtocolEncoderV1'
+
+category: 'encoding-services'
+method: RsrProtocolEncoderV1
 encodeServiceSnapshot: aServiceSnapshot
 onto: aStream
 
-	aServiceSnapshot
+	self
+		encodeControlWord: self snapshotIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aServiceSnapshot sid
+		onto: aStream.
+	self
+		encodeControlWord: aServiceSnapshot slots size
+		onto: aStream.
+	(self targetClassReferenceFor: aServiceSnapshot)
 		encode: aStream
-		using: self
+		using: self.
+	aServiceSnapshot slots do: [:each | each encode: aStream using: self]
+%
+
+category: 'accessing'
+method: RsrProtocolEncoderV1
+targetClassReferenceFor: aServiceSnapshot
+
+	| template targetClassName |
+	template := RsrClassResolver classNamed: aServiceSnapshot templateName.
+	targetClassName := aServiceSnapshot shouldCreateServer
+		ifTrue: [template serverClassName]
+		ifFalse: [template clientClassName].
+	^RsrSymbolReference from: targetClassName
+%
+
+! Class implementation for 'RsrProtocolEncoderV2'
+
+!		Instance methods for 'RsrProtocolEncoderV2'
+
+category: 'encoding-services'
+method: RsrProtocolEncoderV2
+encodeServiceSnapshot: aServiceSnapshot
+onto: aStream
+
+	self
+		encodeControlWord: self snapshotIdentifier
+		onto: aStream.
+	self
+		encodeControlWord: aServiceSnapshot sid
+		onto: aStream.
+	self
+		encodeControlWord: aServiceSnapshot slots size
+		onto: aStream.
+	aServiceSnapshot templateNameReference
+		encode: aStream
+		using: self.
+	aServiceSnapshot personaReference
+		encode: aStream
+		using: self.
+	aServiceSnapshot slots do: [:each | each encode: aStream using: self]
 %
 
 ! Class implementation for 'RsrProtocolVersionNegotiationCodec'
@@ -7461,6 +8395,26 @@ connect
 
 ! Class implementation for 'RsrInternalSocketConnectionSpecification'
 
+!		Class methods for 'RsrInternalSocketConnectionSpecification'
+
+category: 'instance creation'
+classmethod: RsrInternalSocketConnectionSpecification
+new
+	"Create a Spec w/ WireProtocolV2."
+
+	^self wireProtocols: { RsrWireProtocolV2 new }
+%
+
+category: 'instance creation'
+classmethod: RsrInternalSocketConnectionSpecification
+wireProtocols: prioritizedWireProtocols
+	"Create a Spec w/ a specific set of supported WireProtocols."
+
+	^super new
+		wireProtocols: prioritizedWireProtocols;
+		yourself
+%
+
 !		Instance methods for 'RsrInternalSocketConnectionSpecification'
 
 category: 'connecting'
@@ -7469,8 +8423,8 @@ connect
 	"Establish an internal Connection pair via socket."
 
 	| acceptor initiator |
-	acceptor := RsrAcceptConnection port: self defaultPort.
-	initiator := RsrInitiateConnection host: '127.0.0.1' port: self defaultPort.
+	acceptor := RsrAcceptConnection port: self defaultPort wireProtocols: self wireProtocols.
+	initiator := RsrInitiateConnection host: '127.0.0.1' port: self defaultPort wireProtocols: self wireProtocols.
 	RsrProcessModel
 		fork: [connectionA := acceptor waitForConnection]
 		named: 'Pending AcceptConnection'.
@@ -7499,15 +8453,32 @@ minimalWait
 	(Delay forMilliseconds: 1) wait
 %
 
+category: 'accessing'
+method: RsrInternalSocketConnectionSpecification
+wireProtocols
+	"Configured WireProtocols to be used during negotiation."
+
+	^wireProtocols
+%
+
+category: 'accessing'
+method: RsrInternalSocketConnectionSpecification
+wireProtocols: prioritizedWireProtocols
+	"Configured WireProtocols to be used during negotiation."
+
+	wireProtocols := prioritizedWireProtocols
+%
+
 ! Class implementation for 'RsrSocketConnectionSpecification'
 
 !		Class methods for 'RsrSocketConnectionSpecification'
 
-category: 'instance creation'
+category: 'accessing'
 classmethod: RsrSocketConnectionSpecification
-host: hostnameOrAddress port: port
+defaultWireProtocols
+	"Return the default list of supported WireProtocol version."
 
-	^ self subclassResponsibility
+	^{ RsrWireProtocolV2 new. RsrWireProtocolV1 new }
 %
 
 !		Instance methods for 'RsrSocketConnectionSpecification'
@@ -7530,26 +8501,27 @@ host: hostnameOrAddress
 
 category: 'accessing'
 method: RsrSocketConnectionSpecification
-port
-	"The port number used for establishing a socket"
-
-	^port
-%
-
-category: 'accessing'
-method: RsrSocketConnectionSpecification
-port: aPort
-	"The port number used for establishing a socket"
-
-	port := aPort
-%
-
-category: 'accessing'
-method: RsrSocketConnectionSpecification
 socketClass
 	"Return the class that should be used for creating Socket instances."
 
 	^RsrSocket
+%
+
+category: 'accessing'
+method: RsrSocketConnectionSpecification
+wireProtocols
+	"Returns the prioritized protocols that should be used
+	when negotiating a connection."
+
+	^wireProtocols ifNil: [^self class defaultWireProtocols]
+%
+
+category: 'accessing'
+method: RsrSocketConnectionSpecification
+wireProtocols: prioritizedWireProtocols
+	"Configure the list of supported WireProtocols."
+
+	wireProtocols := prioritizedWireProtocols
 %
 
 ! Class implementation for 'RsrAcceptConnection'
@@ -7560,20 +8532,32 @@ category: 'instance creation'
 classmethod: RsrAcceptConnection
 host: hostnameOrAddress port: portNumber
 
-	^ self new
-		  host: hostnameOrAddress;
-		  portRange: (portNumber to: portNumber);
-		  yourself
+	^ self
+		  host: hostnameOrAddress
+		  portRange: (portNumber to: portNumber)
 %
 
 category: 'instance creation'
 classmethod: RsrAcceptConnection
 host: hostnameOrAddress portRange: anInterval
 
-	^ self new
-		  host: hostnameOrAddress;
-		  portRange: anInterval;
-		  yourself
+	^self
+		host: hostnameOrAddress
+		portRange: anInterval
+		wireProtocols: self defaultWireProtocols
+%
+
+category: 'instance creation'
+classmethod: RsrAcceptConnection
+host: hostnameOrAddress
+portRange: anInterval
+wireProtocols: prioritizedWireProtocols
+
+	^self new
+		host: hostnameOrAddress;
+		portRange: anInterval;
+		wireProtocols: prioritizedWireProtocols;
+		yourself
 %
 
 category: 'instance creation'
@@ -7581,6 +8565,17 @@ classmethod: RsrAcceptConnection
 port: aPortInteger
 
 	^ self host: self wildcardAddress port: aPortInteger
+%
+
+category: 'instance creation'
+classmethod: RsrAcceptConnection
+port: aPortInteger
+wireProtocols: prioritizedWireProtocols
+
+	^self
+		host: self wildcardAddress
+		portRange: (aPortInteger to: aPortInteger)
+		wireProtocols: prioritizedWireProtocols
 %
 
 category: 'instance creation'
@@ -7645,7 +8640,7 @@ handshakeSteps
 	"Returns a sequence of steps needed to perform a successful handshake."
 
 	^Array
-		with: RsrProtocolVersionNegotiationServer new
+		with: (RsrProtocolVersionNegotiationServer wireProtocols: self wireProtocols)
 %
 
 category: 'other'
@@ -7710,6 +8705,7 @@ waitForConnection
 		stream: stream.
 	handshake perform.
 	channel := RsrBinaryStreamChannel
+		wireProtocol: handshake wireProtocol
 		inStream: stream
 		outStream: stream.
 	connection := RsrConnection
@@ -7745,7 +8741,7 @@ handshakeSteps
 	"Returns a sequence of steps needed to perform a successful handshake."
 
 	^Array
-		with: RsrProtocolVersionNegotiationServer new
+		with: (RsrProtocolVersionNegotiationServer wireProtocols: self wireProtocols)
 		with: (RsrTokenReceiver token: self token)
 %
 
@@ -7781,10 +8777,23 @@ category: 'instance creation'
 classmethod: RsrInitiateConnection
 host: hostnameOrAddress port: port
 
-	^ self new
-		  host: hostnameOrAddress;
-		  port: port;
-		  yourself
+	^self
+		host: hostnameOrAddress
+		port: port
+		wireProtocols: self defaultWireProtocols
+%
+
+category: 'instance creation'
+classmethod: RsrInitiateConnection
+host: hostnameOrAddress
+port: port
+wireProtocols: prioritizedProtocols
+
+	^self new
+		host: hostnameOrAddress;
+		port: port;
+		wireProtocols: prioritizedProtocols;
+		yourself
 %
 
 !		Instance methods for 'RsrInitiateConnection'
@@ -7804,6 +8813,7 @@ connect
 		stream: stream.
 	handshake perform.
 	channel := RsrBinaryStreamChannel
+		wireProtocol: handshake wireProtocol
 		inStream: stream
 		outStream: stream.
 	connection := RsrConnection
@@ -7820,7 +8830,23 @@ handshakeSteps
 	"Returns a sequence of steps needed to perform a successful handshake."
 
 	^Array
-		with: RsrProtocolVersionNegotiationClient new
+		with: (RsrProtocolVersionNegotiationClient wireProtocols: self wireProtocols)
+%
+
+category: 'accessing'
+method: RsrInitiateConnection
+port
+	"The port number used for establishing a socket"
+
+	^port
+%
+
+category: 'accessing'
+method: RsrInitiateConnection
+port: aPort
+	"The port number used for establishing a socket"
+
+	port := aPort
 %
 
 ! Class implementation for 'RsrGciInitiateConnection'
@@ -7833,9 +8859,24 @@ host: hostnameOrAddress
 port: port
 token: aToken
 
+	^self
+		host: hostnameOrAddress
+		port: port
+		wireProtocols: self defaultWireProtocols
+		token: aToken
+%
+
+category: 'instance creation'
+classmethod: RsrGciInitiateConnection
+host: hostnameOrAddress
+port: port
+wireProtocols: prioritizedWireProtocols
+token: aToken
+
 	^self new
 		host: hostnameOrAddress;
 		port: port;
+		wireProtocols: prioritizedWireProtocols;
 		token: aToken;
 		yourself
 %
@@ -7848,7 +8889,7 @@ handshakeSteps
 	"Returns a sequence of steps needed to perform a successful handshake."
 
 	^Array
-		with: RsrProtocolVersionNegotiationClient new
+		with: (RsrProtocolVersionNegotiationClient wireProtocols: self wireProtocols)
 		with: (RsrTokenSender token: self token)
 %
 
@@ -7976,7 +9017,7 @@ method: RsrHandshake
 perform
 	"Perform the sequence of configured steps."
 
-	self steps do: [:each | each performOver: self stream]
+	self steps do: [:each | each performFor: self over: self stream]
 %
 
 category: 'accessing'
@@ -8011,19 +9052,68 @@ stream: aStream
 	stream := aStream
 %
 
+category: 'accessing'
+method: RsrHandshake
+wireProtocol
+	"Returns the chosen wire protocol.
+	nil - if no protocol negotiation happened."
+
+	^wireProtocol
+%
+
+category: 'accessing'
+method: RsrHandshake
+wireProtocol: aWireProtocol
+	"Sets the chosen wire protocol."
+
+	wireProtocol := aWireProtocol
+%
+
 ! Class implementation for 'RsrHandshakeStep'
 
 !		Instance methods for 'RsrHandshakeStep'
 
 category: 'performing'
 method: RsrHandshakeStep
-performOver: aStream
+performFor: aHandshake
+over: aStream
 	"Perform the work for this step."
 
-	^self subclassResponsibility
+	^self performOver: aStream
+%
+
+category: 'performing'
+method: RsrHandshakeStep
+performOver: aStream
+	"By default, this method is called from
+	#performFor:over: for backwards-compatibility
+	reasons.
+	
+	#performFor:over: is the prefered method and
+	should be used for new steps."
+
+	"NOP by default"
 %
 
 ! Class implementation for 'RsrProtocolVersionNegotiation'
+
+!		Class methods for 'RsrProtocolVersionNegotiation'
+
+category: 'instance creation'
+classmethod: RsrProtocolVersionNegotiation
+new
+
+	^self wireProtocols: { RsrWireProtocolV2 new }
+%
+
+category: 'instance creation'
+classmethod: RsrProtocolVersionNegotiation
+wireProtocols: aPrioritizedListOfWireProtocols
+
+	^super new
+		wireProtocols: aPrioritizedListOfWireProtocols;
+		yourself
+%
 
 !		Instance methods for 'RsrProtocolVersionNegotiation'
 
@@ -8034,49 +9124,78 @@ codec
 	^RsrProtocolVersionNegotiationCodec new
 %
 
+category: 'accessing'
+method: RsrProtocolVersionNegotiation
+wireProtocols
+	"Return the supported protocols."
+
+	^wireProtocols
+%
+
+category: 'accessing'
+method: RsrProtocolVersionNegotiation
+wireProtocols: aPrioritizedListOfWireProtocols
+	"Configure the list and priority of supported wire protocols."
+
+	wireProtocols := aPrioritizedListOfWireProtocols
+%
+
 ! Class implementation for 'RsrProtocolVersionNegotiationClient'
 
 !		Instance methods for 'RsrProtocolVersionNegotiationClient'
 
-category: 'handshaking'
+category: 'performing'
 method: RsrProtocolVersionNegotiationClient
-performOver: aStream
+performFor: aHandshake
+over: aStream
 	"Perform the Client's porition of the handshake"
 
-	| supportedVersions answer |
-	supportedVersions := RsrSupportedVersions versions: #(2).
+	| answer wireProtocol |
 	self codec
-		encodeSupportedVersions: supportedVersions
+		encodeSupportedVersions: self supportedVersions
 		onto: aStream.
 	aStream flush.
 	answer := self codec decode: aStream.
 	answer hasSharedVersion
-		ifFalse: [^RsrProtocolVersionNegotiationFailed signal: 'The Client and Server could not agree on an RSR protocol version.']
+		ifFalse: [^RsrProtocolVersionNegotiationFailed signal: 'The Client and Server could not agree on an RSR protocol version.'].
+	wireProtocol := self wireProtocols
+		detect: [:each | each version = answer version]
+		ifNone: [^RsrProtocolVersionNegotiationFailed signal: 'Server''s chosen protocol version is unsupported.'].
+	aHandshake wireProtocol: wireProtocol
+%
+
+category: 'accessing'
+method: RsrProtocolVersionNegotiationClient
+supportedVersions
+
+	^RsrSupportedVersions versions: (self wireProtocols collect: [:each | each version])
 %
 
 ! Class implementation for 'RsrProtocolVersionNegotiationServer'
 
 !		Instance methods for 'RsrProtocolVersionNegotiationServer'
 
-category: 'handshaking'
+category: 'performing'
 method: RsrProtocolVersionNegotiationServer
-performOver: aStream
-	"Peform the Server's side of the handshake."
+performFor: aHandshake
+over: aStream
+	"Perform the Server's side of the handshake."
 
-	| supportedVersions |
+	| supportedVersions selectedProtocol |
 	supportedVersions := self codec decode: aStream.
-	(supportedVersions versions includes: 2)
-		ifTrue:
-			[self codec
-				encodeChosenVersion: (RsrChosenVersion version: 2)
-				onto: aStream.
-			aStream flush]
-		ifFalse:
+	selectedProtocol := self wireProtocols
+		detect: [:protocol | supportedVersions versions includes: protocol version]
+		ifNone:
 			[self codec
 				encodeNoVersionOverlap: RsrNoVersionOverlap new
 				onto: aStream.
 			aStream flush; close.
-			^RsrProtocolVersionNegotiationFailed signal: 'Client versions did not overlap w/ Server']
+			^RsrProtocolVersionNegotiationFailed signal: 'Client versions do not overlap w/ Server'].
+	self codec
+		encodeChosenVersion: (RsrChosenVersion version: selectedProtocol version)
+		onto: aStream.
+	aStream flush.
+	aHandshake wireProtocol: selectedProtocol
 %
 
 ! Class implementation for 'RsrTokenExchange'
@@ -8969,14 +10088,25 @@ from: anObject
 	^referenceClass from: anObject
 %
 
-category: 'accessing'
-classmethod: RsrReference
-typeIdentifier
+!		Instance methods for 'RsrReference'
 
-	^self subclassResponsibility
+category: 'encoding/decoding'
+method: RsrReference
+decode: aStream
+using: aDecoder
+	"Double dispatch - tell the encoder to decode the receiver from the stream"
+
+	self subclassResponsibility
 %
 
-!		Instance methods for 'RsrReference'
+category: 'encoding/decoding'
+method: RsrReference
+encode: aStream
+using: anEncoder
+	"Double dispatch - tell the encoder to encode the receiver onto the stream"
+
+	self subclassResponsibility
+%
 
 category: 'resolving'
 method: RsrReference
@@ -8984,13 +10114,6 @@ resolve: aConnection
 	"Resolve the reference in the context of the provided Connection."
 
 	^self subclassResponsibility
-%
-
-category: 'accessing'
-method: RsrReference
-typeIdentifier
-
-	^self class typeIdentifier
 %
 
 ! Class implementation for 'RsrImmediateReference'
@@ -9009,7 +10132,7 @@ category: 'instance creation'
 classmethod: RsrImmediateReference
 from: anObject
 
-	^self subclassResponsiblity
+	self subclassResponsibility 
 %
 
 !		Instance methods for 'RsrImmediateReference'
@@ -9029,46 +10152,36 @@ category: 'instance creation'
 classmethod: RsrBooleanReference
 from: aBoolean
 
+	"True and False are Boolean instances in GemStone. This correctly distinguishes
+	the appropriate subclass in all Smalltalk environments."
 	^aBoolean
 		ifTrue: [RsrTrueReference new]
 		ifFalse: [RsrFalseReference new]
 %
 
-!		Instance methods for 'RsrBooleanReference'
+! Class implementation for 'RsrFalseReference'
+
+!		Instance methods for 'RsrFalseReference'
 
 category: 'encoding/decoding'
-method: RsrBooleanReference
+method: RsrFalseReference
 decode: aStream
 using: aDecoder
 
-	"Boolean has no additional value"
+	aDecoder
+		decodeFalseReference: self
+		from: aStream
 %
 
 category: 'encoding/decoding'
-method: RsrBooleanReference
+method: RsrFalseReference
 encode: aStream
 using: anEncoder
 
 	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
+		encodeFalseReference: self
 		onto: aStream
 %
-
-! Class implementation for 'RsrFalseReference'
-
-!		Class methods for 'RsrFalseReference'
-
-category: 'accessing'
-classmethod: RsrFalseReference
-typeIdentifier
-
-	^8
-%
-
-!		Instance methods for 'RsrFalseReference'
 
 category: 'resolving'
 method: RsrFalseReference
@@ -9079,16 +10192,27 @@ resolve: aConnection
 
 ! Class implementation for 'RsrTrueReference'
 
-!		Class methods for 'RsrTrueReference'
+!		Instance methods for 'RsrTrueReference'
 
-category: 'accessing'
-classmethod: RsrTrueReference
-typeIdentifier
+category: 'encoding/decoding'
+method: RsrTrueReference
+decode: aStream
+using: aDecoder
 
-	^7
+	aDecoder
+		decodeTrueReference: self
+		from: aStream
 %
 
-!		Instance methods for 'RsrTrueReference'
+category: 'encoding/decoding'
+method: RsrTrueReference
+encode: aStream
+using: anEncoder
+
+	anEncoder
+		encodeTrueReference: self
+		onto: aStream
+%
 
 category: 'resolving'
 method: RsrTrueReference
@@ -9108,13 +10232,6 @@ from: aNil
 	^self new
 %
 
-category: 'accessing'
-classmethod: RsrNilReference
-typeIdentifier
-
-	^6
-%
-
 !		Instance methods for 'RsrNilReference'
 
 category: 'encoding/decoding'
@@ -9122,7 +10239,9 @@ method: RsrNilReference
 decode: aStream
 using: aDecoder
 
-	"Nil has no additional value"
+	aDecoder
+		decodeNilReference: self
+		from: aStream
 %
 
 category: 'encoding/decoding'
@@ -9131,10 +10250,7 @@ encode: aStream
 using: anEncoder
 
 	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
+		encodeNilReference: self
 		onto: aStream
 %
 
@@ -9160,7 +10276,14 @@ intermediate: anObject
 
 !		Instance methods for 'RsrValueReference'
 
-category: 'private-accessing'
+category: 'accessing'
+method: RsrValueReference
+intermediate
+
+	^intermediate
+%
+
+category: 'accessing'
 method: RsrValueReference
 intermediate: anObject
 	"Store the intermediate form of this object"
@@ -9186,13 +10309,6 @@ from: aByteArray
 	^self intermediate: aByteArray copy
 %
 
-category: 'accessing'
-classmethod: RsrByteArrayReference
-typeIdentifier
-
-	^10
-%
-
 !		Instance methods for 'RsrByteArrayReference'
 
 category: 'encoding/decoding'
@@ -9200,9 +10316,9 @@ method: RsrByteArrayReference
 decode: aStream
 using: aDecoder
 
-	| length |
-	length := aDecoder decodeControlWord: aStream.
-	intermediate := aStream next: length
+	aDecoder
+		decodeByteArrayReference: self
+		from: aStream
 %
 
 category: 'encoding/decoding'
@@ -9211,15 +10327,8 @@ encode: aStream
 using: anEncoder
 
 	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
-		onto: aStream.
-	anEncoder
-		encodeControlWord: intermediate size
-		onto: aStream.
-	aStream nextPutAll: intermediate
+		encodeByteArrayReference: self
+		onto: aStream
 %
 
 ! Class implementation for 'RsrCharacterArrayReference'
@@ -9242,26 +10351,9 @@ method: RsrCharacterArrayReference
 decode: aStream
 using: aDecoder
 
-	| length |
-	length := aDecoder decodeControlWord: aStream.
-	intermediate := aStream next: length
-%
-
-category: 'encoding/decoding'
-method: RsrCharacterArrayReference
-encode: aStream
-using: anEncoder
-
-	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
-		onto: aStream.
-	anEncoder
-		encodeControlWord: intermediate size
-		onto: aStream.
-	aStream nextPutAll: intermediate
+	aDecoder
+		decodeCharacterArrayReference: self
+		from: aStream
 %
 
 category: 'resolving'
@@ -9273,25 +10365,19 @@ resolve: aConnection
 
 ! Class implementation for 'RsrStringReference'
 
-!		Class methods for 'RsrStringReference'
+!		Instance methods for 'RsrStringReference'
 
-category: 'accessing'
-classmethod: RsrStringReference
-typeIdentifier
+category: 'encoding/decoding'
+method: RsrStringReference
+encode: aStream
+using: anEncoder
 
-	^2
+	anEncoder
+		encodeStringReference: self
+		onto: aStream
 %
 
 ! Class implementation for 'RsrSymbolReference'
-
-!		Class methods for 'RsrSymbolReference'
-
-category: 'accessing'
-classmethod: RsrSymbolReference
-typeIdentifier
-
-	^1
-%
 
 !		Instance methods for 'RsrSymbolReference'
 
@@ -9300,6 +10386,16 @@ method: RsrSymbolReference
 convertBytes: aByteArray
 
 	^(super convertBytes: aByteArray) asSymbol
+%
+
+category: 'encoding/decoding'
+method: RsrSymbolReference
+encode: aStream
+using: anEncoder
+
+	anEncoder
+		encodeSymbolReference: self
+		onto: aStream
 %
 
 ! Class implementation for 'RsrCharacterReference'
@@ -9313,13 +10409,6 @@ from: aCharacter
 	^self intermediate: aCharacter codePoint
 %
 
-category: 'accessing'
-classmethod: RsrCharacterReference
-typeIdentifier
-
-	^5
-%
-
 !		Instance methods for 'RsrCharacterReference'
 
 category: 'encoding/decoding'
@@ -9327,7 +10416,9 @@ method: RsrCharacterReference
 decode: aStream
 using: aDecoder
 
-	intermediate := aDecoder decodeControlWord: aStream
+	aDecoder
+		decodeCharacterReference: self
+		from: aStream
 %
 
 category: 'encoding/decoding'
@@ -9336,13 +10427,7 @@ encode: aStream
 using: anEncoder
 
 	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
-		onto: aStream.
-	anEncoder
-		encodeControlWord: intermediate
+		encodeCharacterReference: self
 		onto: aStream
 %
 
@@ -9381,45 +10466,24 @@ method: RsrCollectionReference
 decode: aStream
 using: aDecoder
 
-	| size |
-	size := aDecoder decodeControlWord: aStream.
-	intermediate := (1 to: size) collect: [:i | aDecoder decodeReference: aStream]
-%
-
-category: 'encoding/decoding'
-method: RsrCollectionReference
-encode: aStream
-using: anEncoder
-
-	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
-		onto: aStream.
-	anEncoder
-		encodeControlWord: intermediate size
-		onto: aStream.
-	intermediate
-		do:
-			[:each |
-			each
-				encode: aStream
-				using: anEncoder]
+	aDecoder
+		decodeCollectionReference: self
+		from: aStream
 %
 
 ! Class implementation for 'RsrArrayReference'
 
-!		Class methods for 'RsrArrayReference'
-
-category: 'accessing'
-classmethod: RsrArrayReference
-typeIdentifier
-
-	^9
-%
-
 !		Instance methods for 'RsrArrayReference'
+
+category: 'encoding/decoding'
+method: RsrArrayReference
+encode: aStream
+using: anEncoder
+
+	anEncoder
+		encodeArrayReference: self
+		onto: aStream
+%
 
 category: 'resolving'
 method: RsrArrayReference
@@ -9455,13 +10519,6 @@ from: aDictionary
 	^self intermediate: referenceStream contents
 %
 
-category: 'accessing'
-classmethod: RsrDictionaryReference
-typeIdentifier
-
-	^13
-%
-
 !		Instance methods for 'RsrDictionaryReference'
 
 category: 'encoding/decoding'
@@ -9469,9 +10526,9 @@ method: RsrDictionaryReference
 decode: aStream
 using: aDecoder
 
-	| size |
-	size := aDecoder decodeControlWord: aStream.
-	intermediate := (1 to: size * 2) collect: [:each | aDecoder decodeReference: aStream]
+	aDecoder
+		decodeDictionaryReference: self
+		from: aStream
 %
 
 category: 'encoding/decoding'
@@ -9480,15 +10537,8 @@ encode: aStream
 using: anEncoder
 
 	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
-		onto: aStream.
-	anEncoder
-		encodeControlWord: intermediate size / 2
-		onto: aStream.
-	intermediate do: [:each | each encode: aStream using: anEncoder]
+		encodeDictionaryReference: self
+		onto: aStream
 %
 
 category: 'resolving'
@@ -9509,16 +10559,17 @@ resolve: aConnection
 
 ! Class implementation for 'RsrOrderedCollectionReference'
 
-!		Class methods for 'RsrOrderedCollectionReference'
-
-category: 'accessing'
-classmethod: RsrOrderedCollectionReference
-typeIdentifier
-
-	^12
-%
-
 !		Instance methods for 'RsrOrderedCollectionReference'
+
+category: 'encoding/decoding'
+method: RsrOrderedCollectionReference
+encode: aStream
+using: anEncoder
+
+	anEncoder
+		encodeOrderedCollectionReference: self
+		onto: aStream
+%
 
 category: 'other'
 method: RsrOrderedCollectionReference
@@ -9544,14 +10595,17 @@ from: aSet
 	^self intermediate: referenceStream contents
 %
 
-category: 'accessing'
-classmethod: RsrSetReference
-typeIdentifier
-
-	^11
-%
-
 !		Instance methods for 'RsrSetReference'
+
+category: 'encoding/decoding'
+method: RsrSetReference
+encode: aStream
+using: anEncoder
+
+	anEncoder
+		encodeSetReference: self
+		onto: aStream
+%
 
 category: 'resolving'
 method: RsrSetReference
@@ -9576,13 +10630,6 @@ from: aDateAndTime
 	^self intermediate: intermediate
 %
 
-category: 'accessing'
-classmethod: RsrDateAndTimeReference
-typeIdentifier
-
-	^14
-%
-
 !		Instance methods for 'RsrDateAndTimeReference'
 
 category: 'encoding/decoding'
@@ -9590,7 +10637,9 @@ method: RsrDateAndTimeReference
 decode: aStream
 using: aDecoder
 
-	intermediate := aDecoder decodeControlWord: aStream
+	aDecoder
+		decodeDateAndTimeReference: self
+		from: aStream
 %
 
 category: 'encoding/decoding'
@@ -9599,13 +10648,7 @@ encode: aStream
 using: anEncoder
 
 	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
-		onto: aStream.
-	anEncoder
-		encodeControlWord: intermediate
+		encodeDateAndTimeReference: self 
 		onto: aStream
 %
 
@@ -9629,13 +10672,6 @@ from: aFloat
 	^self intermediate: intermediate
 %
 
-category: 'accessing'
-classmethod: RsrDoubleReference
-typeIdentifier
-
-	^15
-%
-
 !		Instance methods for 'RsrDoubleReference'
 
 category: 'encoding/decoding'
@@ -9643,7 +10679,9 @@ method: RsrDoubleReference
 decode: aStream
 using: aDecoder
 
-	intermediate := aStream next: 8
+	aDecoder
+		decodeDoubleReference: self
+		from: aStream
 %
 
 category: 'encoding/decoding'
@@ -9652,12 +10690,8 @@ encode: aStream
 using: anEncoder
 
 	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
-		onto: aStream.
-	aStream nextPutAll: intermediate
+		encodeDoubleReference: self
+		onto: aStream
 %
 
 category: 'resolving'
@@ -9714,26 +10748,9 @@ method: RsrIntegerReference
 decode: aStream
 using: aDecoder
 
-	| length |
-	length := aDecoder decodeControlWord: aStream.
-	intermediate := aStream next: length
-%
-
-category: 'encoding/decoding'
-method: RsrIntegerReference
-encode: aStream
-using: anEncoder
-
-	anEncoder
-		encodeControlWord: anEncoder immediateOID
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self typeIdentifier
-		onto: aStream.
-	anEncoder
-		encodeControlWord: intermediate size
-		onto: aStream.
-	aStream nextPutAll: intermediate
+	aDecoder
+		decodeIntegerReference: self
+		from: aStream
 %
 
 category: 'resolving'
@@ -9745,15 +10762,6 @@ resolve: aConnection
 
 ! Class implementation for 'RsrNegativeIntegerReference'
 
-!		Class methods for 'RsrNegativeIntegerReference'
-
-category: 'accessing'
-classmethod: RsrNegativeIntegerReference
-typeIdentifier
-
-	^4
-%
-
 !		Instance methods for 'RsrNegativeIntegerReference'
 
 category: 'converting'
@@ -9763,15 +10771,28 @@ convertBytes: aByteArray
 	^(super convertBytes: aByteArray) negated
 %
 
+category: 'encoding/decoding'
+method: RsrNegativeIntegerReference
+encode: aStream
+using: anEncoder
+
+	anEncoder
+		encodeNegativeIntegerReference: self
+		onto: aStream
+%
+
 ! Class implementation for 'RsrPositiveIntegerReference'
 
-!		Class methods for 'RsrPositiveIntegerReference'
+!		Instance methods for 'RsrPositiveIntegerReference'
 
-category: 'accessing'
-classmethod: RsrPositiveIntegerReference
-typeIdentifier
+category: 'encoding/decoding'
+method: RsrPositiveIntegerReference
+encode: aStream
+using: anEncoder
 
-	^3
+	anEncoder
+		encodePositiveIntegerReference: self
+		onto: aStream
 %
 
 ! Class implementation for 'RsrServiceReference'
@@ -9810,7 +10831,7 @@ encode: aStream
 using: anEncoder
 
 	anEncoder
-		encodeControlWord: self sid
+		encodeServiceReference: self
 		onto: aStream
 %
 
@@ -10186,44 +11207,6 @@ createInstanceRegisteredIn: aConnection
 	^instance
 %
 
-category: 'other'
-method: RsrServiceSnapshot
-decode: aStream
-using: aDecoder
-
-	| species instVarCount |
-	species := aDecoder decodeControlWord: aStream.
-	sid := aDecoder decodeControlWord: aStream.
-	instVarCount := aDecoder decodeControlWord: aStream.
-	templateName := (aDecoder decodeReference: aStream) resolve: nil.
-	persona := (aDecoder decodeReference: aStream) resolve: nil.
-	slots := OrderedCollection new: instVarCount.
-	instVarCount timesRepeat: [slots add: (aDecoder decodeReference: aStream)]
-%
-
-category: 'encoding/decoding'
-method: RsrServiceSnapshot
-encode: aStream
-using: anEncoder
-
-	anEncoder
-		encodeControlWord: self snapshotIdentifier
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self sid
-		onto: aStream.
-	anEncoder
-		encodeControlWord: self slots size
-		onto: aStream.
-	self templateNameReference
-		encode: aStream
-		using: anEncoder.
-	self personaReference
-		encode: aStream
-		using: anEncoder.
-	self slots do: [:each | each encode: aStream using: anEncoder]
-%
-
 category: 'accessing'
 method: RsrServiceSnapshot
 instanceIn: aConnection
@@ -10237,7 +11220,7 @@ instanceIn: aConnection
 	^instance
 %
 
-category: 'other'
+category: 'accessing'
 method: RsrServiceSnapshot
 persona
 	"What persona should be used when this ServiceSnapshot is reified?"
@@ -10245,7 +11228,15 @@ persona
 	^persona
 %
 
-category: 'other'
+category: 'accessing'
+method: RsrServiceSnapshot
+persona: aSymbol
+	"What persona should be used when this ServiceSnapshot is reified?"
+	
+	persona := aSymbol
+%
+
+category: 'accessing'
 method: RsrServiceSnapshot
 personaReference
 	"What persona should be used when this ServiceSnapshot is reified?
@@ -10305,7 +11296,7 @@ slots: anArrayOfReferences
 	slots := anArrayOfReferences
 %
 
-category: 'other'
+category: 'snapshotting'
 method: RsrServiceSnapshot
 snapshot: aService
 
@@ -10326,19 +11317,19 @@ snapshot: aService
 
 category: 'accessing'
 method: RsrServiceSnapshot
-snapshotIdentifier
-
-	^0
-%
-
-category: 'other'
-method: RsrServiceSnapshot
 templateName
 
 	^templateName
 %
 
-category: 'other'
+category: 'accessing'
+method: RsrServiceSnapshot
+templateName: aSymbol
+
+	templateName := aSymbol
+%
+
+category: 'accessing'
 method: RsrServiceSnapshot
 templateNameReference
 
@@ -11170,6 +12161,14 @@ stoppedState
 	^#Stop
 %
 
+category: 'accessing'
+method: RsrStreamChannelLoop
+wireProtocol
+	"Return the protocol we are using to talk on the wire"
+
+	^self channel wireProtocol
+%
+
 ! Class implementation for 'RsrCommandSink'
 
 !		Instance methods for 'RsrCommandSink'
@@ -11186,7 +12185,7 @@ category: 'accessing'
 method: RsrCommandSink
 encoder
 
-	^RsrCommandEncoder new
+	^self wireProtocol encoder
 %
 
 category: 'commands'
@@ -11291,7 +12290,7 @@ category: 'accessing'
 method: RsrCommandSource
 decoder
 
-	^RsrCommandDecoder new
+	^self wireProtocol decoder
 %
 
 category: 'commands'
@@ -11483,6 +12482,90 @@ method: RsrTokenRejected
 wasAccepted
 
 	^false
+%
+
+! Class implementation for 'RsrWireProtocol'
+
+!		Instance methods for 'RsrWireProtocol'
+
+category: 'accessing'
+method: RsrWireProtocol
+decoder
+	"Returns the decoder to use for this wire protocol version."
+	
+	self subclassResponsibility
+%
+
+category: 'accessing'
+method: RsrWireProtocol
+encoder
+	"Returns the encoder to use for this wire protocol version."
+	
+	self subclassResponsibility
+%
+
+category: 'accessing'
+method: RsrWireProtocol
+version
+	"Returns the wire protocol version number."
+	
+	self subclassResponsibility
+%
+
+! Class implementation for 'RsrWireProtocolV1'
+
+!		Instance methods for 'RsrWireProtocolV1'
+
+category: 'accessing'
+method: RsrWireProtocolV1
+decoder
+	"Returns the decoder to use for this wire protocol version."
+	
+	^RsrProtocolDecoderV1 new
+%
+
+category: 'accessing'
+method: RsrWireProtocolV1
+encoder
+	"Returns the encoder to use for this wire protocol version."
+	
+	^RsrProtocolEncoderV1 new
+%
+
+category: 'accessing'
+method: RsrWireProtocolV1
+version
+	"Returns the wire protocol version number."
+	
+	^1
+%
+
+! Class implementation for 'RsrWireProtocolV2'
+
+!		Instance methods for 'RsrWireProtocolV2'
+
+category: 'accessing'
+method: RsrWireProtocolV2
+decoder
+	"Returns the decoder to use for this wire protocol version."
+	
+	^RsrProtocolDecoderV2 new
+%
+
+category: 'accessing'
+method: RsrWireProtocolV2
+encoder
+	"Returns the encoder to use for this wire protocol version."
+	
+	^RsrProtocolEncoderV2 new
+%
+
+category: 'accessing'
+method: RsrWireProtocolV2
+version
+	"Returns the wire protocol version number."
+	
+	^2
 %
 
 ! Class implementation for 'RsrProcessModel'
@@ -11904,994 +12987,6 @@ testSuccessfulResolution
 		identicalTo: Object
 %
 
-! Class implementation for 'RsrCommandCodecTest'
-
-!		Class methods for 'RsrCommandCodecTest'
-
-category: 'testing'
-classmethod: RsrCommandCodecTest
-isAbstract
-
-	^self == RsrCommandCodecTest
-%
-
-!		Instance methods for 'RsrCommandCodecTest'
-
-category: 'accessing'
-method: RsrCommandCodecTest
-connection
-
-	^connection
-%
-
-category: 'other'
-method: RsrCommandCodecTest
-decoder
-
-	^RsrCommandDecoder new
-%
-
-category: 'accessing'
-method: RsrCommandCodecTest
-encoder
-
-	^RsrCommandEncoder new
-%
-
-category: 'encode/decode'
-method: RsrCommandCodecTest
-encodeReferenceOf: anObject
-
-	| reference |
-	reference := RsrReference from: anObject.
-	^ByteArray streamContents: [:stream | self encoder encodeReference: reference onto: stream]
-%
-
-category: 'running-symbol'
-method: RsrCommandCodecTest
-genericSymbol
-
-	^#genericSymbol
-%
-
-category: 'running-symbol'
-method: RsrCommandCodecTest
-genericSymbolEncoding
-
-	^#[0 0 0 0 0 0 0 0], "OID = 0"
-	#[0 0 0 0 0 0 0 1], "Immediate Type = 1"
-	#[0 0 0 0 0 0 0 13], "Length of UTF-8 data"
-	#[103 101 110 101 114 105 99 83 121 109 98 111 108]	"#genericSymbol"
-%
-
-category: 'accessing-objects'
-method: RsrCommandCodecTest
-serviceNoInstVarsServerPersonaEncoding
-
-	^#[0 0 0 0 0 0 0 0], "type"
-	#[0 0 0 0 0 0 0 1], "referencedService's OID = 1"
-	#[0 0 0 0 0 0 0 0], "Inst Var Count"
-	#[0 0 0 0 0 0 0 0], "Start of service name. OID = 0"
-	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
-	#[0 0 0 0 0 0 0 20], "Length of UTF-8 encoded bytes"
-	#[82 115 114 83 101 114 118 105 99 101 78 111 73 110 115 116 86 97 114 115], "#RsrServiceNoInstVars"
-	#[0 0 0 0 0 0 0 0], "Start of persona. OID = 0"
-	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
-	#[0 0 0 0 0 0 0 6], "Length of UTF-8 encoded bytes"
-	#[115 101 114 118 101 114] "#server"
-%
-
-category: 'accessing-objects'
-method: RsrCommandCodecTest
-serviceReferenceServiceServerPersona
-
-	^#[0 0 0 0 0 0 0 0], "type"
-	#[0 0 0 0 0 0 0 2], "rootService's OID = 2"
-	#[0 0 0 0 0 0 0 1], "Inst Var Count"
-	#[0 0 0 0 0 0 0 0], "Start of service name. OID = 0"
-	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
-	#[0 0 0 0 0 0 0 26], "Length of UTF-8 encoded bytes"
-	#[82 115 114 83 101 114 118 105 99 101 82 101 102 101 114 101 110 99 101 83 101
-114 118 105 99 101], "#RsrServiceReferenceService"
-	#[0 0 0 0 0 0 0 0], "Start of persona. OID = 0"
-	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
-	#[0 0 0 0 0 0 0 6], "Length of UTF-8 encoded bytes"
-	#[115 101 114 118 101 114], "#server"
-	"inst var  to the nested service w/ SID 1"
-	#[0 0 0 0 0 0 0 1]
-%
-
-category: 'other'
-method: RsrCommandCodecTest
-setUp
-
-	super setUp.
-	connection := RsrConnection
-		channel: RsrNullChannel new
-		transactionSpigot: RsrThreadSafeNumericSpigot naturals
-		oidSpigot: RsrThreadSafeNumericSpigot naturals.
-	connection open
-%
-
-category: 'other'
-method: RsrCommandCodecTest
-tearDown
-
-	connection close.
-	connection := nil.
-	super tearDown
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testArray
-
-	| array encoding |
-	array := Array
-		with: self genericSymbol
-		with: 5
-		with: nil.
-	encoding :=
-		#[0 0 0 0 0 0 0 0], "Immediate Object OID"
-		#[0 0 0 0 0 0 0 9], "Array type"
-		#[0 0 0 0 0 0 0 3], "3 elements"
-		self genericSymbolEncoding, "Generic Symbol"
-		#[0 0 0 0 0 0 0 0], "Immediate OID"
-		#[0 0 0 0 0 0 0 3], "Positive Integer"
-		#[0 0 0 0 0 0 0 1], "num bytes"
-		#[5], "5"
-		#[0 0 0 0 0 0 0 0], "Immediate OID"
-		#[0 0 0 0 0 0 0 6].
-	self
-		verifyImmediate: array
-		encoding: encoding.
-	array := Array new.
-	encoding :=
-		#[0 0 0 0 0 0 0 0], "Immediate OID"
-		#[0 0 0 0 0 0 0 9], "Array type"
-		#[0 0 0 0 0 0 0 0].
-	self
-		verifyImmediate: array
-		encoding: encoding
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testBoolean
-
-	| encoding |
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 7].
-	self
-		verifyImmediate: true
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 8].
-	self
-		verifyImmediate: false
-		encoding: encoding.
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testByteArray
-
-	| bytes encoding |
-	bytes := #[].
-	encoding :=
-		#[0 0 0 0 0 0 0 0], "Immediate Object OID"
-		#[0 0 0 0 0 0 0 10], "ByteArray type"
-		#[0 0 0 0 0 0 0 0], "size"
-		bytes.
-	self
-		verifyImmediate: bytes
-		encoding: encoding.
-	bytes := #[1 2 3 4 5].
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 10],
-		#[0 0 0 0 0 0 0 5],
-		bytes.
-	self
-		verifyImmediate: bytes
-		encoding: encoding
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testCharacter
-
-	| encoding |
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 5],
-		#[0 0 0 0 0 0 0 0].
-	self
-		verifyImmediate: (Character codePoint: 0)
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 5],
-		#[0 0 0 0 0 0 0 65].
-	self
-		verifyImmediate: (Character codePoint: 65)
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 5],
-		#[0 0 0 0 0 0 0 65].
-	self
-		verifyImmediate: $A
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 5],
-		#[0 0 0 0 0 0 1 212].
-	self
-		verifyImmediate: (Character codePoint: 16r01D4)
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 5],
-		#[0 0 0 0 0 0 131 52].
-	self
-		verifyImmediate: (Character codePoint: 16r8334)
-		encoding: encoding.
-%
-
-category: 'running-control words'
-method: RsrCommandCodecTest
-testControlWord
-	
-	self
-		verifyControlWord: 0
-		encoding: #[0 0 0 0 0 0 0 0].
-	self
-		verifyControlWord: 1
-		encoding: #[0 0 0 0 0 0 0 1].
-	self
-		verifyControlWord: -1
-		encoding: #[255 255 255 255 255 255 255 255].
-	self
-		verifyControlWord: (2 raisedTo: 63) - 1
-		encoding: #[127 255 255 255 255 255 255 255].
-	self
-		verifyControlWord: (2 raisedTo: 63) negated
-		encoding: #[128 0 0 0 0 0 0 0]
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testDateTime
-
-	| dt encoding |
-	dt := RsrDateAndTime posixEpoch.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 14],
-		#[0 0 0 0 0 0 0 0].
-	self
-		verifyImmediate: dt
-		encoding: encoding.
-	dt := RsrDateAndTime fromMicroseconds: 1562692562657612. "2019-07-09T10:16:02.657612-07:00"
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 14],
-		#[0 5 141 66 183 23 33 76].
-	self
-		verifyImmediate: dt
-		encoding: encoding.
-	dt := RsrDateAndTime fromMicroseconds: -1000000. "1969-12-31T23:59:59-00:00"
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 14],
-		#[255 255 255 255 255 240 189 192].
-	self
-		verifyImmediate: dt
-		encoding: encoding.
-	dt := RsrDateAndTime fromMicroseconds: -491277642567488. "1954-06-07T14:59:17.432512-07:00"
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 14],
-		#[255 254 65 47 130 160 240 192].
-	self
-		verifyImmediate: dt
-		encoding: encoding
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testDictionary
-
-	| dictionary encoding result |
-	dictionary := Dictionary new.
-	encoding :=
-		#[0 0 0 0 0 0 0 0], "Immediate Object OID"
-		#[0 0 0 0 0 0 0 13], "Dictionary type"
-		#[0 0 0 0 0 0 0 0]. "0 associations"
-	self
-		verifyImmediate: dictionary
-		encoding: encoding.
-	dictionary := Dictionary new
-		at: 1 put: self genericSymbol;
-		at: false put: true;
-		yourself.
-	encoding := self encodeReferenceOf: dictionary.
-	result := (self decoder decodeReference: encoding readStream) resolve: self connection.
-	self
-		assert: result
-		equals: dictionary.
-	self
-		deny: result
-		identicalTo: dictionary.
-	"self hack: 'Order is not guaranteed in a dictionary'.
-	encoding :=
-		#[0 0 0 0 0 0 0 0], ""Immediate OID""
-		#[0 0 0 0 0 0 0 13], ""Dictionary Type""
-		#[0 0 0 0 0 0 0 2], ""Two assocs""
-		#[0 0 0 0 0 0 0 0], ""nil""
-		#[0 0 0 0 0 0 0 6],
-		#[0 0 0 0 0 0 0 0], ""true""
-		#[0 0 0 0 0 0 0 7],
-		#[0 0 0 0 0 0 0 0], ""Integer 1""
-		#[0 0 0 0 0 0 0 3],
-		#[0 0 0 0 0 0 0 1],
-		#[1],
-		self genericSymbolEncoding.
-	self
-		verifyImmediate: dictionary
-		encoding: encoding"
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testDouble
-
-	| encoding |
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 15],
-		#[128 0 0 0 0 0 0 0].
-	self
-		verifyImmediate: -0.0
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 15],
-		#[0 0 0 0 0 0 0 0].
-	self
-		verifyImmediate: 0.0
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 15],
-		#[191 240 0 0 0 0 0 0].
-	self
-		verifyImmediate: -1.0
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 15],
-		#[63 240 0 0 0 0 0 0].
-	self
-		verifyImmediate: 1.0
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 15],
-		#[63 185 153 153 153 153 153 154].
-	self
-		verifyImmediate: 0.1
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 15],
-		#[191 185 153 153 153 153 153 154].
-	self
-		verifyImmediate: -0.1
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 15],
-		#[127 240 0 0 0 0 0 0].
-	self
-		verifyImmediate: RsrDoubleReference infinity
-		encoding: encoding
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testInteger
-
-	| encoding |
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 3],
-		#[0 0 0 0 0 0 0 1],
-		#[0].
-	self
-		verifyImmediate: 0
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 3],
-		#[0 0 0 0 0 0 0 1],
-		#[4].
-	self
-		verifyImmediate: 4
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 3],
-		#[0 0 0 0 0 0 0 5],
-		#[1 15 248 235 121].
-	self
-		verifyImmediate: 4562938745
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 4],
-		#[0 0 0 0 0 0 0 5],
-		#[1 15 248 235 121].
-	self
-		verifyImmediate: -4562938745
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 3],
-		#[0 0 0 0 0 0 0 13],
-		#[10 101 181 177 179 46 128 92 96 64 190 76 107].
-	self
-		verifyImmediate: 823759265872134912569713249387
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 4],
-		#[0 0 0 0 0 0 0 13],
-		#[10 101 181 177 179 46 128 92 96 64 190 76 107].
-	self
-		verifyImmediate: -823759265872134912569713249387
-		encoding: encoding.
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testNil
-
-	| encoding |
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 6].
-	self
-		verifyImmediate: nil
-		encoding: encoding
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testOrderedCollection
-
-	| oc encoding |
-	oc := OrderedCollection new.
-	encoding :=
-		#[0 0 0 0 0 0 0 0], "Immediate OID"
-		#[0 0 0 0 0 0 0 12], "OrderedCollection type"
-		#[0 0 0 0 0 0 0 0].
-	self
-		verifyImmediate: oc
-		encoding: encoding.
-	oc := OrderedCollection
-		with: self genericSymbol
-		with: 5
-		with: nil.
-	encoding :=
-		#[0 0 0 0 0 0 0 0], "Immediate Object OID"
-		#[0 0 0 0 0 0 0 12], "OrderedCollection type"
-		#[0 0 0 0 0 0 0 3], "3 elements"
-		self genericSymbolEncoding, "Generic Symbol"
-		#[0 0 0 0 0 0 0 0], "Immediate OID"
-		#[0 0 0 0 0 0 0 3], "Positive Integer"
-		#[0 0 0 0 0 0 0 1], "num bytes"
-		#[5], "5"
-		#[0 0 0 0 0 0 0 0], "Immediate OID"
-		#[0 0 0 0 0 0 0 6].
-	self
-		verifyImmediate: oc
-		encoding: encoding
-%
-
-category: 'running-immediates'
-method: RsrCommandCodecTest
-testSet
-
-	| set encoding result |
-	set := Set new.
-	encoding :=
-		#[0 0 0 0 0 0 0 0], "OID"
-		#[0 0 0 0 0 0 0 11], "Set"
-		#[0 0 0 0 0 0 0 0]. "0 elements"
-	self
-		verifyImmediate: set
-		encoding: encoding.
-	set := Set
-		with: true
-		with: nil.
-	encoding := self encodeReferenceOf: set.
-	result := (self decoder decodeReference: encoding readStream) resolve: self connection.
-	self
-		assert: result
-		equals: set.
-	self
-		deny: result
-		identicalTo: set.
-	"self hack: 'Hashed collections do not have an ordering'.
-	encoding :=
-		#[0 0 0 0 0 0 0 0], ""OID""
-		#[0 0 0 0 0 0 0 11], ""Set""
-		#[0 0 0 0 0 0 0 2], ""2 elements""
-		#[0 0 0 0 0 0 0 0], ""true""
-		#[0 0 0 0 0 0 0 7],
-		#[0 0 0 0 0 0 0 0], ""nil""
-		#[0 0 0 0 0 0 0 6].
-	self
-		verifyImmediate: set
-		encoding: encoding"
-%
-
-category: 'running-symbol'
-method: RsrCommandCodecTest
-testString
-
-	| encoding |
-	encoding :=
-		#[0 0 0 0 0 0 0 0], "OID = 0"
-		#[0 0 0 0 0 0 0 2], "Immediate Type = 2"
-		#[0 0 0 0 0 0 0 0], "length"
-		#[].	 "empty string"
-	self
-		verifyImmediate: ''
-		encoding: encoding.
-	encoding :=
-		#[0 0 0 0 0 0 0 0], "OID = 0"
-		#[0 0 0 0 0 0 0 2], "Immediate Type = 2"
-		#[0 0 0 0 0 0 0 13], "length"
-		#[103 101 110 101 114 105 99 83 116 114 105 110 103].	 "genericString"
-	self
-		verifyImmediate: 'genericString'
-		encoding: encoding
-%
-
-category: 'running-symbol'
-method: RsrCommandCodecTest
-testSymbol
-
-	self
-		verifyImmediate: self genericSymbol
-		encoding: self genericSymbolEncoding
-%
-
-category: 'asserting'
-method: RsrCommandCodecTest
-verifyControlWord: anInteger
-encoding: bytes
-
-	self subclassResponsibility
-%
-
-category: 'asserting'
-method: RsrCommandCodecTest
-verifyImmediate: anImmediateObject
-encoding: encoding
-
-	self subclassResponsibility
-%
-
-! Class implementation for 'RsrCommandDecoderTest'
-
-!		Instance methods for 'RsrCommandDecoderTest'
-
-category: 'asserting'
-method: RsrCommandDecoderTest
-assertReference: bytes
-decodesTo: expected
-
-	| actual |
-	actual := self decodeReference: bytes.
-	self
-		assert: actual
-		equals: expected
-%
-
-category: 'decoding'
-method: RsrCommandDecoderTest
-decodeReference: bytes
-
-	^(self decoder decodeReference: bytes readStream) resolve: self connection
-%
-
-category: 'decoding'
-method: RsrCommandDecoderTest
-decodeService: anObjectBytes
-
-	^(self decoder decodeServiceSnapshot: anObjectBytes readStream) reifyIn: self connection
-%
-
-category: 'running'
-method: RsrCommandDecoderTest
-testDecodeIncompatibleServiceWithExtraInstVar
-	"Ensure that there is a reasonable error message when decoding failes due to incompatible templates."
-
-	| encoding exception |
-	encoding := 	#[0 0 0 0 0 0 0 0], "type"
-	#[0 0 0 0 0 0 0 1], "referencedService's OID = 1"
-	#[0 0 0 0 0 0 0 1], "Inst Var Count"
-	#[0 0 0 0 0 0 0 0], "Start of service name. OID = 0"
-	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
-	#[0 0 0 0 0 0 0 20], "Length of UTF-8 encoded bytes"
-	#[82 115 114 83 101 114 118 105 99 101 78 111 73 110 115 116 86 97 114 115], "#RsrServiceNoInstVars"
-	#[0 0 0 0 0 0 0 0], "Start of persona. OID = 0"
-	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
-	#[0 0 0 0 0 0 0 6], "Length of UTF-8 encoded bytes"
-	#[115 101 114 118 101 114], "#server"
-	"inst var referencing itself"
-	#[0 0 0 0 0 0 0 1].
-	exception := [self decodeService: encoding]
-		on: Error
-		do: [:ex | ex return: ex].
-	self
-		assert: exception messageText
-		equals: 'Expected 0 value(s) for template RsrServiceNoInstVars but received 1 value(s) instead. Verify peers have compatible template definitions.'
-%
-
-category: 'running'
-method: RsrCommandDecoderTest
-testDeliverResponse
-
-	| service response encoding command decodedService |
-	service := RsrServerNoInstVars new.
-	self connection _ensureRegistered: service.
-	response := #responseSymbol.
-	encoding :=
-		#[0 0 0 0 0 0 0 2], "DeliverResponse Command"
-		#[0 0 0 0 0 0 0 1], "Transaction Id"
-		#[0 0 0 0 0 0 0 1], "Number of services"
-		self serviceNoInstVarsServerPersonaEncoding,
-		#[0 0 0 0 0 0 0 0], "Service Name Symbol Reference"
-		#[0 0 0 0 0 0 0 1], "Object Type for Symbol"
-		#[0 0 0 0 0 0 0 14], "Length of UTF-8 bytes"
-		#[114 101 115 112 111 110 115 101 83 121 109 98 111 108]. "#responseSymbol"
-	command := self decoder decodeCommand: encoding readStream.
-	self
-		assert: command class
-		equals: RsrDeliverResponse.
-	self
-		assert: command transaction
-		equals: 1.
-	self
-		assert: command snapshots size
-		equals: 1.
-	decodedService := command snapshots first reifyIn: self connection.
-	self
-		assert: decodedService
-		equals: service.
-	self
-		assert: (command response resolve: self connection)
-		equals: response
-%
-
-category: 'running'
-method: RsrCommandDecoderTest
-testReleaseServices
-
-	| command encoding |
-	encoding :=
-		#[0 0 0 0 0 0 0 3], "ReleaseObjects Command"
-		#[0 0 0 0 0 0 0 5], "Num OIDS"
-		#[0 0 0 0 0 0 0 1], "First OID"
-		#[0 0 0 0 0 0 0 2],
-		#[0 0 0 0 0 0 0 3],
-		#[0 0 0 0 0 0 0 4],
-		#[0 0 0 0 0 0 0 5]. "Last OID"
-	command := self decoder decodeCommand: encoding readStream.
-	self
-		assert: command sids
-		equals: #(1 2 3 4 5)
-%
-
-category: 'running'
-method: RsrCommandDecoderTest
-testSendMessage
-
-	| service encoding command |
-	service := RsrServerNoInstVars new.
-	self connection _ensureRegistered: service.
-	encoding :=
-		#[0 0 0 0 0 0 0 1], "SendMessage Command"
-		#[0 0 0 0 0 0 0 1], "Transaction ID"
-		#[0 0 0 0 0 0 0 1], "One service is part of this message"
-		self serviceNoInstVarsServerPersonaEncoding,
-		#[0 0 0 0 0 0 0 1], "Receiver OID"
-		#[0 0 0 0 0 0 0 0], "Selector Reference"
-		#[0 0 0 0 0 0 0 1], "Object Type for Symbol"
-		#[0 0 0 0 0 0 0 8], "Length of UTF-8 bytes"
-		#[114 101 116 117 114 110 52 50], "#return42"
-		#[0 0 0 0 0 0 0 0]. "Argument Count"
-	command := self decoder decodeCommand: encoding readStream.
-	self
-		assert: command class
-		equals: RsrSendMessage.
-	self
-		assert: command transaction
-		equals: 1.
-	self
-		assert: (command receiverReference resolve: self connection)
-		identicalTo: service.
-	self
-		assert: (command selectorReference resolve: self connection)
-		identicalTo: #return42.
-	self
-		assert: command argumentReferences
-		equals: #().
-	self
-		assert: command snapshots size
-		equals: 1
-%
-
-category: 'running'
-method: RsrCommandDecoderTest
-testServiceDecodeIdentity
-	"Ensure that decoding an object multiple times results in
-	a single object getting created."
-
-	| firstService secondService |
-	firstService := self decodeService: self serviceNoInstVarsServerPersonaEncoding.
-	secondService := self decodeService: self serviceNoInstVarsServerPersonaEncoding.
-	self
-		assert: firstService
-		identicalTo: secondService
-%
-
-category: 'running'
-method: RsrCommandDecoderTest
-testServiceNoInstVars
-
-	| decodedService |
-	decodedService := self decodeService: self serviceNoInstVarsServerPersonaEncoding.
-	self
-		assert: decodedService class
-		equals: RsrServerNoInstVars.
-	self
-		assert: decodedService _id
-		equals: 1
-%
-
-category: 'running'
-method: RsrCommandDecoderTest
-testServiceReferenceService
-
-	| rootService referencedService |
-	referencedService := self decodeService: self serviceNoInstVarsServerPersonaEncoding.
-	self
-		assert: referencedService class
-		equals: RsrServerNoInstVars.
-	self
-		assert: referencedService _id
-		equals: 1.
-	rootService := self decodeService: self serviceReferenceServiceServerPersona.
-	self
-		assert: rootService class
-		equals: RsrServerReferenceService.
-	self
-		assert: rootService _id
-		equals: 2.
-	self
-		assert: rootService service
-		equals: referencedService
-%
-
-category: 'asserting'
-method: RsrCommandDecoderTest
-verifyControlWord: expected
-encoding: bytes
-
-	| actual |
-	actual := self decoder decodeControlWord: bytes readStream.
-	self
-		assert: actual
-		equals: expected
-%
-
-category: 'asserting'
-method: RsrCommandDecoderTest
-verifyImmediate: expected
-encoding: encoding
-
-	| actual |
-	actual := (self decoder decodeReference: encoding readStream) resolve: self connection.
-	self
-		assert: actual
-		equals: expected
-%
-
-! Class implementation for 'RsrCommandEncoderTest'
-
-!		Instance methods for 'RsrCommandEncoderTest'
-
-category: 'other'
-method: RsrCommandEncoderTest
-register: aService
-
-	self connection _ensureRegistered: aService
-%
-
-category: 'running-immediates'
-method: RsrCommandEncoderTest
-testDeliverResponse
-
-	| service response command result expectedEncoding |
-	service := RsrClientNoInstVars new.
-	self register: service.
-	response := #responseSymbol.
-	command := RsrDeliverResponse
-		transaction: 1
-		responseReference: (RsrReference from: response)
-		snapshots: (Array with: (RsrServiceSnapshot from: service)).
-	result := self encoder encodeDeliverResponse: command.
-	expectedEncoding :=
-		#[0 0 0 0 0 0 0 2], "DeliverResponse Command"
-		#[0 0 0 0 0 0 0 1], "Transaction Id"
-		#[0 0 0 0 0 0 0 1], "One service is part of this response"
-		self serviceNoInstVarsServerPersonaEncoding,
-		#[0 0 0 0 0 0 0 0], "Service Name Symbol Reference"
-		#[0 0 0 0 0 0 0 1], "Object Type for Symbol"
-		#[0 0 0 0 0 0 0 14], "Length of UTF-8 bytes"
-		#[114 101 115 112 111 110 115 101 83 121 109 98 111 108]. "#responseSymbol"
-	self
-		assert: result
-		equals: expectedEncoding
-%
-
-category: 'running'
-method: RsrCommandEncoderTest
-testNaN
-
-	| encoding |
-	"Signaling NaN is not tested.
-	Negative NaN is not tested."
-	encoding :=
-		#[0 0 0 0 0 0 0 0],
-		#[0 0 0 0 0 0 0 15],
-		#[255 248 0 0 0 0 0 0].
-	self
-		verifyImmediate: RsrDoubleReference nan
-		encoding: encoding.
-%
-
-category: 'running-immediates'
-method: RsrCommandEncoderTest
-testReleaseServices
-
-	| command result expectedEncoding |
-	command := RsrReleaseServices sids: #(1 2 3 4 5).
-	result := self encoder encodeReleaseServices: command.
-	expectedEncoding :=
-		#[0 0 0 0 0 0 0 3], "ReleaseObjects Command"
-		#[0 0 0 0 0 0 0 5], "Num OIDS"
-		#[0 0 0 0 0 0 0 1], "First OID"
-		#[0 0 0 0 0 0 0 2],
-		#[0 0 0 0 0 0 0 3],
-		#[0 0 0 0 0 0 0 4],
-		#[0 0 0 0 0 0 0 5]. "Last OID"
-	self
-		assert: result
-		equals: expectedEncoding
-%
-
-category: 'running-immediates'
-method: RsrCommandEncoderTest
-testSendMessage
-
-	| service analysis command result expectedEncoding |
-	service := RsrClientNoInstVars new.
-	self register: service.
-	analysis := RsrSnapshotAnalysis
-		roots: (Array with: service)
-		connection: self connection.
-	analysis perform.
-	command := RsrSendMessage
-		transaction: 1
-		receiverReference: (RsrReference from: service)
-		selectorReference: (RsrSymbolReference from: #return42)
-		argumentReferences: #().
-	command snapshots: analysis snapshots.
-	result := self encoder encodeSendMessage: command.
-	expectedEncoding :=
-		#[0 0 0 0 0 0 0 1], "SendMessage Command"
-		#[0 0 0 0 0 0 0 1], "Transaction ID"
-		#[0 0 0 0 0 0 0 1], "One service is part of this message"
-		self serviceNoInstVarsServerPersonaEncoding,
-		#[0 0 0 0 0 0 0 1], "Receiver OID"
-		#[0 0 0 0 0 0 0 0], "Selector Reference"
-		#[0 0 0 0 0 0 0 1], "Object Type for Symbol"
-		#[0 0 0 0 0 0 0 8], "Length of UTF-8 bytes"
-		#[114 101 116 117 114 110 52 50], "#return42"
-		#[0 0 0 0 0 0 0 0]. "Argument Count"
-	self
-		assert: result
-		equals: expectedEncoding
-%
-
-category: 'running'
-method: RsrCommandEncoderTest
-testServiceNoInstVars
-
-	| rootService encodedBytes expectedEncoding |
-	rootService := RsrClientNoInstVars new.
-	self register: rootService.
-	encodedBytes := self encoder encodeServiceSnapshot: (RsrServiceSnapshot from: rootService).
-	expectedEncoding := self serviceNoInstVarsServerPersonaEncoding.
-	self
-		assert: encodedBytes
-		equals: expectedEncoding
-%
-
-category: 'running'
-method: RsrCommandEncoderTest
-testServiceReferenceService
-
-	| rootService referencedService encodedObject expectedEncoding |
-	referencedService := RsrClientNoInstVars new.
-	rootService := RsrClientReferenceService service: referencedService.
-	self
-		register: referencedService;
-		register: rootService.
-	encodedObject := self encoder encodeServiceSnapshot: (RsrServiceSnapshot from: rootService).
-	expectedEncoding := self serviceReferenceServiceServerPersona.
-	self
-		assert: encodedObject
-		equals: expectedEncoding.
-	encodedObject := self encoder encodeServiceSnapshot: (RsrServiceSnapshot from: referencedService).
-	expectedEncoding := self serviceNoInstVarsServerPersonaEncoding.
-	self
-		assert: encodedObject
-		equals: expectedEncoding
-%
-
-category: 'running'
-method: RsrCommandEncoderTest
-testUnsupportedObject
-
-	self
-		should: [self encoder encodeReference: (RsrReference from: Object new) onto: (WriteStream on: ByteArray new)]
-		raise: RsrUnsupportedObject
-%
-
-category: 'running-immediates'
-method: RsrCommandEncoderTest
-verifyControlWord: anInteger
-encoding: expected
-
-	| actual |
-	actual := ByteArray streamContents: [:stream | self encoder encodeControlWord: anInteger onto: stream].
-	self
-		assert: actual
-		equals: expected
-%
-
-category: 'running-immediates'
-method: RsrCommandEncoderTest
-verifyImmediate: anObject
-encoding: expected
-
-	| actual |
-	actual := ByteArray streamContents: [:stream | self encoder encodeReference: (RsrReference from: anObject) onto: stream].
-	self
-		assert: actual
-		equals: expected
-%
-
 ! Class implementation for 'RsrConnectionSpecificationTestCase'
 
 !		Instance methods for 'RsrConnectionSpecificationTestCase'
@@ -12915,6 +13010,13 @@ method: RsrConnectionSpecificationTestCase
 port
 
 	^47652
+%
+
+category: 'accessing'
+method: RsrConnectionSpecificationTestCase
+portAsRange
+
+	^self port to: self port
 %
 
 category: 'running'
@@ -13086,6 +13188,57 @@ testCancelWaitForConnection
 
 category: 'running'
 method: RsrConnectionSpecificationTestCase
+testConfiguredInternalSocketConnectionSpecification
+	"Ensure that sending #connect to an InternalConnectionSpecification
+	results in returning one of the created Connections."
+
+	| spec connection |
+	"Only v1"
+	spec := RsrInternalSocketConnectionSpecification wireProtocols: { RsrWireProtocolV1 new }.
+	connection := spec connect.
+	self assert: connection isOpen.
+	self
+		assert: connection channel wireProtocol version
+		equals: 1.
+	connection close.
+	
+	"v1 is prioritized"
+	spec := RsrInternalSocketConnectionSpecification wireProtocols: { RsrWireProtocolV1 new. RsrWireProtocolV2 new }.
+	connection := spec connect.
+	self assert: connection isOpen.
+	self
+		assert: connection channel wireProtocol version
+		equals: 1.
+	connection close.
+	
+	"v2 is prioritized"
+	spec := RsrInternalSocketConnectionSpecification wireProtocols: { RsrWireProtocolV2 new. RsrWireProtocolV1 new }.
+	connection := spec connect.
+	self assert: connection isOpen.
+	self
+		assert: connection channel wireProtocol version
+		equals: 2.
+	connection close.
+%
+
+category: 'running'
+method: RsrConnectionSpecificationTestCase
+testDefaultInternalSocketConnectionSpecification
+	"Ensure that sending #connect to an InternalConnectionSpecification
+	results in returning one of the created Connections."
+
+	| spec connection |
+	spec := RsrInternalSocketConnectionSpecification new.
+	connection := spec connect.
+	self assert: connection isOpen.
+	self
+		assert: connection channel wireProtocol version
+		equals: 2.
+	connection close
+%
+
+category: 'running'
+method: RsrConnectionSpecificationTestCase
 testEstablishConnection
 
 	| acceptor initiator semaphore connectionA connectionB |
@@ -13107,29 +13260,20 @@ testEstablishConnection
 
 category: 'running'
 method: RsrConnectionSpecificationTestCase
-testFailedAcceptOnAlternativeLocalhost
+testFailedConnect
 
-	| acceptor initiator semaphore |
-	acceptor := RsrAcceptConnection
-		host: self alternativeLocalhost
-		port: self port.
+	| initiator |
 	initiator := RsrInitiateConnection
 		host: self localhost
 		port: self port.
-	semaphore := Semaphore new.
-	RsrProcessModel
-		fork: [[semaphore signal. acceptor waitForConnection] on: RsrWaitForConnectionCancelled do: [:ex | ex return]]
-		named: 'Pending WaitForConnectionCancelled'.
-	[semaphore wait.
 	self
 		should: [initiator connect]
-		raise: RsrSocketError]
-			ensure: [acceptor cancelWaitForConnection]
+		raise: RsrSocketError
 %
 
 category: 'running'
 method: RsrConnectionSpecificationTestCase
-testInternalConnectionSpecificationConnectReturnsConnection
+testInternalInMemoryConnectionSpecificationConnectReturnsConnection
 	"Ensure that sending #connect to an InternalConnectionSpecification
 	results in returning one of the created Connections."
 
@@ -13138,10 +13282,6 @@ testInternalConnectionSpecificationConnectReturnsConnection
 	connection := spec connect.
 	self assert: connection isOpen.
 	connection close.
-	spec := RsrInternalSocketConnectionSpecification new.
-	connection := spec connect.
-	self assert: connection isOpen.
-	connection close
 %
 
 category: 'running'
@@ -13166,6 +13306,40 @@ testListenThenLaterAccept
 	self
 		assert: connectionA isOpen;
 		assert: connectionB isOpen.
+	connectionA close.
+	connectionB close
+%
+
+category: 'running'
+method: RsrConnectionSpecificationTestCase
+testV1ClientV2V1Server
+
+	| acceptor initiator semaphore connectionA connectionB |
+	acceptor := RsrAcceptConnection
+		host: self localhost 
+		portRange: self portAsRange
+		wireProtocols: { RsrWireProtocolV2 new. RsrWireProtocolV1 new }.
+	initiator := RsrInitiateConnection
+		host: self localhost
+		port: self port
+		wireProtocols: { RsrWireProtocolV1 new }.
+	semaphore := Semaphore new.
+	acceptor ensureListening.
+	RsrProcessModel
+		fork: [semaphore signal. [connectionB := initiator connect] ensure: [semaphore signal]]
+		named: 'Pending InitiateConnection'.
+	semaphore wait.
+	connectionA := acceptor waitForConnection.
+	semaphore wait.
+	self
+		assert: connectionA isOpen;
+		assert: connectionB isOpen.
+	self
+		assert: connectionA channel wireProtocol version
+		equals: 1.
+	self
+		assert: connectionB channel wireProtocol version
+		equals: 1.
 	connectionA close.
 	connectionB close
 %
@@ -13514,6 +13688,1122 @@ testSyncFulfill
 	self
 		assert: promise wait
 		identicalTo: expected
+%
+
+! Class implementation for 'RsrProtocolCodecTest'
+
+!		Class methods for 'RsrProtocolCodecTest'
+
+category: 'testing'
+classmethod: RsrProtocolCodecTest
+isAbstract
+
+	^self == RsrProtocolCodecTest
+%
+
+!		Instance methods for 'RsrProtocolCodecTest'
+
+category: 'accessing'
+method: RsrProtocolCodecTest
+connection
+
+	^connection
+%
+
+category: 'other'
+method: RsrProtocolCodecTest
+decoder
+
+	self protocolVersion == 1
+		ifTrue: [^RsrProtocolDecoderV1 new].
+	self protocolVersion == 2
+		ifTrue: [^RsrProtocolDecoderV2 new].
+	^self error
+%
+
+category: 'accessing'
+method: RsrProtocolCodecTest
+encoder
+
+	self protocolVersion == 1
+		ifTrue: [^RsrProtocolEncoderV1 new].
+	self protocolVersion == 2
+		ifTrue: [^RsrProtocolEncoderV2 new].
+	^self error
+%
+
+category: 'encode/decode'
+method: RsrProtocolCodecTest
+encodeReferenceOf: anObject
+
+	| reference |
+	reference := RsrReference from: anObject.
+	^ByteArray streamContents: [:stream | self encoder encodeReference: reference onto: stream]
+%
+
+category: 'running-symbol'
+method: RsrProtocolCodecTest
+genericSymbol
+
+	^#genericSymbol
+%
+
+category: 'running-symbol'
+method: RsrProtocolCodecTest
+genericSymbolEncoding
+
+	^#[0 0 0 0 0 0 0 0], "OID = 0"
+	#[0 0 0 0 0 0 0 1], "Immediate Type = 1"
+	#[0 0 0 0 0 0 0 13], "Length of UTF-8 data"
+	#[103 101 110 101 114 105 99 83 121 109 98 111 108]	"#genericSymbol"
+%
+
+category: 'accessing'
+method: RsrProtocolCodecTest
+protocolVersion
+
+	self subclassResponsibility
+%
+
+category: 'accessing-objects'
+method: RsrProtocolCodecTest
+serviceNoInstVarsServerPersonaEncoding
+
+	self protocolVersion == 1
+		ifTrue: [^self serviceNoInstVarsServerPersonaEncodingV1].
+	self protocolVersion == 2
+		ifTrue: [^self serviceNoInstVarsServerPersonaEncodingV2].
+	^self error
+%
+
+category: 'accessing-objects'
+method: RsrProtocolCodecTest
+serviceNoInstVarsServerPersonaEncodingV1
+
+	^#[0 0 0 0 0 0 0 0], "type"
+	#[0 0 0 0 0 0 0 1], "referencedService's OID = 1"
+	#[0 0 0 0 0 0 0 0], "Inst Var Count"
+	#[0 0 0 0 0 0 0 0], "Start of service name. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 19], "Length of UTF-8 encoded bytes"
+	#[82 115 114 83 101 114 118 101 114 78 111 73 110 115 116 86 97 114 115] "#RsrServerNoInstVars"
+%
+
+category: 'accessing-objects'
+method: RsrProtocolCodecTest
+serviceNoInstVarsServerPersonaEncodingV2
+
+	^#[0 0 0 0 0 0 0 0], "type"
+	#[0 0 0 0 0 0 0 1], "referencedService's OID = 1"
+	#[0 0 0 0 0 0 0 0], "Inst Var Count"
+	#[0 0 0 0 0 0 0 0], "Start of service name. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 20], "Length of UTF-8 encoded bytes"
+	#[82 115 114 83 101 114 118 105 99 101 78 111 73 110 115 116 86 97 114 115], "#RsrServiceNoInstVars"
+	#[0 0 0 0 0 0 0 0], "Start of persona. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 6], "Length of UTF-8 encoded bytes"
+	#[115 101 114 118 101 114] "#server"
+%
+
+category: 'accessing-objects'
+method: RsrProtocolCodecTest
+serviceReferenceServiceServerPersonaEncoding
+
+	self protocolVersion == 1
+		ifTrue: [^self serviceReferenceServiceServerPersonaEncodingV1].
+	self protocolVersion == 2
+		ifTrue: [^self serviceReferenceServiceServerPersonaEncodingV2].
+	^self error
+%
+
+category: 'accessing-objects'
+method: RsrProtocolCodecTest
+serviceReferenceServiceServerPersonaEncodingV1
+
+	^#[0 0 0 0 0 0 0 0], "type"
+	#[0 0 0 0 0 0 0 2], "rootService's OID = 2"
+	#[0 0 0 0 0 0 0 1], "Inst Var Count"
+	#[0 0 0 0 0 0 0 0], "Start of service name. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 25], "Length of UTF-8 encoded bytes"
+	#[82 115 114 83 101 114 118 101 114 82 101 102 101 114 101 110 99 101 83 101
+114 118 105 99 101], "#RsrServerReferenceService"
+	"inst var  to the nested service w/ SID 1"
+	#[0 0 0 0 0 0 0 1]
+%
+
+category: 'accessing-objects'
+method: RsrProtocolCodecTest
+serviceReferenceServiceServerPersonaEncodingV2
+
+	^#[0 0 0 0 0 0 0 0], "type"
+	#[0 0 0 0 0 0 0 2], "rootService's OID = 2"
+	#[0 0 0 0 0 0 0 1], "Inst Var Count"
+	#[0 0 0 0 0 0 0 0], "Start of service name. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 26], "Length of UTF-8 encoded bytes"
+	#[82 115 114 83 101 114 118 105 99 101 82 101 102 101 114 101 110 99 101 83 101
+114 118 105 99 101], "#RsrServiceReferenceService"
+	#[0 0 0 0 0 0 0 0], "Start of persona. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 6], "Length of UTF-8 encoded bytes"
+	#[115 101 114 118 101 114], "#server"
+	"inst var  to the nested service w/ SID 1"
+	#[0 0 0 0 0 0 0 1]
+%
+
+category: 'other'
+method: RsrProtocolCodecTest
+setUp
+
+	super setUp.
+	connection := RsrConnection
+		channel: RsrNullChannel new
+		transactionSpigot: RsrThreadSafeNumericSpigot naturals
+		oidSpigot: RsrThreadSafeNumericSpigot naturals.
+	connection open
+%
+
+category: 'other'
+method: RsrProtocolCodecTest
+tearDown
+
+	connection close.
+	connection := nil.
+	super tearDown
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testArray
+
+	| array encoding |
+	array := Array
+		with: self genericSymbol
+		with: 5
+		with: nil.
+	encoding :=
+		#[0 0 0 0 0 0 0 0], "Immediate Object OID"
+		#[0 0 0 0 0 0 0 9], "Array type"
+		#[0 0 0 0 0 0 0 3], "3 elements"
+		self genericSymbolEncoding, "Generic Symbol"
+		#[0 0 0 0 0 0 0 0], "Immediate OID"
+		#[0 0 0 0 0 0 0 3], "Positive Integer"
+		#[0 0 0 0 0 0 0 1], "num bytes"
+		#[5], "5"
+		#[0 0 0 0 0 0 0 0], "Immediate OID"
+		#[0 0 0 0 0 0 0 6].
+	self
+		verifyImmediate: array
+		encoding: encoding.
+	array := Array new.
+	encoding :=
+		#[0 0 0 0 0 0 0 0], "Immediate OID"
+		#[0 0 0 0 0 0 0 9], "Array type"
+		#[0 0 0 0 0 0 0 0].
+	self
+		verifyImmediate: array
+		encoding: encoding
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testBoolean
+
+	| encoding |
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 7].
+	self
+		verifyImmediate: true
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 8].
+	self
+		verifyImmediate: false
+		encoding: encoding.
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testByteArray
+
+	| bytes encoding |
+	bytes := #[].
+	encoding :=
+		#[0 0 0 0 0 0 0 0], "Immediate Object OID"
+		#[0 0 0 0 0 0 0 10], "ByteArray type"
+		#[0 0 0 0 0 0 0 0], "size"
+		bytes.
+	self
+		verifyImmediate: bytes
+		encoding: encoding.
+	bytes := #[1 2 3 4 5].
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 10],
+		#[0 0 0 0 0 0 0 5],
+		bytes.
+	self
+		verifyImmediate: bytes
+		encoding: encoding
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testCharacter
+
+	| encoding |
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 5],
+		#[0 0 0 0 0 0 0 0].
+	self
+		verifyImmediate: (Character codePoint: 0)
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 5],
+		#[0 0 0 0 0 0 0 65].
+	self
+		verifyImmediate: (Character codePoint: 65)
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 5],
+		#[0 0 0 0 0 0 0 65].
+	self
+		verifyImmediate: $A
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 5],
+		#[0 0 0 0 0 0 1 212].
+	self
+		verifyImmediate: (Character codePoint: 16r01D4)
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 5],
+		#[0 0 0 0 0 0 131 52].
+	self
+		verifyImmediate: (Character codePoint: 16r8334)
+		encoding: encoding.
+%
+
+category: 'running-control words'
+method: RsrProtocolCodecTest
+testControlWord
+	
+	self
+		verifyControlWord: 0
+		encoding: #[0 0 0 0 0 0 0 0].
+	self
+		verifyControlWord: 1
+		encoding: #[0 0 0 0 0 0 0 1].
+	self
+		verifyControlWord: -1
+		encoding: #[255 255 255 255 255 255 255 255].
+	self
+		verifyControlWord: (2 raisedTo: 63) - 1
+		encoding: #[127 255 255 255 255 255 255 255].
+	self
+		verifyControlWord: (2 raisedTo: 63) negated
+		encoding: #[128 0 0 0 0 0 0 0]
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testDateTime
+
+	| dt encoding |
+	dt := RsrDateAndTime posixEpoch.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 14],
+		#[0 0 0 0 0 0 0 0].
+	self
+		verifyImmediate: dt
+		encoding: encoding.
+	dt := RsrDateAndTime fromMicroseconds: 1562692562657612. "2019-07-09T10:16:02.657612-07:00"
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 14],
+		#[0 5 141 66 183 23 33 76].
+	self
+		verifyImmediate: dt
+		encoding: encoding.
+	dt := RsrDateAndTime fromMicroseconds: -1000000. "1969-12-31T23:59:59-00:00"
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 14],
+		#[255 255 255 255 255 240 189 192].
+	self
+		verifyImmediate: dt
+		encoding: encoding.
+	dt := RsrDateAndTime fromMicroseconds: -491277642567488. "1954-06-07T14:59:17.432512-07:00"
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 14],
+		#[255 254 65 47 130 160 240 192].
+	self
+		verifyImmediate: dt
+		encoding: encoding
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testDictionary
+
+	| dictionary encoding result |
+	dictionary := Dictionary new.
+	encoding :=
+		#[0 0 0 0 0 0 0 0], "Immediate Object OID"
+		#[0 0 0 0 0 0 0 13], "Dictionary type"
+		#[0 0 0 0 0 0 0 0]. "0 associations"
+	self
+		verifyImmediate: dictionary
+		encoding: encoding.
+	dictionary := Dictionary new
+		at: 1 put: self genericSymbol;
+		at: false put: true;
+		yourself.
+	encoding := self encodeReferenceOf: dictionary.
+	result := (self decoder decodeReference: encoding readStream) resolve: self connection.
+	self
+		assert: result
+		equals: dictionary.
+	self
+		deny: result
+		identicalTo: dictionary.
+	"self hack: 'Order is not guaranteed in a dictionary'.
+	encoding :=
+		#[0 0 0 0 0 0 0 0], ""Immediate OID""
+		#[0 0 0 0 0 0 0 13], ""Dictionary Type""
+		#[0 0 0 0 0 0 0 2], ""Two assocs""
+		#[0 0 0 0 0 0 0 0], ""nil""
+		#[0 0 0 0 0 0 0 6],
+		#[0 0 0 0 0 0 0 0], ""true""
+		#[0 0 0 0 0 0 0 7],
+		#[0 0 0 0 0 0 0 0], ""Integer 1""
+		#[0 0 0 0 0 0 0 3],
+		#[0 0 0 0 0 0 0 1],
+		#[1],
+		self genericSymbolEncoding.
+	self
+		verifyImmediate: dictionary
+		encoding: encoding"
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testDouble
+
+	| encoding |
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 15],
+		#[128 0 0 0 0 0 0 0].
+	self
+		verifyImmediate: -0.0
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 15],
+		#[0 0 0 0 0 0 0 0].
+	self
+		verifyImmediate: 0.0
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 15],
+		#[191 240 0 0 0 0 0 0].
+	self
+		verifyImmediate: -1.0
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 15],
+		#[63 240 0 0 0 0 0 0].
+	self
+		verifyImmediate: 1.0
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 15],
+		#[63 185 153 153 153 153 153 154].
+	self
+		verifyImmediate: 0.1
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 15],
+		#[191 185 153 153 153 153 153 154].
+	self
+		verifyImmediate: -0.1
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 15],
+		#[127 240 0 0 0 0 0 0].
+	self
+		verifyImmediate: RsrDoubleReference infinity
+		encoding: encoding
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testInteger
+
+	| encoding |
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 3],
+		#[0 0 0 0 0 0 0 1],
+		#[0].
+	self
+		verifyImmediate: 0
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 3],
+		#[0 0 0 0 0 0 0 1],
+		#[4].
+	self
+		verifyImmediate: 4
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 3],
+		#[0 0 0 0 0 0 0 5],
+		#[1 15 248 235 121].
+	self
+		verifyImmediate: 4562938745
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 4],
+		#[0 0 0 0 0 0 0 5],
+		#[1 15 248 235 121].
+	self
+		verifyImmediate: -4562938745
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 3],
+		#[0 0 0 0 0 0 0 13],
+		#[10 101 181 177 179 46 128 92 96 64 190 76 107].
+	self
+		verifyImmediate: 823759265872134912569713249387
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 4],
+		#[0 0 0 0 0 0 0 13],
+		#[10 101 181 177 179 46 128 92 96 64 190 76 107].
+	self
+		verifyImmediate: -823759265872134912569713249387
+		encoding: encoding.
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testNil
+
+	| encoding |
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 6].
+	self
+		verifyImmediate: nil
+		encoding: encoding
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testOrderedCollection
+
+	| oc encoding |
+	oc := OrderedCollection new.
+	encoding :=
+		#[0 0 0 0 0 0 0 0], "Immediate OID"
+		#[0 0 0 0 0 0 0 12], "OrderedCollection type"
+		#[0 0 0 0 0 0 0 0].
+	self
+		verifyImmediate: oc
+		encoding: encoding.
+	oc := OrderedCollection
+		with: self genericSymbol
+		with: 5
+		with: nil.
+	encoding :=
+		#[0 0 0 0 0 0 0 0], "Immediate Object OID"
+		#[0 0 0 0 0 0 0 12], "OrderedCollection type"
+		#[0 0 0 0 0 0 0 3], "3 elements"
+		self genericSymbolEncoding, "Generic Symbol"
+		#[0 0 0 0 0 0 0 0], "Immediate OID"
+		#[0 0 0 0 0 0 0 3], "Positive Integer"
+		#[0 0 0 0 0 0 0 1], "num bytes"
+		#[5], "5"
+		#[0 0 0 0 0 0 0 0], "Immediate OID"
+		#[0 0 0 0 0 0 0 6].
+	self
+		verifyImmediate: oc
+		encoding: encoding
+%
+
+category: 'running-immediates'
+method: RsrProtocolCodecTest
+testSet
+
+	| set encoding result |
+	set := Set new.
+	encoding :=
+		#[0 0 0 0 0 0 0 0], "OID"
+		#[0 0 0 0 0 0 0 11], "Set"
+		#[0 0 0 0 0 0 0 0]. "0 elements"
+	self
+		verifyImmediate: set
+		encoding: encoding.
+	set := Set
+		with: true
+		with: nil.
+	encoding := self encodeReferenceOf: set.
+	result := (self decoder decodeReference: encoding readStream) resolve: self connection.
+	self
+		assert: result
+		equals: set.
+	self
+		deny: result
+		identicalTo: set.
+	"self hack: 'Hashed collections do not have an ordering'.
+	encoding :=
+		#[0 0 0 0 0 0 0 0], ""OID""
+		#[0 0 0 0 0 0 0 11], ""Set""
+		#[0 0 0 0 0 0 0 2], ""2 elements""
+		#[0 0 0 0 0 0 0 0], ""true""
+		#[0 0 0 0 0 0 0 7],
+		#[0 0 0 0 0 0 0 0], ""nil""
+		#[0 0 0 0 0 0 0 6].
+	self
+		verifyImmediate: set
+		encoding: encoding"
+%
+
+category: 'running-symbol'
+method: RsrProtocolCodecTest
+testString
+
+	| encoding |
+	encoding :=
+		#[0 0 0 0 0 0 0 0], "OID = 0"
+		#[0 0 0 0 0 0 0 2], "Immediate Type = 2"
+		#[0 0 0 0 0 0 0 0], "length"
+		#[].	 "empty string"
+	self
+		verifyImmediate: ''
+		encoding: encoding.
+	encoding :=
+		#[0 0 0 0 0 0 0 0], "OID = 0"
+		#[0 0 0 0 0 0 0 2], "Immediate Type = 2"
+		#[0 0 0 0 0 0 0 13], "length"
+		#[103 101 110 101 114 105 99 83 116 114 105 110 103].	 "genericString"
+	self
+		verifyImmediate: 'genericString'
+		encoding: encoding
+%
+
+category: 'running-symbol'
+method: RsrProtocolCodecTest
+testSymbol
+
+	self
+		verifyImmediate: self genericSymbol
+		encoding: self genericSymbolEncoding
+%
+
+category: 'asserting'
+method: RsrProtocolCodecTest
+verifyControlWord: anInteger
+encoding: bytes
+
+	self subclassResponsibility
+%
+
+category: 'asserting'
+method: RsrProtocolCodecTest
+verifyImmediate: anImmediateObject
+encoding: encoding
+
+	self subclassResponsibility
+%
+
+! Class implementation for 'RsrProtocolDecoderTest'
+
+!		Class methods for 'RsrProtocolDecoderTest'
+
+category: 'testing'
+classmethod: RsrProtocolDecoderTest
+isAbstract
+
+	^self == RsrProtocolDecoderTest
+%
+
+!		Instance methods for 'RsrProtocolDecoderTest'
+
+category: 'asserting'
+method: RsrProtocolDecoderTest
+assertReference: bytes
+decodesTo: expected
+
+	| actual |
+	actual := self decodeReference: bytes.
+	self
+		assert: actual
+		equals: expected
+%
+
+category: 'decoding'
+method: RsrProtocolDecoderTest
+decodeReference: bytes
+
+	^(self decoder decodeReference: bytes readStream) resolve: self connection
+%
+
+category: 'decoding'
+method: RsrProtocolDecoderTest
+decodeService: anObjectBytes
+
+	^(self decoder decodeServiceSnapshot: anObjectBytes readStream) reifyIn: self connection
+%
+
+category: 'running'
+method: RsrProtocolDecoderTest
+testDecodeIncompatibleServiceWithExtraInstVar
+	"Ensure that there is a reasonable error message when decoding failes due to incompatible templates."
+
+	| encoding exception |
+	encoding := 	#[0 0 0 0 0 0 0 0], "type"
+	#[0 0 0 0 0 0 0 1], "referencedService's OID = 1"
+	#[0 0 0 0 0 0 0 1], "Inst Var Count"
+	#[0 0 0 0 0 0 0 0], "Start of service name. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 20], "Length of UTF-8 encoded bytes"
+	#[82 115 114 83 101 114 118 105 99 101 78 111 73 110 115 116 86 97 114 115], "#RsrServiceNoInstVars"
+	#[0 0 0 0 0 0 0 0], "Start of persona. OID = 0"
+	#[0 0 0 0 0 0 0 1], "Service name = 1 -> Symbol"
+	#[0 0 0 0 0 0 0 6], "Length of UTF-8 encoded bytes"
+	#[115 101 114 118 101 114], "#server"
+	"inst var referencing itself"
+	#[0 0 0 0 0 0 0 1].
+	exception := [self decodeService: encoding]
+		on: Error
+		do: [:ex | ex return: ex].
+	self
+		assert: exception messageText
+		equals: 'Expected 0 value(s) for template RsrServiceNoInstVars but received 1 value(s) instead. Verify peers have compatible template definitions.'
+%
+
+category: 'running'
+method: RsrProtocolDecoderTest
+testDeliverResponse
+
+	| service response encoding command decodedService |
+	service := RsrServerNoInstVars new.
+	self connection _ensureRegistered: service.
+	response := #responseSymbol.
+	encoding :=
+		#[0 0 0 0 0 0 0 2], "DeliverResponse Command"
+		#[0 0 0 0 0 0 0 1], "Transaction Id"
+		#[0 0 0 0 0 0 0 1], "Number of services"
+		self serviceNoInstVarsServerPersonaEncoding,
+		#[0 0 0 0 0 0 0 0], "Service Name Symbol Reference"
+		#[0 0 0 0 0 0 0 1], "Object Type for Symbol"
+		#[0 0 0 0 0 0 0 14], "Length of UTF-8 bytes"
+		#[114 101 115 112 111 110 115 101 83 121 109 98 111 108]. "#responseSymbol"
+	command := self decoder decodeCommand: encoding readStream.
+	self
+		assert: command class
+		equals: RsrDeliverResponse.
+	self
+		assert: command transaction
+		equals: 1.
+	self
+		assert: command snapshots size
+		equals: 1.
+	decodedService := command snapshots first reifyIn: self connection.
+	self
+		assert: decodedService
+		equals: service.
+	self
+		assert: (command response resolve: self connection)
+		equals: response
+%
+
+category: 'running'
+method: RsrProtocolDecoderTest
+testReleaseServices
+
+	| command encoding |
+	encoding :=
+		#[0 0 0 0 0 0 0 3], "ReleaseObjects Command"
+		#[0 0 0 0 0 0 0 5], "Num OIDS"
+		#[0 0 0 0 0 0 0 1], "First OID"
+		#[0 0 0 0 0 0 0 2],
+		#[0 0 0 0 0 0 0 3],
+		#[0 0 0 0 0 0 0 4],
+		#[0 0 0 0 0 0 0 5]. "Last OID"
+	command := self decoder decodeCommand: encoding readStream.
+	self
+		assert: command sids
+		equals: #(1 2 3 4 5)
+%
+
+category: 'running'
+method: RsrProtocolDecoderTest
+testSendMessage
+
+	| service encoding command |
+	service := RsrServerNoInstVars new.
+	self connection _ensureRegistered: service.
+	encoding :=
+		#[0 0 0 0 0 0 0 1], "SendMessage Command"
+		#[0 0 0 0 0 0 0 1], "Transaction ID"
+		#[0 0 0 0 0 0 0 1], "One service is part of this message"
+		self serviceNoInstVarsServerPersonaEncoding,
+		#[0 0 0 0 0 0 0 1], "Receiver OID"
+		#[0 0 0 0 0 0 0 0], "Selector Reference"
+		#[0 0 0 0 0 0 0 1], "Object Type for Symbol"
+		#[0 0 0 0 0 0 0 8], "Length of UTF-8 bytes"
+		#[114 101 116 117 114 110 52 50], "#return42"
+		#[0 0 0 0 0 0 0 0]. "Argument Count"
+	command := self decoder decodeCommand: encoding readStream.
+	self
+		assert: command class
+		equals: RsrSendMessage.
+	self
+		assert: command transaction
+		equals: 1.
+	self
+		assert: (command receiverReference resolve: self connection)
+		identicalTo: service.
+	self
+		assert: (command selectorReference resolve: self connection)
+		identicalTo: #return42.
+	self
+		assert: command argumentReferences
+		equals: #().
+	self
+		assert: command snapshots size
+		equals: 1
+%
+
+category: 'running'
+method: RsrProtocolDecoderTest
+testServiceDecodeIdentity
+	"Ensure that decoding an object multiple times results in
+	a single object getting created."
+
+	| firstService secondService |
+	firstService := self decodeService: self serviceNoInstVarsServerPersonaEncoding.
+	secondService := self decodeService: self serviceNoInstVarsServerPersonaEncoding.
+	self
+		assert: firstService
+		identicalTo: secondService
+%
+
+category: 'running'
+method: RsrProtocolDecoderTest
+testServiceNoInstVars
+
+	| decodedService |
+	decodedService := self decodeService: self serviceNoInstVarsServerPersonaEncoding.
+	self
+		assert: decodedService class
+		equals: RsrServerNoInstVars.
+	self
+		assert: decodedService _id
+		equals: 1
+%
+
+category: 'running'
+method: RsrProtocolDecoderTest
+testServiceReferenceService
+
+	| rootService referencedService |
+	referencedService := self decodeService: self serviceNoInstVarsServerPersonaEncoding.
+	self
+		assert: referencedService class
+		equals: RsrServerNoInstVars.
+	self
+		assert: referencedService _id
+		equals: 1.
+	rootService := self decodeService: self serviceReferenceServiceServerPersonaEncoding.
+	self
+		assert: rootService class
+		equals: RsrServerReferenceService.
+	self
+		assert: rootService _id
+		equals: 2.
+	self
+		assert: rootService service
+		equals: referencedService
+%
+
+category: 'asserting'
+method: RsrProtocolDecoderTest
+verifyControlWord: expected
+encoding: bytes
+
+	| actual |
+	actual := self decoder decodeControlWord: bytes readStream.
+	self
+		assert: actual
+		equals: expected
+%
+
+category: 'asserting'
+method: RsrProtocolDecoderTest
+verifyImmediate: expected
+encoding: encoding
+
+	| actual |
+	actual := (self decoder decodeReference: encoding readStream) resolve: self connection.
+	self
+		assert: actual
+		equals: expected
+%
+
+! Class implementation for 'RsrProtocolDecoderV1Test'
+
+!		Instance methods for 'RsrProtocolDecoderV1Test'
+
+category: 'accessing'
+method: RsrProtocolDecoderV1Test
+protocolVersion
+
+	^1
+%
+
+! Class implementation for 'RsrProtocolDecoderV2Test'
+
+!		Instance methods for 'RsrProtocolDecoderV2Test'
+
+category: 'accessing'
+method: RsrProtocolDecoderV2Test
+protocolVersion
+
+	^2
+%
+
+! Class implementation for 'RsrProtocolEncoderTest'
+
+!		Class methods for 'RsrProtocolEncoderTest'
+
+category: 'testing'
+classmethod: RsrProtocolEncoderTest
+isAbstract
+
+	^self == RsrProtocolEncoderTest
+%
+
+!		Instance methods for 'RsrProtocolEncoderTest'
+
+category: 'other'
+method: RsrProtocolEncoderTest
+register: aService
+
+	self connection _ensureRegistered: aService
+%
+
+category: 'running-immediates'
+method: RsrProtocolEncoderTest
+testDeliverResponse
+
+	| service response command result expectedEncoding |
+	service := RsrClientNoInstVars new.
+	self register: service.
+	response := #responseSymbol.
+	command := RsrDeliverResponse
+		transaction: 1
+		responseReference: (RsrReference from: response)
+		snapshots: (Array with: (RsrServiceSnapshot from: service)).
+	result := self encoder encodeDeliverResponse: command.
+	expectedEncoding :=
+		#[0 0 0 0 0 0 0 2], "DeliverResponse Command"
+		#[0 0 0 0 0 0 0 1], "Transaction Id"
+		#[0 0 0 0 0 0 0 1], "One service is part of this response"
+		self serviceNoInstVarsServerPersonaEncoding,
+		#[0 0 0 0 0 0 0 0], "Service Name Symbol Reference"
+		#[0 0 0 0 0 0 0 1], "Object Type for Symbol"
+		#[0 0 0 0 0 0 0 14], "Length of UTF-8 bytes"
+		#[114 101 115 112 111 110 115 101 83 121 109 98 111 108]. "#responseSymbol"
+	self
+		assert: result
+		equals: expectedEncoding
+%
+
+category: 'running'
+method: RsrProtocolEncoderTest
+testNaN
+
+	| encoding |
+	"Signaling NaN is not tested.
+	Negative NaN is not tested."
+	encoding :=
+		#[0 0 0 0 0 0 0 0],
+		#[0 0 0 0 0 0 0 15],
+		#[255 248 0 0 0 0 0 0].
+	self
+		verifyImmediate: RsrDoubleReference nan
+		encoding: encoding.
+%
+
+category: 'running-immediates'
+method: RsrProtocolEncoderTest
+testReleaseServices
+
+	| command result expectedEncoding |
+	command := RsrReleaseServices sids: #(1 2 3 4 5).
+	result := self encoder encodeReleaseServices: command.
+	expectedEncoding :=
+		#[0 0 0 0 0 0 0 3], "ReleaseObjects Command"
+		#[0 0 0 0 0 0 0 5], "Num OIDS"
+		#[0 0 0 0 0 0 0 1], "First OID"
+		#[0 0 0 0 0 0 0 2],
+		#[0 0 0 0 0 0 0 3],
+		#[0 0 0 0 0 0 0 4],
+		#[0 0 0 0 0 0 0 5]. "Last OID"
+	self
+		assert: result
+		equals: expectedEncoding
+%
+
+category: 'running-immediates'
+method: RsrProtocolEncoderTest
+testSendMessage
+
+	| service analysis command result expectedEncoding |
+	service := RsrClientNoInstVars new.
+	self register: service.
+	analysis := RsrSnapshotAnalysis
+		roots: (Array with: service)
+		connection: self connection.
+	analysis perform.
+	command := RsrSendMessage
+		transaction: 1
+		receiverReference: (RsrReference from: service)
+		selectorReference: (RsrSymbolReference from: #return42)
+		argumentReferences: #().
+	command snapshots: analysis snapshots.
+	result := self encoder encodeSendMessage: command.
+	expectedEncoding :=
+		#[0 0 0 0 0 0 0 1], "SendMessage Command"
+		#[0 0 0 0 0 0 0 1], "Transaction ID"
+		#[0 0 0 0 0 0 0 1], "One service is part of this message"
+		self serviceNoInstVarsServerPersonaEncoding,
+		#[0 0 0 0 0 0 0 1], "Receiver OID"
+		#[0 0 0 0 0 0 0 0], "Selector Reference"
+		#[0 0 0 0 0 0 0 1], "Object Type for Symbol"
+		#[0 0 0 0 0 0 0 8], "Length of UTF-8 bytes"
+		#[114 101 116 117 114 110 52 50], "#return42"
+		#[0 0 0 0 0 0 0 0]. "Argument Count"
+	self
+		assert: result
+		equals: expectedEncoding
+%
+
+category: 'running'
+method: RsrProtocolEncoderTest
+testServiceNoInstVars
+
+	| rootService encodedBytes expectedEncoding |
+	rootService := RsrClientNoInstVars new.
+	self register: rootService.
+	encodedBytes := self encoder encodeServiceSnapshot: (RsrServiceSnapshot from: rootService).
+	expectedEncoding := self serviceNoInstVarsServerPersonaEncoding.
+	self
+		assert: encodedBytes
+		equals: expectedEncoding
+%
+
+category: 'running'
+method: RsrProtocolEncoderTest
+testServiceReferenceService
+
+	| rootService referencedService encodedObject expectedEncoding |
+	referencedService := RsrClientNoInstVars new.
+	rootService := RsrClientReferenceService service: referencedService.
+	self
+		register: referencedService;
+		register: rootService.
+	encodedObject := self encoder encodeServiceSnapshot: (RsrServiceSnapshot from: rootService).
+	expectedEncoding := self serviceReferenceServiceServerPersonaEncoding.
+	self
+		assert: encodedObject
+		equals: expectedEncoding.
+	encodedObject := self encoder encodeServiceSnapshot: (RsrServiceSnapshot from: referencedService).
+	expectedEncoding := self serviceNoInstVarsServerPersonaEncoding.
+	self
+		assert: encodedObject
+		equals: expectedEncoding
+%
+
+category: 'running'
+method: RsrProtocolEncoderTest
+testUnsupportedObject
+
+	self
+		should: [self encoder encodeReference: (RsrReference from: Object new) onto: (WriteStream on: ByteArray new)]
+		raise: RsrUnsupportedObject
+%
+
+category: 'running-immediates'
+method: RsrProtocolEncoderTest
+verifyControlWord: anInteger
+encoding: expected
+
+	| actual |
+	actual := ByteArray streamContents: [:stream | self encoder encodeControlWord: anInteger onto: stream].
+	self
+		assert: actual
+		equals: expected
+%
+
+category: 'running-immediates'
+method: RsrProtocolEncoderTest
+verifyImmediate: anObject
+encoding: expected
+
+	| actual |
+	actual := ByteArray streamContents: [:stream | self encoder encodeReference: (RsrReference from: anObject) onto: stream].
+	self
+		assert: actual
+		equals: expected
+%
+
+! Class implementation for 'RsrProtocolEncoderV1Test'
+
+!		Instance methods for 'RsrProtocolEncoderV1Test'
+
+category: 'accessing'
+method: RsrProtocolEncoderV1Test
+protocolVersion
+
+	^1
+%
+
+! Class implementation for 'RsrProtocolEncoderV2Test'
+
+!		Instance methods for 'RsrProtocolEncoderV2Test'
+
+category: 'accessing'
+method: RsrProtocolEncoderV2Test
+protocolVersion
+
+	^2
 %
 
 ! Class implementation for 'RsrProtocolVersionNegotiationCodecTestCase'
@@ -14310,6 +15600,46 @@ initializeSocketConnections
 		assert: connectionB isOpen
 %
 
+category: 'initialization'
+method: RsrSystemTestCase
+initializeSocketConnectionsV1
+
+	| spec |
+	spec := RsrInternalSocketConnectionSpecification wireProtocols: { RsrWireProtocolV1 new }.
+	spec connect.
+	connectionA := spec connectionA.
+	connectionB := spec connectionB.
+	self
+		assert: connectionA isOpen;
+		assert: connectionB isOpen.
+	self
+		assert: connectionA channel wireProtocol version
+		equals: 1.
+	self
+		assert: connectionB channel wireProtocol version
+		equals: 1.
+%
+
+category: 'initialization'
+method: RsrSystemTestCase
+initializeSocketConnectionsV2
+
+	| spec |
+	spec := RsrInternalSocketConnectionSpecification new.
+	spec connect.
+	connectionA := spec connectionA.
+	connectionB := spec connectionB.
+	self
+		assert: connectionA isOpen;
+		assert: connectionB isOpen.
+	self
+		assert: connectionA channel wireProtocol version
+		equals: 2.
+	self
+		assert: connectionB channel wireProtocol version
+		equals: 2.
+%
+
 category: 'accessing'
 method: RsrSystemTestCase
 peerOf: aService
@@ -14484,14 +15814,37 @@ setUp
 
 ! Class implementation for 'RsrSocketConnectionTestCase'
 
-!		Instance methods for 'RsrSocketConnectionTestCase'
+!		Class methods for 'RsrSocketConnectionTestCase'
+
+category: 'testing'
+classmethod: RsrSocketConnectionTestCase
+isAbstract
+
+	^self == RsrSocketConnectionTestCase
+%
+
+! Class implementation for 'RsrSocketConnectionTestCaseV1'
+
+!		Instance methods for 'RsrSocketConnectionTestCaseV1'
 
 category: 'running'
-method: RsrSocketConnectionTestCase
+method: RsrSocketConnectionTestCaseV1
 setUp
 
 	super setUp.
-	self initializeSocketConnections
+	self initializeSocketConnectionsV1
+%
+
+! Class implementation for 'RsrSocketConnectionTestCaseV2'
+
+!		Instance methods for 'RsrSocketConnectionTestCaseV2'
+
+category: 'running'
+method: RsrSocketConnectionTestCaseV2
+setUp
+
+	super setUp.
+	self initializeSocketConnectionsV2
 %
 
 ! Class implementation for 'RsrEphemeronMourningDeadlock'
@@ -14713,14 +16066,37 @@ setUp
 
 ! Class implementation for 'RsrSocketLifetimeTest'
 
-!		Instance methods for 'RsrSocketLifetimeTest'
+!		Class methods for 'RsrSocketLifetimeTest'
+
+category: 'testing'
+classmethod: RsrSocketLifetimeTest
+isAbstract
+
+	^self == RsrSocketLifetimeTest
+%
+
+! Class implementation for 'RsrSocketLifetimeTestV1'
+
+!		Instance methods for 'RsrSocketLifetimeTestV1'
 
 category: 'running'
-method: RsrSocketLifetimeTest
+method: RsrSocketLifetimeTestV1
 setUp
 
 	super setUp.
-	self initializeSocketConnections
+	self initializeSocketConnectionsV1
+%
+
+! Class implementation for 'RsrSocketLifetimeTestV2'
+
+!		Instance methods for 'RsrSocketLifetimeTestV2'
+
+category: 'running'
+method: RsrSocketLifetimeTestV2
+setUp
+
+	super setUp.
+	self initializeSocketConnectionsV2
 %
 
 ! Class implementation for 'RsrMessageSendingTest'
@@ -15338,14 +16714,37 @@ setUp
 
 ! Class implementation for 'RsrSocketMessageSendingTest'
 
-!		Instance methods for 'RsrSocketMessageSendingTest'
+!		Class methods for 'RsrSocketMessageSendingTest'
+
+category: 'testing'
+classmethod: RsrSocketMessageSendingTest
+isAbstract
+
+	^self == RsrSocketMessageSendingTest
+%
+
+! Class implementation for 'RsrSocketMessageSendingTestV1'
+
+!		Instance methods for 'RsrSocketMessageSendingTestV1'
 
 category: 'running'
-method: RsrSocketMessageSendingTest
+method: RsrSocketMessageSendingTestV1
 setUp
 
 	super setUp.
-	self initializeSocketConnections
+	self initializeSocketConnectionsV1
+%
+
+! Class implementation for 'RsrSocketMessageSendingTestV2'
+
+!		Instance methods for 'RsrSocketMessageSendingTestV2'
+
+category: 'running'
+method: RsrSocketMessageSendingTestV2
+setUp
+
+	super setUp.
+	self initializeSocketConnectionsV2
 %
 
 ! Class implementation for 'RsrServiceTest'
@@ -15730,25 +17129,6 @@ testReturnServerWithoutAssociatedClient
 
 category: 'running'
 method: RsrServiceTest
-testSendClientWithoutAssociatedServer
-
-	| client server reason |
-	client := RsrRemoteActionClient new
-		registerWith: connectionA;
-		synchronize.
-	server := connectionB serviceAt: client _id.
-	server action: [:x | x].
-	reason := self expectCatch: (client asyncValue: RsrKnownClient new).
-	self
-		assert: reason class
-		equals: RsrRemoteExceptionServer.
-	self
-		assert: reason exceptionClassName
-		equals: #RsrUnknownClass
-%
-
-category: 'running'
-method: RsrServiceTest
 testVariableReflection
 
 	| localService remoteService |
@@ -15781,16 +17161,79 @@ setUp
 	self initializeInMemoryConnections
 %
 
+category: 'running'
+method: RsrInMemoryServiceTest
+testSendClientWithoutAssociatedServer
+	"See RsrSocketServiceTestV2>>testSendClientWithoutAssociatedServer"
+
+	| client server reason |
+	client := RsrRemoteActionClient new
+		registerWith: connectionA;
+		synchronize.
+	server := connectionB serviceAt: client _id.
+	server action: [:x | x].
+	reason := self expectCatch: (client asyncValue: RsrKnownClient new).
+	self
+		assert: reason class
+		equals: RsrRemoteExceptionServer.
+	self
+		assert: reason exceptionClassName
+		equals: #RsrUnknownClass
+%
+
 ! Class implementation for 'RsrSocketServiceTest'
 
-!		Instance methods for 'RsrSocketServiceTest'
+!		Class methods for 'RsrSocketServiceTest'
+
+category: 'testing'
+classmethod: RsrSocketServiceTest
+isAbstract
+
+	^self == RsrSocketServiceTest
+%
+
+! Class implementation for 'RsrSocketServiceTestV1'
+
+!		Instance methods for 'RsrSocketServiceTestV1'
 
 category: 'running'
-method: RsrSocketServiceTest
+method: RsrSocketServiceTestV1
 setUp
 
 	super setUp.
-	self initializeSocketConnections
+	self initializeSocketConnectionsV1
+%
+
+! Class implementation for 'RsrSocketServiceTestV2'
+
+!		Instance methods for 'RsrSocketServiceTestV2'
+
+category: 'running'
+method: RsrSocketServiceTestV2
+setUp
+
+	super setUp.
+	self initializeSocketConnectionsV2
+%
+
+category: 'running'
+method: RsrSocketServiceTestV2
+testSendClientWithoutAssociatedServer
+	"See RsrInMemoryServiceTest>>testSendClientWithoutAssociatedServer"
+
+	| client server reason |
+	client := RsrRemoteActionClient new
+		registerWith: connectionA;
+		synchronize.
+	server := connectionB serviceAt: client _id.
+	server action: [:x | x].
+	reason := self expectCatch: (client asyncValue: RsrKnownClient new).
+	self
+		assert: reason class
+		equals: RsrRemoteExceptionServer.
+	self
+		assert: reason exceptionClassName
+		equals: #RsrUnknownClass
 %
 
 ! Class implementation for 'RsrSpeciesEquality'
@@ -16040,14 +17483,37 @@ setUp
 
 ! Class implementation for 'RsrSocketSpeciesEquality'
 
-!		Instance methods for 'RsrSocketSpeciesEquality'
+!		Class methods for 'RsrSocketSpeciesEquality'
+
+category: 'testing'
+classmethod: RsrSocketSpeciesEquality
+isAbstract
+
+	^self == RsrSocketSpeciesEquality
+%
+
+! Class implementation for 'RsrSocketSpeciesEqualityV1'
+
+!		Instance methods for 'RsrSocketSpeciesEqualityV1'
 
 category: 'running'
-method: RsrSocketSpeciesEquality
+method: RsrSocketSpeciesEqualityV1
 setUp
 
 	super setUp.
-	self initializeSocketConnections
+	self initializeSocketConnectionsV1
+%
+
+! Class implementation for 'RsrSocketSpeciesEqualityV2'
+
+!		Instance methods for 'RsrSocketSpeciesEqualityV2'
+
+category: 'running'
+method: RsrSocketSpeciesEqualityV2
+setUp
+
+	super setUp.
+	self initializeSocketConnectionsV2
 %
 
 ! Class implementation for 'RsrStressTest'
@@ -16058,7 +17524,7 @@ category: 'accessing'
 classmethod: RsrStressTest
 defaultTimeLimit
 
-	^30 seconds
+	^Duration seconds: 60
 %
 
 category: 'testing'
@@ -16096,6 +17562,13 @@ concurrentlyRun: aBlock
 	self deny: anyCurtailed
 %
 
+category: 'accessing'
+method: RsrStressTest
+defaultTestDuration
+
+	^self class defaultTimeLimit / 4
+%
+
 category: 'initialize/release'
 method: RsrStressTest
 initializeServices
@@ -16118,7 +17591,20 @@ category: 'running-utilities'
 method: RsrStressTest
 repeatedlyRun: aBlock
 
-	self repetitions timesRepeat: aBlock
+	| endTime |
+	endTime := DateAndTime now + self defaultTestDuration.
+	self
+		repeatedlyRun: aBlock
+		until: endTime
+%
+
+category: 'running-utilities'
+method: RsrStressTest
+repeatedlyRun: aBlock
+until: endTime
+
+	[DateAndTime now < endTime]
+		whileTrue: [aBlock value]
 %
 
 category: 'running-utilities'
@@ -16126,13 +17612,6 @@ method: RsrStressTest
 repeatedlySend: anObject
 
 	self repeatedlyRun: [self send: anObject]
-%
-
-category: 'accessing'
-method: RsrStressTest
-repetitions
-
-	^1000
 %
 
 category: 'running-utilities'
@@ -16171,11 +17650,7 @@ category: 'running'
 method: RsrStressTest
 test10MBytes
 
-	| bytes |
-	bytes := ByteArray new: 1024 * 1024 * 10.
-	1
-		to: 10
-		do: [:i | self send: bytes]
+	self repeatedlySend: (ByteArray new: 1024 * 1024 * 10)
 %
 
 category: 'running'
@@ -16190,13 +17665,6 @@ method: RsrStressTest
 test1MBytes
 
 	self repeatedlySend: (ByteArray new: 1024 squared)
-%
-
-category: 'running'
-method: RsrStressTest
-test2KBytes
-
-	self repeatedlySend: (ByteArray new: 1024 *2)
 %
 
 category: 'running'
@@ -16242,21 +17710,33 @@ initializeConnections
 
 !		Class methods for 'RsrSocketStressTest'
 
-category: 'accessing'
+category: 'testing'
 classmethod: RsrSocketStressTest
-defaultTimeLimit
-	"These tests take longer over a Socket"
+isAbstract
 
-	^60 seconds
+	^self == RsrSocketStressTest
 %
 
-!		Instance methods for 'RsrSocketStressTest'
+! Class implementation for 'RsrSocketStressTestV1'
+
+!		Instance methods for 'RsrSocketStressTestV1'
 
 category: 'initializing'
-method: RsrSocketStressTest
+method: RsrSocketStressTestV1
 initializeConnections
 
-	self initializeSocketConnections
+	self initializeSocketConnectionsV1
+%
+
+! Class implementation for 'RsrSocketStressTestV2'
+
+!		Instance methods for 'RsrSocketStressTestV2'
+
+category: 'initializing'
+method: RsrSocketStressTestV2
+initializeConnections
+
+	self initializeSocketConnectionsV2
 %
 
 ! Class implementation for 'RsrTemplateResolverTestCase'
@@ -17068,6 +18548,43 @@ method: RsrProcessModel
 currentStackDump
 
 	^GsProcess stackReportToLevel: 1000
+%
+
+! Class extensions for 'RsrProtocolEncoder'
+
+!		Instance methods for 'RsrProtocolEncoder'
+
+category: '*RemoteServiceReplication-Test'
+method: RsrProtocolEncoder
+encodeDeliverResponse: aDeliverResponse
+
+	^ByteArray streamContents: [:stream | self encodeDeliverResponse: aDeliverResponse onto: stream]
+%
+
+category: '*RemoteServiceReplication-Test'
+method: RsrProtocolEncoder
+encodeReleaseServices: aReleaseServices
+
+	^ByteArray streamContents: [:stream | self encodeReleaseServices: aReleaseServices onto: stream]
+%
+
+category: '*RemoteServiceReplication-Test'
+method: RsrProtocolEncoder
+encodeSendMessage: aSendMessage
+
+	^ByteArray streamContents: [:stream | self encodeSendMessage: aSendMessage onto: stream]
+%
+
+category: '*RemoteServiceReplication-Test'
+method: RsrProtocolEncoder
+encodeServiceSnapshot: aServiceSnapshot
+
+	^ByteArray
+		streamContents:
+			[:stream |
+			self
+				encodeServiceSnapshot: aServiceSnapshot
+				onto: stream]
 %
 
 ! Class extensions for 'RsrReference'
