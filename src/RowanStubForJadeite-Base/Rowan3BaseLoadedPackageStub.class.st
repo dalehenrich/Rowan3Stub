@@ -1,7 +1,7 @@
 Class {
 	#name : 'Rowan3BaseLoadedPackageStub',
 	#superclass : 'Rowan3LoadedPackageStub',
-	#category : 'Rowan3Stub-Core'
+	#category : 'RowanStubForJadeite-Core'
 }
 
 { #category : 'accessing' }

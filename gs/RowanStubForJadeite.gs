@@ -26,7 +26,7 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan3Stub-Core';
+		category: 'RowanStubForJadeite-Core';
 		immediateInvariant.
 true.
 %
@@ -41,7 +41,7 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan3Stub-Core';
+		category: 'RowanStubForJadeite-Core';
 		immediateInvariant.
 true.
 %
@@ -56,7 +56,7 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan3Stub-Core';
+		category: 'RowanStubForJadeite-Core';
 		immediateInvariant.
 true.
 %
@@ -71,7 +71,7 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan3Stub-Core';
+		category: 'RowanStubForJadeite-Core';
 		immediateInvariant.
 true.
 %
@@ -86,7 +86,7 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan3Stub-Core';
+		category: 'RowanStubForJadeite-Core';
 		immediateInvariant.
 true.
 %
@@ -101,7 +101,7 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan3Stub-Core';
+		category: 'RowanStubForJadeite-Core';
 		immediateInvariant.
 true.
 %
@@ -116,14 +116,14 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan3Stub-Core';
+		category: 'RowanStubForJadeite-Core';
 		immediateInvariant.
 true.
 %
 
 doit
 (Object
-	subclass: 'Rowan3Stub'
+	subclass: 'RowanStubForJadeite'
 	instVarNames: #(platform projectTools)
 	classVars: #()
 	classInstVars: #()
@@ -131,7 +131,7 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan3Stub-Core';
+		category: 'RowanStubForJadeite-Core';
 		immediateInvariant.
 true.
 %
@@ -589,29 +589,29 @@ initialize
 	self browser
 %
 
-! Class implementation for 'Rowan3Stub'
+! Class implementation for 'RowanStubForJadeite'
 
-!		Class methods for 'Rowan3Stub'
+!		Class methods for 'RowanStubForJadeite'
 
 category: 'instance creation'
-classmethod: Rowan3Stub
+classmethod: RowanStubForJadeite
 new
 	"Create a new initialized instance of the receiver."
 
 	^ self basicNew initialize
 %
 
-!		Instance methods for 'Rowan3Stub'
+!		Instance methods for 'RowanStubForJadeite'
 
 category: 'accessing'
-method: Rowan3Stub
+method: RowanStubForJadeite
 commandResultClass
 
 	^ self platform commandResultClass
 %
 
 category: 'accessing'
-method: Rowan3Stub
+method: RowanStubForJadeite
 globalNamed: aString
 	"Answer a global object with the given name.  If no object with the given name is found, returns nil."
 
@@ -619,20 +619,20 @@ globalNamed: aString
 %
 
 category: 'accessing'
-method: Rowan3Stub
+method: RowanStubForJadeite
 image
 	^ self platform image
 %
 
 category: 'initialization'
-method: Rowan3Stub
+method: RowanStubForJadeite
 initialize
 	self platform.
 	self projectTools
 %
 
 category: 'accessing'
-method: Rowan3Stub
+method: RowanStubForJadeite
 jadeServerClassNamed: className
 
 	| jadeClasses |
@@ -644,26 +644,26 @@ jadeServerClassNamed: className
 %
 
 category: 'accessing'
-method: Rowan3Stub
+method: RowanStubForJadeite
 loggingServiceClass
 
 	^ self platform loggingServiceClass
 %
 
 category: 'accessing'
-method: Rowan3Stub
+method: RowanStubForJadeite
 platform
 	^ platform ifNil: [ platform := Rowan3PlatformStub new ]
 %
 
 category: 'accessing'
-method: Rowan3Stub
+method: RowanStubForJadeite
 projectTools
 	^ projectTools ifNil: [ projectTools := Rowan3ProjectToolsStub new ]
 %
 
 category: 'accessing'
-method: Rowan3Stub
+method: RowanStubForJadeite
 unpackagedName
 	"Answer the name used for projects and packages that are not in a package ... unpackaged projects and packages are where pacakge things go by default."
 

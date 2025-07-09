@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'theClass'
 	],
-	#category : 'Rowan3Stub-Core'
+	#category : 'RowanStubForJadeite-Core'
 }
 
 { #category : 'accessing' }

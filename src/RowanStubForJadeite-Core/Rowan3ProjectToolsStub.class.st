@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'browserTool'
 	],
-	#category : 'Rowan3Stub-Core'
+	#category : 'RowanStubForJadeite-Core'
 }
 
 { #category : 'instance creation' }
