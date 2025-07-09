@@ -33,5 +33,5 @@ startNetldi.solo -r
 source customenv # set $GEMSTONE
 
 export ROWAN_STUB_EXTENT_TYPE=$extentType
-$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub.gs -I $topazini_systemuser -L
-$ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_base.gs -I $topazini_systemuser -L
+$ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/installRowanStub.gs -I $topazini_systemuser -L
+$ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/RowanClassService_base.gs -I $topazini_systemuser -L

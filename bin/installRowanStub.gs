@@ -119,33 +119,33 @@ symbolList := GsCurrentSession currentSession symbolList.
 ] ]. 
 %
 
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Announcements.gs
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RemoteServiceReplication.gs
+input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/Announcements.gs
+input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RemoteServiceReplication.gs
 
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/GemStoneInteractions.gs
+input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/GemStoneInteractions.gs
 
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
+input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeite.gs
 
-# install Monticello package support for Rowan3Stub
+# install Monticello package support for RowanStubForJadeite
 run
 | filePath |
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'base'
 	ifTrue: [
- 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubBase.gs' asFileReference pathString.
+ 		filePath := '$ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeiteBase.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside'
 	ifTrue: [
-		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
+		filePath := '$ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeiteMonticello.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'metacello'
 	ifTrue: [
 		self error: 'metacello extent type not supported' ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'
 	ifTrue: [
-		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMetacello.gs' asFileReference pathString.
+		filePath := '$ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
 
-Published at: #Rowan put: Rowan3Stub new.
+Published at: #Rowan put: RowanStubForJadeite new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
 %
 
@@ -294,8 +294,8 @@ run
 			Globals at: symbolName put: (RwGsDummy named: symbolName) ].
 %
 
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RowanClientServicesV3.gs
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubServices.gs
+input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanClientServicesV3.gs
+input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeiteServices.gs
 
 #
 # PATCHES to RowanClientServices methods to enable the use of `System waitForDebug`
@@ -510,7 +510,7 @@ rwProject
 #
 
 # SequenceableCollection>>copyUpTo:
-category: 'Rowan3Stub' 
+category: 'RowanStubForJadeite' 
 method: SequenceableCollection
 copyUpTo: anObject
 

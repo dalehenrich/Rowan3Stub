@@ -10,6 +10,6 @@ run
 %
 
 logout
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/bin/installRowanStub.gs
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/bin/RowanClassService_base.gs
+input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/installRowanStub.gs
+input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/RowanClassService_base.gs
 
