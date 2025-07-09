@@ -1,5 +1,5 @@
 Class {
-	#name : 'Rowan3Stub',
+	#name : 'RowanStubForJadeite',
 	#superclass : 'Object',
 	#instVars : [
 		'platform',
@@ -9,38 +9,38 @@ Class {
 }
 
 { #category : 'instance creation' }
-Rowan3Stub class >> new [
+RowanStubForJadeite class >> new [
 	"Create a new initialized instance of the receiver."
 
 	^ self basicNew initialize
 ]
 
 { #category : 'accessing' }
-Rowan3Stub >> commandResultClass [
+RowanStubForJadeite >> commandResultClass [
 
 	^ self platform commandResultClass
 ]
 
 { #category : 'accessing' }
-Rowan3Stub >> globalNamed: aString [
+RowanStubForJadeite >> globalNamed: aString [
 	"Answer a global object with the given name.  If no object with the given name is found, returns nil."
 
 	^ self image objectNamed: aString
 ]
 
 { #category : 'accessing' }
-Rowan3Stub >> image [
+RowanStubForJadeite >> image [
 	^ self platform image
 ]
 
 { #category : 'initialization' }
-Rowan3Stub >> initialize [
+RowanStubForJadeite >> initialize [
 	self platform.
 	self projectTools
 ]
 
 { #category : 'accessing' }
-Rowan3Stub >> jadeServerClassNamed: className [
+RowanStubForJadeite >> jadeServerClassNamed: className [
 
 	| jadeClasses |
 
@@ -51,23 +51,23 @@ Rowan3Stub >> jadeServerClassNamed: className [
 ]
 
 { #category : 'accessing' }
-Rowan3Stub >> loggingServiceClass [
+RowanStubForJadeite >> loggingServiceClass [
 
 	^ self platform loggingServiceClass
 ]
 
 { #category : 'accessing' }
-Rowan3Stub >> platform [
+RowanStubForJadeite >> platform [
 	^ platform ifNil: [ platform := Rowan3PlatformStub new ]
 ]
 
 { #category : 'accessing' }
-Rowan3Stub >> projectTools [
+RowanStubForJadeite >> projectTools [
 	^ projectTools ifNil: [ projectTools := Rowan3ProjectToolsStub new ]
 ]
 
 { #category : 'accessing' }
-Rowan3Stub >> unpackagedName [
+RowanStubForJadeite >> unpackagedName [
 	"Answer the name used for projects and packages that are not in a package ... unpackaged projects and packages are where pacakge things go by default."
 
 	^ '(NONE)'

@@ -1,8 +1,8 @@
 RwLoadSpecificationV2 {
-	#projectName : 'Rowan3Stub',
+	#projectName : 'RowanStubForJadeite',
 	#projectSpecFile : 'rowan/project.ston',
 	#componentNames : [
-		'Core'
+		'Metacello'
 	],
 	#platformProperties : {
 		'gemstone' : {

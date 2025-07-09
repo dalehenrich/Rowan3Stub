@@ -5,7 +5,7 @@ RwLoadComponent {
 		'Core'
 	],
 	#packageNames : [
-		'Rowan3Stub-Metacello'
+		'RowanStubForJadeite-Metacello'
 	],
 	#comment : ''
 }
