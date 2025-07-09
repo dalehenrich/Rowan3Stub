@@ -5027,8 +5027,13 @@ category: 'command support'
 method: RowanFileService
 basicIsDirectory: thePath
 	| fileReference |
+	[ 
 	fileReference := FileReference fileSystem: FileSystem disk path: thePath asPath.
-	answer := fileReference isDirectory.
+	answer := fileReference isDirectory ]
+		on: Error
+		do: [ :ex | 
+			self inform: 'Error accessing ' , thePath , ' ' , ex messageText.
+			answer := nil ].
 	RowanCommandResult addResult: self
 %
 
@@ -5117,9 +5122,11 @@ method: RowanFileService
 fileContents
 	| fileReference |
 	fileReference := FileReference fileSystem: FileSystem disk path: path asPath.
-	answer := fileReference exists
-		ifTrue: [ fileReference readStream contents ]
-		ifFalse: [ String new asUnicodeString ].
+	answer := [ fileReference readStreamDo: [ :stream | stream contents ] ]
+		on: Error
+		do: [ :ex | 
+			self inform: 'Error accessing file: ' , path.
+			ex return: String new asUnicodeString ].
 	RowanCommandResult addResult: self
 %
 
@@ -5213,6 +5220,20 @@ category: 'client commands'
 method: RowanFileService
 isDirectory: directory
 	self basicIsDirectory: directory
+%
+
+category: 'client commands'
+method: RowanFileService
+isReadable
+	answer := path asFileReference isReadable.
+	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanFileService
+isWritable
+	answer := path asFileReference isWritable.
+	RowanCommandResult addResult: self
 %
 
 category: 'client commands'
@@ -5691,15 +5712,21 @@ method: RowanBrowserService
 recompileMethodsAfterClassCompilation
 	"compileClass: must be run first"
 
-	| theClass classService packageService projectService |
+	| theClass classService packageService projectService compileErrors |
+	compileErrors := Array new. 
 	theClass := [ 
 	[ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
-		on: CompileWarning , CompileError
-		do: [ :ex |  ] ]
+		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
+		do: [ :ex |  | compileError |
+			compileError := ex compileError.
+			Transcript cr; show: compileError printString. 
+			compileErrors add: compileError. 
+			"sourceString := compileError sourceString.
+			methodClass := (compileError gsArguments at: 3)  halt."
+			ex resume: true. "method compile error will be handled later"  ] ]
 		ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
 	classService := RowanClassService new name: theClass name.
 	classService update.
-	classService recompileAllMethods. "handle method compile errors here" 
 	classService updateSubclasses.
 	classService isNewClass: true.	"if nothing else, the dirty state of the package/project services
 	should be updated. Would like a less heavy weight solution than this, though."

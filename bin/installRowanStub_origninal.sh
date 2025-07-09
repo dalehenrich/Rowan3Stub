@@ -289,7 +289,7 @@ run
 %
 
 run
-	#(RwExecuteClassInitializeMethodsAfterLoadNotification RwPerformingUnpackagedEditNotification RwPackage RBParser RwMethodDefinition RwProject RwSemanticVersionNumber RwPlatformSubcomponent RwSubcomponent RwSpecification RwClassDefinition RwCompileErrorCompilingMethodsForNewClassVersionNotification) 
+	#(RwExecuteClassInitializeMethodsAfterLoadNotification RwPerformingUnpackagedEditNotification RwPackage RBParser RwMethodDefinition RwProject RwSemanticVersionNumber RwPlatformSubcomponent RwSubcomponent RwSpecification RwClassDefinition) 
 		do: [:symbolName |
 			Globals at: symbolName put: (RwGsDummy named: symbolName) ].
 %
@@ -540,5 +540,3 @@ _describeMCOrganizationDefinition: anMCOrganizationDefinition on: aStream packag
 %
 
 commit
-
-logout

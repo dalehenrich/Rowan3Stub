@@ -35,5 +35,4 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 		do: [:ex | ex return: method -> warnings]
 %
 commit
-
 ## end of RowanClassService_base.gs
