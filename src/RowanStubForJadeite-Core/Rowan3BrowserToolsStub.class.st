@@ -1,7 +1,7 @@
 Class {
 	#name : 'Rowan3BrowserToolsStub',
 	#superclass : 'Object',
-	#category : 'Rowan3Stub-Core'
+	#category : 'RowanStubForJadeite-Core'
 }
 
 { #category : 'accessing' }

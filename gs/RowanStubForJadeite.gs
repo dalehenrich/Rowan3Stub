@@ -11,7 +11,7 @@ doit
 	inDictionary: Globals
 	options: #()
 )
-		category: 'Rowan3Stub-Core';
+		category: 'RowanStubForJadeite-Core';
 		immediateInvariant.
 true.
 %
