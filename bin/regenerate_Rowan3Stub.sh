@@ -1,6 +1,9 @@
 set -ex
 
-export ROWAN_PROJECTS_HOME=/bosch1/users/dhenrich/_stones/37x/h_37x_externals_st/
+if [ "$ROWAN_PROJECTS_HOME" = "" ]; then
+	echo "ERROR -- \$ROWAN_PROJECTS_HOME must be defined"
+	exit 1
+fi
 
 product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$ROWAN_PROJECTS_HOME/RowanStubForJadeite/rowan/specs/RowanStubForJadeite_base.ston \
  	--projectsHome=$ROWAN_PROJECTS_HOME --fileName=$ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeite.gs RowanStubForJadeite-Core $*

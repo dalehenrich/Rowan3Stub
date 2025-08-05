@@ -1,6 +1,6 @@
 set -ex
 
-if [ $ROWAN_PROJECTS_HOME = "" ]; then
+if [ "$ROWAN_PROJECTS_HOME" = "" ]; then
 	echo "ERROR -- \$ROWAN_PROJECTS_HOME must be defined"
 	exit 1
 fi
