@@ -422,7 +422,7 @@ classCreationTemplateUsing: packageNames
 				ifFalse: [ result addAll: ((anArray at: 1) at: 1) name asString ].
 	result
 		add: lfsp;
-		add: self theClass _optionsArrayForDefinition.
+		add: self theClass _optionsStringForDefinition.
 	result add: Character lf.
 	^ result
 %
