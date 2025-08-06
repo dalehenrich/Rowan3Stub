@@ -1,3 +1,10 @@
+#
+#	The following projects should present in ROWAN_PROJECTS_HOME:
+#		RowanStubForJadeite
+#		RemoteServiceReplication
+#		RowanClientServicesV3
+#		Announcements
+
 set -ex
 
 if [ "$ROWAN_PROJECTS_HOME" = "" ]; then
