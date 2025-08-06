@@ -143,7 +143,18 @@ true.
 category: 'accessing'
 method: Rowan3BrowserToolsStub
 classCreationTemplateForClass: aClass hybridBrowser: hybridBrowser
-	^ aClass definition
+	| result def |
+	def := aClass definition.
+	def := def copyFrom: 1 to: def size - 1.	"definition has a trailing LF that we don't want"
+	result := String new.
+	result
+		addAll: '(';
+		addAll: def;
+		lf;
+		addAll: ') category: ''Kernel''';
+		lf;
+		yourself.
+	^ result
 %
 
 category: 'accessing'
@@ -160,7 +171,7 @@ classCreationTemplateForSubclassOf: superclassName category: category packageNam
 		ifFalse: [ 
 			| result lfsp |
 			result := String new.
-			result addAll: '(' , Character lf asString , superclassName.
+			result addAll: '(' , superclassName.
 			result addAll: ' subclass: ''NameOfSubclass'''.
 			lfsp := Character lf asString tab.
 			result
@@ -177,8 +188,8 @@ classCreationTemplateForSubclassOf: superclassName category: category packageNam
 			result
 				add: lfsp;
 				add: 'options: #()';
-				add: Character lf;
-				add: ') category: ''Kernel'''.
+				add: ') category: ''Kernel''';
+				lf.
 			^ result ]
 %
 

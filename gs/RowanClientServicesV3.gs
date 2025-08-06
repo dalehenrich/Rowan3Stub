@@ -5146,13 +5146,21 @@ fileIn: filePath
 	fileReference exists
 		ifFalse: [ ^ self inform: 'File does not exist' ].
 	[ GsFileIn fromServerPath: filePath ]
-		on: CompileWarning
+		on: CompileWarning , Error
 		do: [ :ex | 
-			Transcript
-				cr;
-				show: ex description;
-				flush.
-			ex resume ].
+			(ex isKindOf: CompileWarning)
+				ifTrue: [ 
+					Transcript
+						cr;
+						show: ex description;
+						flush.
+					ex resume ]
+				ifFalse: [ 
+					self
+						inform:
+							'Error during file in. File in cancelled. Error Text: ' , ex messageText.
+					answer := nil.
+					^ RowanCommandResult addResult: self ] ].
 	answer := fileReference readStream contents.
 	RowanCommandResult addResult: self
 %
@@ -5712,19 +5720,28 @@ method: RowanBrowserService
 recompileMethodsAfterClassCompilation
 	"compileClass: must be run first"
 
-	| theClass classService packageService projectService compileErrors |
-	compileErrors := Array new. 
+	| theClass classService packageService projectService methodCompileErrors |
+	methodCompileErrors := Array new.
+
 	theClass := [ 
 	[ (SessionTemps current at: #'jadeiteCompileClassMethod') _executeInContext: nil ]
 		on: RwCompileErrorCompilingMethodsForNewClassVersionNotification
-		do: [ :ex |  | compileError |
-			compileError := ex compileError.
-			Transcript cr; show: compileError printString. 
-			compileErrors add: compileError. 
-			"sourceString := compileError sourceString.
-			methodClass := (compileError gsArguments at: 3)  halt."
-			ex resume: true. "method compile error will be handled later"  ] ]
+		do: [ :ex | 
+			| methodService errorOffset errorText |
+			errorOffset := ex compileError gsArguments first first at: 2.
+			errorText := ex compileError gsArguments first first at: 3.
+			methodService := RowanMethodService new.
+			methodService source: ex compileError sourceString.
+			methodService source insertAll: errorText , '->' at: errorOffset.
+			methodService
+				className: (ex compileError gsArguments at: 3);
+				meta: false;
+				firstReference: errorOffset;
+				searchString: errorText.
+			methodCompileErrors add: methodService.
+			ex resume: true	"method compile error will be handled later" ] ]
 		ensure: [ SessionTemps current at: #'jadeiteCompileClassMethod' put: nil ].
+	[ 
 	classService := RowanClassService new name: theClass name.
 	classService update.
 	classService updateSubclasses.
@@ -5743,8 +5760,14 @@ recompileMethodsAfterClassCompilation
 	classService updateType: #'newClass:browser:'.
 	self updateSymbols: (Array with: theClass name asString).
 	classService classHierarchy.
+	classService methodsFailingRecompilation: methodCompileErrors.
 	RowanCommandResult addResult: self.
-	^ classService
+	^ classService ]
+		on: Error
+		do: [ :ex | 
+			Transcript
+				cr;
+				show: 'ERROR post class processing' ]
 %
 
 category: 'client commands'
@@ -6592,6 +6615,7 @@ initialize
 	categories := Array new.
 	updateAfterCommand := true.
 	hasSubclasses := false.
+	methodsFailingRecompilation := Array new.
 %
 
 category: 'initialization'
@@ -6784,6 +6808,18 @@ methodServicesFor: classOrMeta organizer: theOrganizer subclasses: subclasses
 						meta: meta
 						organizer: theOrganizer
 						subclasses: subclasses])
+%
+
+category: 'accessing'
+method: RowanClassService
+methodsFailingRecompilation
+	^methodsFailingRecompilation
+%
+
+category: 'accessing'
+method: RowanClassService
+methodsFailingRecompilation: object
+	methodsFailingRecompilation := object
 %
 
 category: 'private'
@@ -7240,6 +7276,7 @@ removeSelector: selector ifAbsent: absentBlock
 	| theClass |
 	theClass := self theClass. 
 	meta ifTrue: [theClass := theClass class].
+	selector ifNil: [^absentBlock value]. "protect here as compiledMethodAt:otherwise: uses protected mode"
 	(theClass compiledMethodAt: selector otherwise: nil) isNil ifTrue:[ ^absentBlock value ].
 	[self browserTool removeMethod: selector forClassNamed: name asString isMeta: meta]
 		on: RwPerformingUnpackagedEditNotification
@@ -7482,8 +7519,8 @@ setDictionary: classOrMeta
 category: 'Updating'
 method: RowanClassService
 setIsTestCase
-
-	isTestCase := self theClass isSubclassOf: TestCase
+	isTestCase := (self theClass isSubclassOf: TestCase)
+		and: [ self theClass isAbstract not ]
 %
 
 category: 'client commands'
@@ -10475,11 +10512,12 @@ forSelector: sel class: theClass meta: boolean organizer: anOrganizer
 	^ service
 %
 
-category: 'Accessing'
+category: 'updates'
 method: RowanMethodService
 gsNMethod
 	| theBehavior |
 	theBehavior := self theClass ifNil: [^nil]. 
+	selector ifNil: [^nil]. "must protect outside of `compiledMethodAt:otherwise:` which uses protected mode"
 	^ theBehavior compiledMethodAt: selector otherwise: nil
 %
 
@@ -10531,6 +10569,8 @@ initialize
 	hasMethodHistory := true.
 	inSelectedPackage := true.
 	isExtension := false.
+	stepPoints := Array new.
+	breakPoints := Array new
 %
 
 category: 'initialization'
@@ -10981,6 +11021,7 @@ updateLatest
 	| theClass compiledMethod |
 	theClass := (RowanClassService new name: className) theClass.
 	theClass ifNil: [ ^ self ].
+	selector ifNil: [^self]. "must protect outside of `compiledMethodAt:otherwise:` which uses protected mode"
 	compiledMethod := theClass compiledMethodAt: selector otherwise: nil.
 	compiledMethod
 		ifNil: [ 
