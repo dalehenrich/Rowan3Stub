@@ -7,6 +7,11 @@ fi
 
 stoneName=$1
 registryName=$2;
+# extentType
+#		base			- extent0.dbf
+#		metacello	- extent0.seaside.dbf with monticello and metacello installed
+#		seaside 	- extent0.seaside.dbf with monticello installed
+#		tode			-	extent0.seaside.dbf with monticello ,metacello and tODE installed
 extentType=$3
 if [ "$stoneName" = "" ]; then
 	echo "missing stone name (argument 1)"

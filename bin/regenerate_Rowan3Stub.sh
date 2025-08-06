@@ -5,6 +5,13 @@ if [ "$ROWAN_PROJECTS_HOME" = "" ]; then
 	exit 1
 fi
 
+if ["$GEMSTONE" = "" ]; then
+	echo "ERROR -- \$GEMSTONE must be defined"
+	exit 1
+fi
+
+export PATH=$GEMSTONE/bin:$PATH
+
 product/rowan3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$ROWAN_PROJECTS_HOME/RowanStubForJadeite/rowan/specs/RowanStubForJadeite_base.ston \
  	--projectsHome=$ROWAN_PROJECTS_HOME --fileName=$ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeite.gs RowanStubForJadeite-Core $*
 
