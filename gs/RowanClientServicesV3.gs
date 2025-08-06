@@ -2883,6 +2883,14 @@ isRowanClientServicesVersionSupported: versionString lowerLimit: lowerLimit
 	^ low <= version and: [ version < high ]
 %
 
+category: 'autocommit'
+classmethod: RowanService
+isRowanStub
+
+	Globals at: #Rowan3LoadedPackageStub ifAbsent: [^false].
+	^true
+%
+
 category: 'instance creation'
 classmethod: RowanService
 new
@@ -4628,6 +4636,19 @@ isClassName: aString
 	answer := (self organizer classes collect: [ :cls | cls name asString ])
 		asArray includes: aString.
 	RowanCommandResult addResult: self
+%
+
+category: 'client commands'
+method: RowanAnsweringService
+isRowanAvailable
+	answer := self isRowanStub not.
+	RowanCommandResult addResult: self
+%
+
+category: 'testing'
+method: RowanAnsweringService
+isRowanStub
+	^RowanService isRowanStub
 %
 
 category: 'testing'
