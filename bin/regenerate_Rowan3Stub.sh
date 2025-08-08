@@ -1,9 +1,10 @@
 #
-#	The following projects should present in ROWAN_PROJECTS_HOME:
+#	The following projects should be present in ROWAN_PROJECTS_HOME:
 #		RowanStubForJadeite
 #		RemoteServiceReplication
 #		RowanClientServicesV3
 #		Announcements
+#		RowanV3
 
 set -ex
 
