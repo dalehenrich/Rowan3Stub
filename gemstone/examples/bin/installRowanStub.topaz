@@ -1,0 +1,18 @@
+#!/usr/bin/env superdoit_topaz
+#
+# to execute as a a topaz script: 
+#               - expect $GEMSTONE to be defined and and $GEMSTONE/bin to be in your $PATH
+#
+#               - using current $GEMSTONE and .topazini supplied on command line to define stone
+#                               installRowanStub.gs -I ./.topazini -L
+#
+# otherwise input the script 
+#
+output pushnew installRowanStub.log
+set u SystemUser p swordfish
+
+# each of these scripts is expected to do a login with a commit and logout at end
+input $GEMSTONE/examples/jadeite/bin/installRowanStub.gs
+input $GEMSTONE/examples/jadeite/gs/RowanClassService_base.gs
+
+errorcount

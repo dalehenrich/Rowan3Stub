@@ -13,3 +13,4 @@ logout
 input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/installRowanStub.gs
 input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/RowanClassService_base.gs
 
+commit

@@ -1,7 +1,0 @@
-logout
-
-set u SystemUser p swordfish
-
-input $GEMSTONE/examples/gs/installRowanStub.gs
-input $GEMSTONE/examples/gs/RowanClassService_base.gs
-
