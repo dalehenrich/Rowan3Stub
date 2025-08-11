@@ -8,6 +8,51 @@ login
 
 set INPUTPAUSEONERROR on
 
+######## method overrides added by ewinger ################
+
+method: RowanClassService
+moveMethods: methodServices to: category
+	"update the dirty flag of the project & package both before and after the move"
+
+	| behavior |
+	behavior := self classOrMeta.
+	methodServices
+		do: [ :methodService | 
+			| beforePackageName |
+			methodService organizer: self organizer.
+			beforePackageName := methodService packageName.
+			behavior compileMethod:  methodService source category: category  environmentId: 0.
+			methodService update.
+			methodService updatePackageProjectAfterCategoryChange: beforePackageName ].
+	self update.
+	self selectedMethods: methodServices
+%
+
+method: RowanClassService
+compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol
+	"returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
+
+	| method warnings |
+	
+	[ [ [ [ method := aBehavior compileMethod:  methodString category: categorySymbol environmentId: 0]
+		on: RwExecuteClassInitializeMethodsAfterLoadNotification
+		do: [:ex | ex resume: false ]]
+			on: CompileError
+			do: [:ex | ^nil -> (ex gsArguments at: 1)]]
+				on: CompileWarning
+				do: 
+					[:ex |  
+					warnings := ex warningString.
+					ex resume]]
+					on: RwPerformingUnpackagedEditNotification
+					do: [:ex | ex resume ] .
+	^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
+		do: [:ex | ex return: method -> warnings]
+
+%
+
+######## end method overrides added by ewinger ###############
+
 #
 #	these 4 methods should be in GemStone-Interactions-Kernel package in Rowan 3 and should
 #		be when we hit masterV3.3
@@ -322,12 +367,16 @@ executeCommand
 	updates := Rowan commandResultClass results.
 	self postCommandExecution ]
 		on: Exception
-		do: [ :ex | 
+		do: [ :ex |
+			(ex isKindOf: RowanServiceShouldExit)
+				ifTrue: [ ^ self ].
+			(ex isKindOf: Notification)
+				ifFalse: [ 
 			GsFile
 				gciLogServer:
 					DateTime now asStringMs , ' {'
 						, Processor activeProcess identityHash printString , '}  - got error: '
-						, ex printString.
+						, ex printString].
 			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
 			ex pass ].
 	^ self
