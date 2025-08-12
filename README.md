@@ -14,6 +14,6 @@ $GEMSTONE/jadeite/bin/installRowanStub_stones.sh <stone-name> <registry-name> ba
 ```
 ### topaz-based script for installing JfPwoR support in an existing extent0.dbf stone.
 ```
-$GEMSTONE/jadeite/bin/installRowanStub.sh
+$GEMSTONE/jadeite/bin/installRowanStub_topaz.sh [<.topazini-path>]
 ```
 
