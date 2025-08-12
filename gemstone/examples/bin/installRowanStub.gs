@@ -9,8 +9,6 @@ login
 set INPUTPAUSEONERROR on
 
 run
-	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
-		ifNil: [ self error: 'The environment variable ROWAN_PROJECTS_HOME must be defined' ].
 	(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE')
 		ifNil: [ self error: 'The environment variable ROWAN_STUB_EXTENT_TYPE must be defined' ].
 %
