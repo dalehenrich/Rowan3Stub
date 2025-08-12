@@ -148,6 +148,7 @@ run
 Published at: #Rowan put: RowanStubForJadeite new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
 %
+errorCount
 
 # the following 4 methods cannot be packaged, since they conflict with the Rowan implementation
 method: Behavior

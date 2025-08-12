@@ -8,6 +8,13 @@ login
 
 set INPUTPAUSEONERROR on
 
+run
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME')
+		ifNil: [ self error: 'The environment variable ROWAN_PROJECTS_HOME must be defined' ].
+	(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE')
+		ifNil: [ self error: 'The environment variable ROWAN_STUB_EXTENT_TYPE must be defined' ].
+%
+
 #
 #	these 4 methods should be in GemStone-Interactions-Kernel package in Rowan 3 and should
 #		be when we hit masterV3.3
@@ -128,22 +135,27 @@ input $GEMSTONE/examples/jadeite/gs/RowanStubForJadeite.gs
 
 # install Monticello package support for RowanStubForJadeite
 run
-| filePath |
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'base'
+| extentType filePath |
+extentType := System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE'.
+extentType = 'base'
 	ifTrue: [
  		filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteBase.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath ].
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside'
-	ifTrue: [
-		filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMonticello.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath ].
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'metacello'
-	ifTrue: [
-		self error: 'metacello extent type not supported' ].
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'
-	ifTrue: [
-		filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath ].
+		GsFileIn fromServerPath: filePath ]
+	ifFalse: [
+		extentType = 'seaside'
+			ifTrue: [
+				filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMonticello.gs' asFileReference pathString.
+				GsFileIn fromServerPath: filePath ]
+			ifFalse: [
+				extentType = 'metacello'
+					ifTrue: [
+						self error: 'metacello extent type not supported' ]
+					ifFalse: [ 
+						extentType = 'tode'
+							ifTrue: [
+								filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
+								GsFileIn fromServerPath: filePath ]
+							ifFalse: [ self error: 'Unknown extent type: ', extentType printString ] ] ] ].
 
 Published at: #Rowan put: RowanStubForJadeite new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).

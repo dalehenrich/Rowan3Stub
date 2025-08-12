@@ -1,0 +1,1 @@
+../gemstone/examples/bin/installRowanStub_stones.sh

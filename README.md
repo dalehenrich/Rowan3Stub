@@ -8,18 +8,18 @@ export ROWAN_PROJECTS_HOME=/bosch1/users/dhenrich/_stones/37x/h_37x_externals_st
 # if 'base' or 'seaside' is specified, then the stone will be restarted with a fresh 
 # extent0.dbf or extent0.seaside.dbf. Otherwise the current running stone will used
 #
-$ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/installRowanStub.sh <stone-name> <registry-name> [base | seaside]
+$GEMSTONE/jadeite/bin/installRowanStub_stones.sh <stone-name> <registry-name> base
 ```
-### topaz script for installing JfPwoR support in an extent0.dbf stone.
+### topaz-based script for installing JfPwoR support in an existing extent0.dbf stone.
+
 ```
+export ROWAN_STUB_EXTENT_TYPE=base
+
+# start topaz
 set u SystemUser p swordfish
 login
-# Installation shell script using topaz
-run
-System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: '/bosch1/users/dhenrich/_stones/37x/h_37x_externals_st'.
-System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE' put: 'base'.
-%
-input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/installRowanStub.gs
-input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/RowanClassService_base.gs
+
+input $GEMSTONE/jadeite/bin/installRowanStub.gs
+input $GEMSTONE/jadeite/gs/RowanClassService_base.gs
 ```
 

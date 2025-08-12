@@ -140,7 +140,6 @@ basicRefresh
 	diskSha := self rowanDiskSha. 
 	branch := self rowanBranch.
 	projectUrl := self rowanProjectUrl.
-	rowanProjectsHome := System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME'.
 	isDiskDirty := self isGitDirty.
 "
 	componentServices := self componentServices.

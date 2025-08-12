@@ -1,16 +1,14 @@
-logout
-
 set u SystemUser p swordfish
 login
 
 run
-
-	System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME' put: '/bosch1/users/dhenrich/_stones/37x/h_37x_externals_st'.
-	System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE' put: 'base'.
+	(System gemEnvironmentVariable: 'ROWAN_PROJECTS_HOME') 
+		ifNil: [ self error: 'ROWAN_PROJECTS_HOME env variable must be defined' ].
+	(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE')
+		ifNil: [ self error: 'ROWAN_STUB_EXTENT_TYPE env variable must be defined' ].
 %
 
 logout
+# the following two scripts will do a topaz login
 input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/installRowanStub.gs
 input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/bin/RowanClassService_base.gs
-
-commit
