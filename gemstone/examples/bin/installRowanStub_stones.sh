@@ -57,4 +57,4 @@ fi
 export ROWAN_STUB_EXTENT_TYPE=base
 
 $GEMSTONE/examples/jadeite/bin/installRowanStub.topaz $topazCommandLine
-$GEMSTONE/examples/jadeite/gs/RowanClassService_base.topaz $topazCommandLine
+$GEMSTONE/examples/jadeite/gs/RowanClassService_base.gs $topazCommandLine
