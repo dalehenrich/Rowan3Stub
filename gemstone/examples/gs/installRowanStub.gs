@@ -1,12 +1,4 @@
-#!/usr/bin/env superdoit_topaz
 #
-# to run as superdoit script with $GEMSTONE set :
-#		./installRowanStub.gs -I <path-to-topazini> -L
-# 
-# as SystemUser
-login
-
-set INPUTPAUSEONERROR on
 
 run
 	(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE')
@@ -550,5 +542,4 @@ _describeMCOrganizationDefinition: anMCOrganizationDefinition on: aStream packag
 %
 
 commit
-
-logout
+## end of installRowanStub.gs

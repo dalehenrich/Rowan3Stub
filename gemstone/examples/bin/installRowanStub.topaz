@@ -10,9 +10,11 @@
 #
 output pushnew installRowanStub.log
 set u SystemUser p swordfish
+login
 
-# each of these scripts is expected to do a login with a commit and logout at end
-input $GEMSTONE/examples/jadeite/bin/installRowanStub.gs
+set INPUTPAUSEONERROR on
+
+input $GEMSTONE/examples/jadeite/gs/installRowanStub.gs
 input $GEMSTONE/examples/jadeite/gs/RowanClassService_base.gs
 
 errorcount

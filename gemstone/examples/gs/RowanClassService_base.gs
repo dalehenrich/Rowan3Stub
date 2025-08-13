@@ -1,14 +1,4 @@
-#!/usr/bin/env superdoit_topaz
-#
-# to run as superdoit script with $GEMSTONE set :
-#		./installRowanClassService_base.gs -I <path-to-topazini> -L
 # 
-# as SystemUser
-login
-
-set INPUTPAUSEONERROR on
-
-#
 # overwrite of RowanClassService method that will need to change for JfPwoR
 # when run against extent0.dbf (non-Seaside)
 #
