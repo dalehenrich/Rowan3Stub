@@ -10,6 +10,50 @@ set INPUTPAUSEONERROR on
 
 ######## method overrides added by ewinger ################
 
+method: RowanBrowserService
+compileClass: definitionString
+
+	| newClass newClassService newMetaClassService |
+	self confirmDuplicateName: definitionString.
+	newClass := definitionString evaluate.
+	newClassService := RowanClassService new name: newClass.
+	newClassService update. 
+	newMetaClassService := RowanClassService new name: newClass.
+	newMetaClassService meta: true.
+	newMetaClassService update.
+	newClassService version > 1 ifTrue: [
+		self compileMethodsFrom: newClassService and: newMetaClassService ].
+	newClassService updateSubclasses.
+	newClassService isNewClass: true.
+	RowanCommandResult addResult: self.
+	RowanCommandResult addResult: newClassService.
+	RowanCommandResult addResult: newMetaClassService. "bring back class & instance side"
+	selectedClass := newClassService.
+	updateType := #none
+%
+
+method: RowanBrowserService
+compileMethodsFrom: newClassService and: newMetaClassService
+
+	| oldClass oldClassService |
+	oldClass := newClassService theClass classHistory at:
+		            newClassService version - 1.
+	oldClassService := RowanClassService new classServiceFromOop:
+		                   oldClass asOop.
+	oldClassService update.
+	oldClassService methods do: [ :methodService |
+		newClassService
+			saveMethodSource: methodService source
+			category: methodService category ].
+	oldClassService
+		meta: true;
+		update.
+	oldClassService methods do: [ :methodService |
+		newMetaClassService
+			saveMethodSource: methodService source
+			category: methodService category ]
+%
+
 method: RowanClassService
 moveMethods: methodServices to: category
 	"update the dirty flag of the project & package both before and after the move"
@@ -29,7 +73,6 @@ moveMethods: methodServices to: category
 %
 
 method: RowanClassService
-
 compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol
         "returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
 
