@@ -17,19 +17,27 @@ compileClass: definitionString
 	self confirmDuplicateName: definitionString.
 	newClass := definitionString evaluate.
 	newClassService := RowanClassService new name: newClass.
-	newClassService update. 
+	newClassService update.
 	newMetaClassService := RowanClassService new name: newClass.
 	newMetaClassService meta: true.
 	newMetaClassService update.
 	newClassService version > 1 ifTrue: [
-		self compileMethodsFrom: newClassService and: newMetaClassService ].
-	newClassService updateSubclasses.
-	newClassService isNewClass: true.
-	RowanCommandResult addResult: self.
-	RowanCommandResult addResult: newClassService.
-	RowanCommandResult addResult: newMetaClassService. "bring back class & instance side"
+		self compileMethodsFrom: newClassService and: newMetaClassService.
+		self recompileSubclassesFor:  newClassService].
+	RowanCommandResult
+		addResult: self;
+		addResult: newClassService;
+		addResult: newMetaClassService. "bring back class & instance side"
 	selectedClass := newClassService.
-	updateType := #none
+%
+
+method: RowanBrowserService
+recompileSubclassesFor: newClassService
+
+	newClassService theClass subclasses do: [ :subclass |
+		| subclassService |
+		subclassService := RowanClassService new name: subclass name.
+		self compileClass: subclassService classCreationTemplate ]
 %
 
 method: RowanBrowserService
