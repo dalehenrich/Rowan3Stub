@@ -6,7 +6,8 @@ Class {
 
 { #category : 'accessing' }
 Rowan3BrowserToolsStub >> classCreationTemplateForClass: aClass hybridBrowser: hybridBrowser [
-	| result def |
+	| result def classCategory |
+	classCategory := aClass category.
 	def := aClass definition.
 	def := def copyFrom: 1 to: def size - 1.	"definition has a trailing LF that we don't want"
 	result := String new.
@@ -14,7 +15,7 @@ Rowan3BrowserToolsStub >> classCreationTemplateForClass: aClass hybridBrowser: h
 		addAll: '(';
 		addAll: def;
 		lf;
-		addAll: ') category: ''Kernel''';
+		addAll: ') category: ', classCategory printString ;
 		lf;
 		yourself.
 	^ result
