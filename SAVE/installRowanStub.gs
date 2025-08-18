@@ -8,6 +8,101 @@ login
 
 set INPUTPAUSEONERROR on
 
+######## method overrides added by ewinger ################
+
+method: RowanBrowserService
+compileClass: definitionString
+
+	| newClass newClassService newMetaClassService |
+	self confirmDuplicateName: definitionString.
+	newClass := definitionString evaluate.
+	newClassService := RowanClassService new name: newClass.
+	newClassService update.
+	newMetaClassService := RowanClassService new name: newClass.
+	newMetaClassService meta: true.
+	newMetaClassService update.
+	newClassService version > 1 ifTrue: [
+		self compileMethodsFrom: newClassService and: newMetaClassService.
+		self recompileSubclassesFor:  newClassService].
+	RowanCommandResult
+		addResult: self;
+		addResult: newClassService;
+		addResult: newMetaClassService. "bring back class & instance side"
+	selectedClass := newClassService.
+%
+
+method: RowanBrowserService
+recompileSubclassesFor: newClassService
+
+	newClassService theClass subclasses do: [ :subclass |
+		| subclassService |
+		subclassService := RowanClassService new name: subclass name.
+		self compileClass: subclassService classCreationTemplate ]
+%
+
+method: RowanBrowserService
+compileMethodsFrom: newClassService and: newMetaClassService
+
+	| oldClass oldClassService |
+	oldClass := newClassService theClass classHistory at:
+		            newClassService version - 1.
+	oldClassService := RowanClassService new classServiceFromOop:
+		                   oldClass asOop.
+	oldClassService update.
+	oldClassService methods do: [ :methodService |
+		newClassService
+			saveMethodSource: methodService source
+			category: methodService category ].
+	oldClassService
+		meta: true;
+		update.
+	oldClassService methods do: [ :methodService |
+		newMetaClassService
+			saveMethodSource: methodService source
+			category: methodService category ]
+%
+
+method: RowanClassService
+moveMethods: methodServices to: category
+	"update the dirty flag of the project & package both before and after the move"
+
+	| behavior |
+	behavior := self classOrMeta.
+	methodServices
+		do: [ :methodService | 
+			| beforePackageName |
+			methodService organizer: self organizer.
+			beforePackageName := methodService packageName.
+			behavior compileMethod:  methodService source category: category  environmentId: 0.
+			methodService update.
+			methodService updatePackageProjectAfterCategoryChange: beforePackageName ].
+	self update.
+	self selectedMethods: methodServices
+%
+
+method: RowanClassService
+compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol
+        "returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
+
+        | method warnings |
+
+         [ [ [ method := aBehavior compileMethod:  methodString category: categorySymbol asString  environmentId: 0]
+                        on: CompileError
+                        do: [:ex | ^nil -> (ex gsArguments at: 1)]]
+                                on: CompileWarning
+                                do:
+                                        [:ex | 
+                                        warnings := ex warningString.
+                                        ex resume]]
+                                        on: RwPerformingUnpackagedEditNotification
+                                        do: [:ex | ex resume ] .
+        ^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
+                do: [:ex | ex return: method -> warnings]
+
+%
+
+######## end method overrides added by ewinger ###############
+
 #
 #	these 4 methods should be in GemStone-Interactions-Kernel package in Rowan 3 and should
 #		be when we hit masterV3.3
@@ -119,35 +214,36 @@ symbolList := GsCurrentSession currentSession symbolList.
 ] ]. 
 %
 
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Announcements.gs
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RemoteServiceReplication.gs
+input $GEMSTONE/examples/jadeite/gs/Announcements.gs
+input $GEMSTONE/examples/jadeite/gs/RemoteServiceReplication.gs
 
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/GemStoneInteractions.gs
+input $GEMSTONE/examples/jadeite/gs/GemStoneInteractions.gs
 
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3Stub.gs
+input $GEMSTONE/examples/jadeite/gs/RowanStubForJadeite.gs
 
-# install Monticello package support for Rowan3Stub
+# install Monticello package support for RowanStubForJadeite
 run
 | filePath |
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'base'
 	ifTrue: [
- 		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubBase.gs' asFileReference pathString.
+ 		filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteBase.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside'
 	ifTrue: [
-		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMonticello.gs' asFileReference pathString.
+		filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMonticello.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'metacello'
 	ifTrue: [
 		self error: 'metacello extent type not supported' ].
 (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'
 	ifTrue: [
-		filePath := '$ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubMetacello.gs' asFileReference pathString.
+		filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ].
 
-Published at: #Rowan put: Rowan3Stub new.
+Published at: #Rowan put: RowanStubForJadeite new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
 %
+errorCount
 
 # the following 4 methods cannot be packaged, since they conflict with the Rowan implementation
 method: Behavior
@@ -289,13 +385,13 @@ run
 %
 
 run
-	#(RwExecuteClassInitializeMethodsAfterLoadNotification RwPerformingUnpackagedEditNotification RwPackage RBParser RwMethodDefinition RwProject RwSemanticVersionNumber RwPlatformSubcomponent RwSubcomponent RwSpecification RwClassDefinition) 
+	#(RwExecuteClassInitializeMethodsAfterLoadNotification RwPerformingUnpackagedEditNotification RwPackage RBParser RwMethodDefinition RwProject RwSemanticVersionNumber RwPlatformSubcomponent RwSubcomponent RwSpecification RwClassDefinition RwCompileErrorCompilingMethodsForNewClassVersionNotification) 
 		do: [:symbolName |
 			Globals at: symbolName put: (RwGsDummy named: symbolName) ].
 %
 
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/RowanClientServicesV3.gs
-input $ROWAN_PROJECTS_HOME/Rowan3Stub/gs/Rowan3StubServices.gs
+input $GEMSTONE/examples/jadeite/gs/RowanClientServicesV3.gs
+input $GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteServices.gs
 
 #
 # PATCHES to RowanClientServices methods to enable the use of `System waitForDebug`
@@ -322,12 +418,16 @@ executeCommand
 	updates := Rowan commandResultClass results.
 	self postCommandExecution ]
 		on: Exception
-		do: [ :ex | 
+		do: [ :ex |
+			(ex isKindOf: RowanServiceShouldExit)
+				ifTrue: [ ^ self ].
+			(ex isKindOf: Notification)
+				ifFalse: [ 
 			GsFile
 				gciLogServer:
 					DateTime now asStringMs , ' {'
 						, Processor activeProcess identityHash printString , '}  - got error: '
-						, ex printString.
+						, ex printString].
 			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
 			ex pass ].
 	^ self
@@ -422,7 +522,7 @@ classCreationTemplateUsing: packageNames
 				ifFalse: [ result addAll: ((anArray at: 1) at: 1) name asString ].
 	result
 		add: lfsp;
-		add: self theClass _optionsArrayForDefinition.
+		add: self theClass _optionsStringForDefinition.
 	result add: Character lf.
 	^ result
 %
@@ -510,7 +610,7 @@ rwProject
 #
 
 # SequenceableCollection>>copyUpTo:
-category: 'Rowan3Stub' 
+category: 'RowanStubForJadeite' 
 method: SequenceableCollection
 copyUpTo: anObject
 
@@ -540,3 +640,5 @@ _describeMCOrganizationDefinition: anMCOrganizationDefinition on: aStream packag
 %
 
 commit
+
+logout

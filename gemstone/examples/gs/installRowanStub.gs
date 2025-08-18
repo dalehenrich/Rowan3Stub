@@ -1,107 +1,9 @@
-#!/usr/bin/env superdoit_topaz
 #
-# to run as superdoit script with $GEMSTONE set :
-#		./installRowanStub.gs -I <path-to-topazini> -L
-# 
-# as SystemUser
-login
 
-set INPUTPAUSEONERROR on
-
-######## method overrides added by ewinger ################
-
-method: RowanBrowserService
-compileClass: definitionString
-
-	| newClass newClassService newMetaClassService |
-	self confirmDuplicateName: definitionString.
-	newClass := definitionString evaluate.
-	newClassService := RowanClassService new name: newClass.
-	newClassService update.
-	newMetaClassService := RowanClassService new name: newClass.
-	newMetaClassService meta: true.
-	newMetaClassService update.
-	newClassService version > 1 ifTrue: [
-		self compileMethodsFrom: newClassService and: newMetaClassService.
-		self recompileSubclassesFor:  newClassService].
-	RowanCommandResult
-		addResult: self;
-		addResult: newClassService;
-		addResult: newMetaClassService. "bring back class & instance side"
-	selectedClass := newClassService.
+run
+	(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE')
+		ifNil: [ self error: 'The environment variable ROWAN_STUB_EXTENT_TYPE must be defined' ].
 %
-
-method: RowanBrowserService
-recompileSubclassesFor: newClassService
-
-	newClassService theClass subclasses do: [ :subclass |
-		| subclassService |
-		subclassService := RowanClassService new name: subclass name.
-		self compileClass: subclassService classCreationTemplate ]
-%
-
-method: RowanBrowserService
-compileMethodsFrom: newClassService and: newMetaClassService
-
-	| oldClass oldClassService |
-	oldClass := newClassService theClass classHistory at:
-		            newClassService version - 1.
-	oldClassService := RowanClassService new classServiceFromOop:
-		                   oldClass asOop.
-	oldClassService update.
-	oldClassService methods do: [ :methodService |
-		newClassService
-			saveMethodSource: methodService source
-			category: methodService category ].
-	oldClassService
-		meta: true;
-		update.
-	oldClassService methods do: [ :methodService |
-		newMetaClassService
-			saveMethodSource: methodService source
-			category: methodService category ]
-%
-
-method: RowanClassService
-moveMethods: methodServices to: category
-	"update the dirty flag of the project & package both before and after the move"
-
-	| behavior |
-	behavior := self classOrMeta.
-	methodServices
-		do: [ :methodService | 
-			| beforePackageName |
-			methodService organizer: self organizer.
-			beforePackageName := methodService packageName.
-			behavior compileMethod:  methodService source category: category  environmentId: 0.
-			methodService update.
-			methodService updatePackageProjectAfterCategoryChange: beforePackageName ].
-	self update.
-	self selectedMethods: methodServices
-%
-
-method: RowanClassService
-compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol
-        "returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
-
-        | method warnings |
-
-         [ [ [ method := aBehavior compileMethod:  methodString category: categorySymbol asString  environmentId: 0]
-                        on: CompileError
-                        do: [:ex | ^nil -> (ex gsArguments at: 1)]]
-                                on: CompileWarning
-                                do:
-                                        [:ex | 
-                                        warnings := ex warningString.
-                                        ex resume]]
-                                        on: RwPerformingUnpackagedEditNotification
-                                        do: [:ex | ex resume ] .
-        ^[(self compiledMethodAt: method key selector inClass: aBehavior) -> warnings] on: Error
-                do: [:ex | ex return: method -> warnings]
-
-%
-
-######## end method overrides added by ewinger ###############
 
 #
 #	these 4 methods should be in GemStone-Interactions-Kernel package in Rowan 3 and should
@@ -214,31 +116,36 @@ symbolList := GsCurrentSession currentSession symbolList.
 ] ]. 
 %
 
-input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/Announcements.gs
-input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RemoteServiceReplication.gs
+input $GEMSTONE/examples/jadeite/gs/Announcements.gs
+input $GEMSTONE/examples/jadeite/gs/RemoteServiceReplication.gs
 
-input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/GemStoneInteractions.gs
+input $GEMSTONE/examples/jadeite/gs/GemStoneInteractions.gs
 
-input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeite.gs
+input $GEMSTONE/examples/jadeite/gs/RowanStubForJadeite.gs
 
 # install Monticello package support for RowanStubForJadeite
 run
-| filePath |
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'base'
+| extentType filePath |
+extentType := System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE'.
+extentType = 'base'
 	ifTrue: [
- 		filePath := '$ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeiteBase.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath ].
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'seaside'
-	ifTrue: [
-		filePath := '$ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeiteMonticello.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath ].
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'metacello'
-	ifTrue: [
-		self error: 'metacello extent type not supported' ].
-(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE') = 'tode'
-	ifTrue: [
-		filePath := '$ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
-		GsFileIn fromServerPath: filePath ].
+ 		filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteBase.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath ]
+	ifFalse: [
+		extentType = 'seaside'
+			ifTrue: [
+				filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMonticello.gs' asFileReference pathString.
+				GsFileIn fromServerPath: filePath ]
+			ifFalse: [
+				extentType = 'metacello'
+					ifTrue: [
+						self error: 'metacello extent type not supported' ]
+					ifFalse: [ 
+						extentType = 'tode'
+							ifTrue: [
+								filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
+								GsFileIn fromServerPath: filePath ]
+							ifFalse: [ self error: 'Unknown extent type: ', extentType printString ] ] ] ].
 
 Published at: #Rowan put: RowanStubForJadeite new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
@@ -389,8 +296,8 @@ run
 			Globals at: symbolName put: (RwGsDummy named: symbolName) ].
 %
 
-input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanClientServicesV3.gs
-input $ROWAN_PROJECTS_HOME/RowanStubForJadeite/gs/RowanStubForJadeiteServices.gs
+input $GEMSTONE/examples/jadeite/gs/RowanClientServicesV3.gs
+input $GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteServices.gs
 
 #
 # PATCHES to RowanClientServices methods to enable the use of `System waitForDebug`
@@ -417,16 +324,12 @@ executeCommand
 	updates := Rowan commandResultClass results.
 	self postCommandExecution ]
 		on: Exception
-		do: [ :ex |
-			(ex isKindOf: RowanServiceShouldExit)
-				ifTrue: [ ^ self ].
-			(ex isKindOf: Notification)
-				ifFalse: [ 
+		do: [ :ex | 
 			GsFile
 				gciLogServer:
 					DateTime now asStringMs , ' {'
 						, Processor activeProcess identityHash printString , '}  - got error: '
-						, ex printString].
+						, ex printString.
 			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
 			ex pass ].
 	^ self
@@ -639,5 +542,4 @@ _describeMCOrganizationDefinition: anMCOrganizationDefinition on: aStream packag
 %
 
 commit
-
-logout
+## end of installRowanStub.gs
