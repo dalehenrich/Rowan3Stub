@@ -14,7 +14,7 @@ method: RowanBrowserService
 compileClass: definitionString
 
 	| newClass newClassService newMetaClassService |
-	self confirmDuplicateName: definitionString.
+	"self confirmDuplicateName: definitionString."
 	newClass := definitionString evaluate.
 	newClassService := RowanClassService new name: newClass.
 	newClassService update.
@@ -32,23 +32,17 @@ compileClass: definitionString
 %
 
 method: RowanBrowserService
-recompileSubclassesFor: newClassService
+recompileSubclassesFrom: oldClassService to: newClassService
 
-	newClassService theClass subclasses do: [ :subclass |
+	oldClassService theClass subclasses do: [ :subclass |
 		| subclassService |
 		subclassService := RowanClassService new name: subclass name.
 		self compileClass: subclassService classCreationTemplate ]
 %
 
 method: RowanBrowserService
-compileMethodsFrom: newClassService and: newMetaClassService
+compileMethodsFrom: oldClassService to: newClassService and: newMetaClassService
 
-	| oldClass oldClassService |
-	oldClass := newClassService theClass classHistory at:
-		            newClassService version - 1.
-	oldClassService := RowanClassService new classServiceFromOop:
-		                   oldClass asOop.
-	oldClassService update.
 	oldClassService methods do: [ :methodService |
 		newClassService
 			saveMethodSource: methodService source
