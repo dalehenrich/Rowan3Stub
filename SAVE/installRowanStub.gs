@@ -11,10 +11,9 @@ set INPUTPAUSEONERROR on
 ######## method overrides added by ewinger ################
 
 method: RowanBrowserService
-compileClass: definitionString
+jfpwor_compileClass: definitionString
 
 	| newClass newClassService newMetaClassService |
-	"self confirmDuplicateName: definitionString."
 	newClass := definitionString evaluate.
 	newClassService := RowanClassService new name: newClass.
 	newClassService update.
@@ -22,26 +21,35 @@ compileClass: definitionString
 	newMetaClassService meta: true.
 	newMetaClassService update.
 	newClassService version > 1 ifTrue: [
-		self compileMethodsFrom: newClassService and: newMetaClassService.
-		self recompileSubclassesFor:  newClassService].
+		| oldClass oldClassService |
+		oldClass := newClassService theClass classHistory at:
+			            newClassService version - 1.
+		oldClassService := RowanClassService new classServiceFromOop:
+			                   oldClass asOop.
+		oldClassService update.
+		self
+			jfpwor_compileMethodsFrom: oldClassService
+			to: newClassService
+			and: newMetaClassService.
+		self jfpwor_recompileSubclassesFrom: oldClassService to: newClassService ].
 	RowanCommandResult
 		addResult: self;
 		addResult: newClassService;
 		addResult: newMetaClassService. "bring back class & instance side"
-	selectedClass := newClassService.
+	selectedClass := newClassService
 %
 
 method: RowanBrowserService
-recompileSubclassesFrom: oldClassService to: newClassService
+jfpwor_recompileSubclassesFrom: oldClassService to: newClassService
 
 	oldClassService theClass subclasses do: [ :subclass |
 		| subclassService |
 		subclassService := RowanClassService new name: subclass name.
-		self compileClass: subclassService classCreationTemplate ]
+		self jfpwor_compileClass: subclassService classCreationTemplate ]
 %
 
 method: RowanBrowserService
-compileMethodsFrom: oldClassService to: newClassService and: newMetaClassService
+jfpwor_compileMethodsFrom: oldClassService to: newClassService and: newMetaClassService
 
 	oldClassService methods do: [ :methodService |
 		newClassService
@@ -57,7 +65,7 @@ compileMethodsFrom: oldClassService to: newClassService and: newMetaClassService
 %
 
 method: RowanClassService
-moveMethods: methodServices to: category
+jfpwor_moveMethods: methodServices to: category
 	"update the dirty flag of the project & package both before and after the move"
 
 	| behavior |
@@ -72,10 +80,61 @@ moveMethods: methodServices to: category
 			methodService updatePackageProjectAfterCategoryChange: beforePackageName ].
 	self update.
 	self selectedMethods: methodServices
+
+%
+method: RowanClassService
+jfpwor_saveMethodSource: source category: category 
+	| behavior compilationResult gsNMethod updatedCategory methodService unicodeSource |
+	unicodeSource := source. 
+	meta
+		ifNil: [ 
+			behavior := Object _objectForOop: oop.
+			meta := behavior isMeta ]
+		ifNotNil: [ 
+			behavior := meta
+				ifTrue: [ self theClass class ]
+				ifFalse: [ self theClass ] ].
+	oop := behavior asOop.
+	self initializeMethodHistoryFor: unicodeSource.
+	updatedCategory := category ifNil: [ 'other' ].
+	compilationResult := self
+		jfpwor_compileMethod: unicodeSource
+		behavior: behavior
+		symbolList: Rowan image symbolList
+		inCategory: updatedCategory asSymbol.
+	(gsNMethod := compilationResult key) isNil
+		ifTrue: [ 
+			System
+				signal: 1001
+				args: (Array with: compilationResult value)
+				signalDictionary: GemStoneError ].
+	organizer := ClassOrganizer new. 
+	methodService := self
+		methodServiceFrom: gsNMethod
+		in: behavior
+		compiltationResult: compilationResult.
+	RowanCommandResult addResult: methodService.
+	self refreshFrom: self theClass. "make sure new methods have proper inst var refs"
+	RowanQueryService new
+		organizer: ClassOrganizer new;
+		hierarchyImplementorsOf: methodService selector
+			inClass: methodService className.	"this will update hierarchy method indicators for client"
+	self selectedMethods: (Array with: methodService).
+	self updateDirtyState.
+	(methods includes: methodService)
+		ifFalse: [ methods add: methodService ].
+	methodService isTestMethod
+		ifTrue: [ self updateTests ].
+	self
+		updateSymbols:
+			gsNMethod _selectorPool asArray , (Array with: methodService selector).
+	methodService addToMethodHistory.
+	RowanCommandResult addResult: self
+
 %
 
 method: RowanClassService
-compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol
+jfpwor_compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCategory: categorySymbol 
         "returns (nil -> anArrayOfErrors) or (aGsNMethod -> compilerWarnings) or (aGsNMethod -> nil)"
 
         | method warnings |
