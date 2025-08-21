@@ -1,0 +1,1 @@
+../gemstone/examples/bin/generate_Rowan3Stub.sh
