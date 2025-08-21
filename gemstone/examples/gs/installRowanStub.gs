@@ -5,9 +5,11 @@ run
 		ifNil: [ self error: 'The environment variable ROWAN_STUB_EXTENT_TYPE must be defined' ].
 	(System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY')
     ifNotNil: [ :location | 
-      GsFile gciLogServer: 'RowanStub project .gs files will be loaded from a non-standard location: ', location ]
+      GsFile gciLogServer: 'RowanStub project .gs files will be loaded from a non-standard location: ', location.
+      System gemEnvironmentVariable: 'ROWAN_STUB_INTENTIONAL_OVERRIDE' put: 'true'. ]
     ifNil: [ 
-      System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY' put: '$GEMSTONE/examples/jadeite/gs'
+      System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY' put: '$GEMSTONE/examples/jadeite/gs'.
+      System gemEnvironmentVariable: 'ROWAN_STUB_INTENTIONAL_OVERRIDE' put: 'false'.
       GsFile gciLogServer: 'RowanStub project .gs files will be loaded from the standard location: ', '$GEMSTONE/examples/jadeite/gs' ].
 %
 
@@ -102,11 +104,11 @@ new: size withAll: value
 run
 (Published at: #Rowan ifAbsent: [])
 	ifNotNil: [ 
-    (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE')
-      ifNil: [ self error: 'Rowan is already installed!!' ]
-      ifNotNil: [
+    ((System gemEnvironmentVariable: 'ROWAN_STUB_INTENTIONAL_OVERRIDE') = 'true')
+      ifTrue: [
         "intentional reinstall"
         GsFile gciLogServer: 'Reinstalling Rowan Stub support' ]
+      ifFalse: [ self error: 'Rowan is already installed!!' ]
   ] ifNil: [ 
     Published at: #Rowan put: nil.  "make the compiler happy"
   ]
@@ -119,8 +121,8 @@ symbolList := GsCurrentSession currentSession symbolList.
   do: [:symbolName | 
     (symbolList resolveSymbol: symbolName)
       ifNotNil: [:val | 
-        (System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY')
-          ifNil: [
+        ((System gemEnvironmentVariable: 'ROWAN_STUB_INTENTIONAL_OVERRIDE') = 'true')
+          ifFalse: [
             self error: 'The symbol dictionary named ', symbolName printString, ' in unexpectly present' 
           ] 
         ]
