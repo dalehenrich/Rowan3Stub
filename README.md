@@ -21,4 +21,10 @@ $GEMSTONE/jadeite/bin/installRowanStub_stones.sh <stone-name> <registry-name> ba
 #
 $GEMSTONE/jadeite/bin/installRowanStub_topaz.sh [<.topazini-path>]
 ```
-
+### Updating or Upgrading a stone after running installRowanStub_stones.sh or installRowanStub_topaz.sh
+If any changes need to be made to the .gs files in $GEMSTONE/examples/jadeite/gs files
+you can define the environment variable ROWAN_STUB_GS_DIRECTORY and the referenced
+directory will be used instead of $GEMSTONE/examples/jadeite/gs and then either 
+$GEMSTONE/jadeite/bin/installRowanStub_stones.sh or 
+$GEMSTONE/jadeite/bin/installRowanStub_topaz.sh with the appropriate arguments and the files in
+the alternate directory will be loaded.

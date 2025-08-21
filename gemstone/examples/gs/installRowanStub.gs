@@ -3,6 +3,12 @@
 run
 	(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE')
 		ifNil: [ self error: 'The environment variable ROWAN_STUB_EXTENT_TYPE must be defined' ].
+	(System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY')
+    ifNotNil: [ :location | 
+      GsFile gciLogServer: 'RowanStub project .gs files will be loaded from a non-standard location: ', location ]
+    ifNil: [ 
+      System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY' put: '$GEMSTONE/examples/jadeite/gs'
+      GsFile gciLogServer: 'RowanStub project .gs files will be loaded from the standard location: ', '$GEMSTONE/examples/jadeite/gs' ].
 %
 
 #
@@ -95,8 +101,15 @@ new: size withAll: value
 
 run
 (Published at: #Rowan ifAbsent: [])
-	ifNotNil: [ self error: 'Rowan is already installed!!' ].
-Published at: #Rowan put: nil.	"make the compiler happy"
+	ifNotNil: [ 
+    (System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE')
+      ifNil: [ self error: 'Rowan is already installed!!' ]
+      ifNotNil: [
+        "intentional reinstall"
+        GsFile gciLogServer: 'Reinstalling Rowan Stub support' ]
+  ] ifNil: [ 
+    Published at: #Rowan put: nil.  "make the compiler happy"
+  ]
 %
 
 run
@@ -104,24 +117,32 @@ run
 symbolList := GsCurrentSession currentSession symbolList.
 #( #RowanKernel) "needed by GemStoneInteractions"
   do: [:symbolName | 
-    (symbolList resolveSymbol: symbolName) ifNotNil: [:val | System waitForDebug ] ifNil: [
-      | newDict size |
-      newDict := SymbolDictionary new
-        name: symbolName;
-        objectSecurityPolicy: symbolList objectSecurityPolicy;
-        yourself.
-      size := System myUserProfile symbolList size.
-      System myUserProfile insertDictionary: newDict at: size + 1 .
-      GsFile gciLogServer:'created ', symbolName . 
-] ]. 
+    (symbolList resolveSymbol: symbolName)
+      ifNotNil: [:val | 
+        (System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY')
+          ifNil: [
+            self error: 'The symbol dictionary named ', symbolName printString, ' in unexpectly present' 
+          ] 
+        ]
+      ifNil: [
+        | newDict size |
+        newDict := SymbolDictionary new
+          name: symbolName;
+          objectSecurityPolicy: symbolList objectSecurityPolicy;
+          yourself.
+        size := System myUserProfile symbolList size.
+        System myUserProfile insertDictionary: newDict at: size + 1 .
+        GsFile gciLogServer:'created ', symbolName . 
+       ]
+  ]. 
 %
 
-input $GEMSTONE/examples/jadeite/gs/Announcements.gs
-input $GEMSTONE/examples/jadeite/gs/RemoteServiceReplication.gs
+input $ROWAN_STUB_GS_DIRECTORY/Announcements.gs
+input $ROWAN_STUB_GS_DIRECTORY/RemoteServiceReplication.gs
 
-input $GEMSTONE/examples/jadeite/gs/GemStoneInteractions.gs
+input $ROWAN_STUB_GS_DIRECTORY/GemStoneInteractions.gs
 
-input $GEMSTONE/examples/jadeite/gs/RowanStubForJadeite.gs
+input $ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeite.gs
 
 # install Monticello package support for RowanStubForJadeite
 run
