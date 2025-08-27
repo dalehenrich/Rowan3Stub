@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : 'accessing' }
-Rowan3BrowserToolsStub >> classCreationTemplateForClass: aClass hybridBrowser: hybridBrowser [
+Rowan3BrowserToolsStub >> classCreationTemplateForClass: aClass [
 	| result def classCategory |
 	classCategory := aClass category.
 	def := aClass definition.
@@ -19,6 +19,11 @@ Rowan3BrowserToolsStub >> classCreationTemplateForClass: aClass hybridBrowser: h
 		lf;
 		yourself.
 	^ result
+]
+
+{ #category : 'accessing' }
+Rowan3BrowserToolsStub >> classCreationTemplateForClass: aClass hybridBrowser: ignored [
+	^ self classCreationTemplateForClass: aClass
 ]
 
 { #category : 'accessing' }

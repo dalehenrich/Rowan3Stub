@@ -7,7 +7,7 @@ set -ex
 # If no <topaz command line args> specified on the script command line, then .topazini 
 #	is assumed to exists in the current directory and the default command line will be:
 #
-#		installRowanStub_topaz.sh base -L
+#		installRowanStub_stones.sh <stone-name> <registry-name> base -L
 #
 #  a minimal command line would be the following
 #
