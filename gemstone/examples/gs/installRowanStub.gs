@@ -323,42 +323,6 @@ input $GEMSTONE/examples/jadeite/gs/RowanClientServicesV3.gs
 input $GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteServices.gs
 
 #
-# PATCHES to RowanClientServices methods to enable the use of `System waitForDebug`
-#
-
-category: 'rsr'
-method: RowanService
-executeCommand
-	"RSR -> RowanServices primary api."
-
-	self checkForDeadProcesses.
-	self setDebugActionBlock.	"<===== patch here ====="
-	[ 
-	Rowan commandResultClass initializeResults.
-	[ 
-	updateType := nil.	"Update type is only for returned commands"
-	command ifNil: [^self]. 
-	self servicePerform: command withArguments: commandArgs ]
-		on: GsInteractionRequest
-		do: [ :ex | 
-			ex
-				response:
-					(ex interaction interactWith: self gsInteractionInformFailureHandler) ].
-	updates := Rowan commandResultClass results.
-	self postCommandExecution ]
-		on: Exception
-		do: [ :ex | 
-			GsFile
-				gciLogServer:
-					DateTime now asStringMs , ' {'
-						, Processor activeProcess identityHash printString , '}  - got error: '
-						, ex printString.
-			RowanDebuggerService new saveProcessOop: GsProcess _current asOop.
-			ex pass ].
-	^ self
-%
-
-#
 # overwrites of RowanClassService methods that will need to change for JfPwoR
 #
 category: 'Rowan3 stub'
