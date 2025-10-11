@@ -27,6 +27,44 @@ Rowan3BrowserToolsStub >> classCreationTemplateForClass: aClass hybridBrowser: i
 ]
 
 { #category : 'accessing' }
+Rowan3BrowserToolsStub >> classCreationTemplateForSubclassOf: superclassName category: category dictionaryName: dictionaryName [
+	"Returns a description of the receiver using object names taken from the given UserProfile."
+
+	^ (Class respondsTo: #'templateForSubclassOf:category:')
+		ifTrue: [ 
+			"running in a GLASS/tODE environement"
+			Class
+				templateForSubclassOf:
+					(GsSession currentSession objectNamed: superclassName)
+				category: (category ifNil: [ 'Kernel' ]) ]
+		ifFalse: [ 
+			| result lfsp catName dictName |
+			result := String new.
+			result addAll: '(' , superclassName.
+			result addAll: ' subclass: ''NameOfSubclass'''.
+			lfsp := Character lf asString tab.
+			catName := category ifNil: [ '' ].
+			dictName := dictionaryName ifNil: [ 'UserGlobals' ].
+			result
+				addAll: lfsp;
+				addLast: 'instVarNames: #()';
+				addAll: lfsp;
+				addLast: 'classVars: #()';
+				addAll: lfsp;
+				addLast: 'classInstVars: #()';
+				addAll: lfsp;
+				addAll: 'poolDictionaries: #()';
+				addAll: lfsp;
+				addAll: 'inDictionary: ' , dictName.
+			result
+				add: lfsp;
+				add: 'options: #()';
+				add: ') category:  catName';
+				lf.
+			^ result ]
+]
+
+{ #category : 'accessing' }
 Rowan3BrowserToolsStub >> classCreationTemplateForSubclassOf: superclassName category: category packageName: packageName [
 	"Returns a description of the receiver using object names taken from the given UserProfile."
 
