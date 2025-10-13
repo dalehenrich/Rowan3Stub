@@ -59,7 +59,7 @@ Rowan3BrowserToolsStub >> classCreationTemplateForSubclassOf: superclassName cat
 			result
 				add: lfsp;
 				add: 'options: #()';
-				add: ') category:  catName';
+				add: ') category: ', catName;
 				lf.
 			^ result ]
 ]
