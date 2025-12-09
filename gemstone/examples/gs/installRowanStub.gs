@@ -1,18 +1,5 @@
 #
 
-run
-	(System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE')
-		ifNil: [ self error: 'The environment variable ROWAN_STUB_EXTENT_TYPE must be defined' ].
-	(System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY')
-    ifNotNil: [ :location | 
-      GsFile gciLogServer: 'RowanStub project .gs files will be loaded from a non-standard location: ', location.
-      System gemEnvironmentVariable: 'ROWAN_STUB_INTENTIONAL_OVERRIDE' put: 'true'. ]
-    ifNil: [ 
-      System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY' put: '$GEMSTONE/examples/jadeite/gs'.
-      System gemEnvironmentVariable: 'ROWAN_STUB_INTENTIONAL_OVERRIDE' put: 'false'.
-      GsFile gciLogServer: 'RowanStub project .gs files will be loaded from the standard location: ', '$GEMSTONE/examples/jadeite/gs' ].
-%
-
 #
 #	these 4 methods should be in GemStone-Interactions-Kernel package in Rowan 3 and should
 #		be when we hit masterV3.3
@@ -279,7 +266,7 @@ name := aSymbol
 
 method: RwGsDummy
 handles: arg
-System waitForDebug.
+	arg pass.
 %
 
 run
