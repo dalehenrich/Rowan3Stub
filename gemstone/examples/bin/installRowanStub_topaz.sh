@@ -22,6 +22,10 @@ if [ "$GEMSTONE" = "" ]; then
 fi
 
 if [ "$#" -eq 0 ]; then
+	if [ ! -f .topazini ]; then
+		echo ".topazini for SystemUser was expected to be in the current directory"
+		exit 1
+	fi
 	topazCommandLine="-L"
 else
 	topazCommandLine="$*"

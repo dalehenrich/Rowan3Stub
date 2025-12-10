@@ -9,7 +9,7 @@
 # otherwise input the script 
 #
 output pushnew installRowanStub.log
-set u SystemUser p swordfish
+# login as SystemUser .. .topazini is required
 login
 
 set INPUTPAUSEONERROR on
