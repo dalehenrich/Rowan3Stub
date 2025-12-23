@@ -1,0 +1,1 @@
+../gemstone/examples/bin/upgradeRowanStub_image.sh
