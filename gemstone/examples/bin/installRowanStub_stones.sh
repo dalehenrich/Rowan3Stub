@@ -2,7 +2,7 @@ set -ex
 #
 # To run:
 #
-# installRowanStub.sh base [ <topaz command line args> ]
+# installRowanStub.sh <stone-name> <registry-name> base [ <topaz command line args> ]
 #
 # If no <topaz command line args> specified on the script command line, then .topazini 
 #	is assumed to exists in the current directory and the default command line will be:
@@ -11,7 +11,7 @@ set -ex
 #
 #  a minimal command line would be the following
 #
-#		installRowanStub_topaz.sh base -L -I <path-to-.topazini-file>
+#		installRowanStub_stones.sh base -L -I <path-to-.topazini-file>
 #
 
 if [ "$GEMSTONE" = "" ]; then
