@@ -68,3 +68,10 @@ Rowan3LoadedProjectStub >> name: object [
 Rowan3LoadedProjectStub >> projectUrl [
 	^ 'file://fake'
 ]
+
+{ #category : 'accessing' }
+Rowan3LoadedProjectStub >> requiredProjectNames [
+	"empty array  for Monticello and Monticello"
+
+	^ #()
+]

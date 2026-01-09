@@ -208,3 +208,20 @@ packageNamesForLoadedProjectNamed: projectName
 	^ (self loadedProjectNamed: projectName) packageNames
 %
 
+category: 'accessing'
+method: Rowan3ImageStub
+projectNamed: projectName
+
+	^ self loadedProjectNamed: projectName
+%
+
+! Class extensions for 'RowanStubForJadeite'
+
+!		Instance methods for 'RowanStubForJadeite'
+
+category: 'accessing'
+method: RowanStubForJadeite
+projectNamed: projectName
+	^ self image loadedProjectNamed: projectName
+%
+

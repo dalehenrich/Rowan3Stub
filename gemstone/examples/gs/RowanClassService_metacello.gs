@@ -9,7 +9,7 @@ login
 set INPUTPAUSEONERROR on
 
 #
-# overwrite of RowanProjectService method that will need to change for JfPwoR
+# overwrite of RowanProjectService methods that will need to change for JfPwoR
 # when run against Metacello image
 #
 
@@ -35,6 +35,14 @@ changes
               alternateName: nil
               packageName: packageName) ] ]
 %
+category:'Rowan3 stub'
+method: RowanProjectService
+defaultSymbolDictionaryFromLoadSpec
+
+
+	^ 'UserGlobals'
+%
+
 commit
 
 ## end of RowanClassService_metacello.gs

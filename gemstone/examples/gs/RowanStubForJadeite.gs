@@ -39,6 +39,24 @@ removeallclassmethods Rowan3GemStoneRowanToolStub
 
 doit
 (Object
+	subclass: 'Rowan3GemStoneTopazToolStub'
+	instVarNames: #()
+	classVars: #()
+	classInstVars: #()
+	poolDictionaries: #()
+	inDictionary: Globals
+	options: #()
+)
+		category: 'RowanStubForJadeite-Core';
+		immediateInvariant.
+true.
+%
+
+removeallmethods Rowan3GemStoneTopazToolStub
+removeallclassmethods Rowan3GemStoneTopazToolStub
+
+doit
+(Object
 	subclass: 'Rowan3ImageStub'
 	instVarNames: #()
 	classVars: #()
@@ -166,7 +184,7 @@ removeallclassmethods Rowan3ProjectToolsStub
 doit
 (Object
 	subclass: 'RowanStubForJadeite'
-	instVarNames: #(platform projectTools gemstoneTools)
+	instVarNames: #(platform projectTools)
 	classVars: #()
 	classInstVars: #()
 	poolDictionaries: #()
@@ -297,6 +315,65 @@ removeMethod: selector forClassNamed: name  isMeta: meta
 	beh := Rowan globalNamed: name.
 	meta ifTrue: [ beh := beh class ].
 	beh removeSelector: selector
+%
+
+! Class implementation for 'Rowan3GemStoneRowanToolStub'
+
+!		Instance methods for 'Rowan3GemStoneRowanToolStub'
+
+category: 'accessing'
+method: Rowan3GemStoneRowanToolStub
+topaz
+	^ Rowan3GemStoneTopazToolStub new
+%
+
+! Class implementation for 'Rowan3GemStoneTopazToolStub'
+
+!		Instance methods for 'Rowan3GemStoneTopazToolStub'
+
+category: 'accessing'
+method: Rowan3GemStoneTopazToolStub
+currentTopazPackageName
+	"Return the current topaz package name or nil"
+
+	^ SessionTemps current at: self _currentTopazPackageKey otherwise: nil
+%
+
+category: 'accessing'
+method: Rowan3GemStoneTopazToolStub
+currentTopazPackageName: packageNameOrNil
+	"Set the current topaz package name. New methods and classes created in the topaz session 
+		will be added to the named package. If nil, new methods and classes will be unmanaged."
+
+	SessionTemps current at: self _currentTopazPackageKey put: packageNameOrNil
+%
+
+category: 'accessing'
+method: Rowan3GemStoneTopazToolStub
+currentTopazProjectName
+	"answer the name of the current project"
+
+	^ SessionTemps current at: self _currentTopazProjectKey otherwise: nil
+%
+
+category: 'accessing'
+method: Rowan3GemStoneTopazToolStub
+currentTopazProjectName: projectNameOrNil
+	"set the name of the current project"
+
+	SessionTemps current at: self _currentTopazProjectKey put: projectNameOrNil
+%
+
+category: 'private'
+method: Rowan3GemStoneTopazToolStub
+_currentTopazPackageKey
+	^ #'RowanTopazCurrentPackageName'
+%
+
+category: 'private'
+method: Rowan3GemStoneTopazToolStub
+_currentTopazProjectKey
+	^#'RowanTopazCurrentProjectName'
 %
 
 ! Class implementation for 'Rowan3ImageStub'
@@ -550,6 +627,14 @@ projectUrl
 	^ 'file://fake'
 %
 
+category: 'accessing'
+method: Rowan3LoadedProjectStub
+requiredProjectNames
+	"empty array  for Monticello and Monticello"
+
+	^ #()
+%
+
 ! Class implementation for 'Rowan3PlatformStub'
 
 !		Class methods for 'Rowan3PlatformStub'
@@ -715,7 +800,9 @@ commandResultClass
 category: 'accessing'
 method: RowanStubForJadeite
 gemstoneTools
-	^ gemstoneTools ifNil: [ gemstoneTools := Rowan3GemStoneRowanToolStub new ]
+	^ UserGlobals 
+		at: #RowanStubForJadeite_gemstoneTools
+		ifAbsentPut: [ Rowan3GemStoneRowanToolStub new ]
 %
 
 category: 'accessing'

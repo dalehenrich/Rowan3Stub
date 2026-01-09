@@ -21,3 +21,9 @@ Rowan3ImageStub >> loadedProjects [
 Rowan3ImageStub >> packageNamesForLoadedProjectNamed: projectName [
 	^ (self loadedProjectNamed: projectName) packageNames
 ]
+
+{ #category : 'accessing' }
+Rowan3ImageStub >> projectNamed: projectName [
+
+	^ self loadedProjectNamed: projectName
+]

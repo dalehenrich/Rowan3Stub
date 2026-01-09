@@ -22,3 +22,9 @@ Rowan3ImageStub >> packageNamesForLoadedProjectNamed: projectName [
 	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
 		collect: [ :wc | wc packageName ]) sort
 ]
+
+{ #category : 'accessing' }
+Rowan3ImageStub >> projectNamed: projectName [
+
+	^ self loadedProjectNamed: projectName
+]
