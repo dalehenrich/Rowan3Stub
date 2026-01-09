@@ -4,6 +4,10 @@ set -ex
 #
 # installRowanStub_topaz.sh [ <topaz-command-line-args> ]
 #
+# Define the environment varianble ROWAN_STUB_EXTENT_TYPE to one of base, metacello,
+# seaside, or tode. If the environemnt variable is not defined, then base will be 
+# used.
+#
 # If no arguments specified on the script command line, then .topazini is assumed to 
 #		exists in the current directory and the default topaz command line will be:
 #
@@ -31,5 +35,8 @@ else
 	topazCommandLine="$*"
 fi
 
-export ROWAN_STUB_EXTENT_TYPE=base
+if [ "$ROWAN_STUB_EXTENT_TYPE" = "" ]; then
+	export ROWAN_STUB_EXTENT_TYPE=base
+fi
+
 $GEMSTONE/examples/jadeite/bin/installRowanStub.topaz $topazCommandLine

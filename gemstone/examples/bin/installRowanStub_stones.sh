@@ -2,7 +2,7 @@ set -ex
 #
 # To run:
 #
-# installRowanStub.sh base [ <topaz command line args> ]
+# installRowanStub.sh <stone-name> <registry-name>  [ base | metacello | seaside | tode ] [ <topaz command line args> ]
 #
 # If no <topaz command line args> specified on the script command line, then .topazini 
 #	is assumed to exists in the current directory and the default command line will be:
@@ -25,9 +25,9 @@ registryName=$1;
 shift
 # extentType
 #		base			- extent0.dbf
-#		metacello	- extent0.seaside.dbf with monticello and metacello installed				[not supported - yet]
-#		seaside 	- extent0.seaside.dbf with monticello installed											[not supported - yet]
-#		tode			-	extent0.seaside.dbf with monticello ,metacello and tODE installed	[not supported - yet]
+#		metacello	- extent0.seaside.dbf with monticello and metacello installed
+#		seaside 	- extent0.seaside.dbf with monticello installed
+#		tode			-	extent0.seaside.dbf with monticello ,metacello and tODE installed
 extentType=$1
 shift
 
@@ -54,6 +54,6 @@ else
 	echo "existing extent in $stoneName will be updated with JfPwoR support"
 fi
 
-export ROWAN_STUB_EXTENT_TYPE=base
+export ROWAN_STUB_EXTENT_TYPE=$extentType
 
 $GEMSTONE/examples/jadeite/bin/installRowanStub.topaz $topazCommandLine

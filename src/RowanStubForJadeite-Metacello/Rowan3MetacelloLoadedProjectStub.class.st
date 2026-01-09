@@ -10,12 +10,16 @@ Class {
 { #category : 'accessing' }
 Rowan3MetacelloLoadedProjectStub class >> metacelloProjectRegistrations [
 
-	^((Rowan globalNamed: 'MetacelloProjectRegistration') registry projectSpecs
-    collect: [ :projectSpec | 
-      (Rowan globalNamed: 'MetacelloProjectRegistration')
-        registrationForProjectSpec: projectSpec
-        ifAbsent: [ self error: 'registration for projectSpec: ' projectSpec name , ' not found' ]
-        ifPresent: [ :registration :ignored | (Rowan globalNamed: 'TDMetacelloRegistrationDefinition') registration: registration ] ])
+	(Rowan globalNamed: 'MetacelloProjectRegistration')
+		ifNil: [ ^ #() ]
+		ifNotNil: [:theMetacelloProjectRegistrationClass |
+				"if logging in as SystemUser, then these classes aren't present"
+				^(theMetacelloProjectRegistrationClass registry projectSpecs
+    			collect: [ :projectSpec | 
+      			(Rowan globalNamed: 'MetacelloProjectRegistration')
+        			registrationForProjectSpec: projectSpec
+        			ifAbsent: [ self error: 'registration for projectSpec: ' projectSpec name , ' not found' ]
+        			ifPresent: [ :registration :ignored | (Rowan globalNamed: 'TDMetacelloRegistrationDefinition') registration: registration ] ]) ]
 ]
 
 { #category : 'accessing' }

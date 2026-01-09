@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'platform',
-		'projectTools'
+		'projectTools',
+		'gemstoneTools'
 	],
 	#category : 'RowanStubForJadeite-Core'
 }
@@ -19,6 +20,11 @@ RowanStubForJadeite class >> new [
 RowanStubForJadeite >> commandResultClass [
 
 	^ self platform commandResultClass
+]
+
+{ #category : 'accessing' }
+RowanStubForJadeite >> gemstoneTools [
+	^ gemstoneTools ifNil: [ gemstoneTools := Rowan3GemStoneRowanToolStub new ]
 ]
 
 { #category : 'accessing' }
