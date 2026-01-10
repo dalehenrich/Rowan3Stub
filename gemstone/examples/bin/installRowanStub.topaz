@@ -28,6 +28,5 @@ run
 %
 
 input $ROWAN_STUB_GS_DIRECTORY/installRowanStub.gs
-input $ROWAN_STUB_GS_DIRECTORY/RowanClassService_base.gs
 
 errorcount

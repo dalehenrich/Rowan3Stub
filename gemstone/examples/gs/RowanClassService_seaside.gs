@@ -4,9 +4,9 @@
 #		./installRowanClassService_seaside.gs -I <path-to-topazini> -L
 # 
 # as seaside user (DataCurator)
-login
+#login
 
-set INPUTPAUSEONERROR on
+#set INPUTPAUSEONERROR on
 
 #
 # overwrite of RowanClassService method that will need to change for JfPwoR

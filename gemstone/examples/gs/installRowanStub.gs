@@ -133,7 +133,7 @@ input $ROWAN_STUB_GS_DIRECTORY/GemStoneInteractions.gs
 
 input $ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeite.gs
 
-# install Monticello package support for RowanStubForJadeite
+# install package support for RowanStubForJadeite
 run
 | extentType filePath |
 extentType := System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE'.
@@ -513,6 +513,31 @@ _describeMCOrganizationDefinition: anMCOrganizationDefinition on: aStream packag
 		nextPutAll: packageName;
 		tab;
 		lf
+%
+#install extentType overrides/extensions
+run
+| extentType filePath |
+extentType := System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE'.
+extentType = 'base'
+	ifTrue: [
+ 		filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanClassService_base.gs' asFileReference pathString.
+		GsFileIn fromServerPath: filePath ]
+	ifFalse: [
+		extentType = 'seaside'
+			ifTrue: [
+				filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanClassService_seaside.gs' asFileReference pathString.
+				GsFileIn fromServerPath: filePath ]
+			ifFalse: [
+				extentType = 'metacello'
+					ifTrue: [
+						filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanClassService_metacello.gs' asFileReference pathString.
+						GsFileIn fromServerPath: filePath ]
+					ifFalse: [ 
+						extentType = 'tode'
+							ifTrue: [
+								filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanClassService_tode.gs' asFileReference pathString.
+								GsFileIn fromServerPath: filePath ]
+							ifFalse: [ self error: 'Unknown extent type: ', extentType printString ] ] ] ].
 %
 
 commit

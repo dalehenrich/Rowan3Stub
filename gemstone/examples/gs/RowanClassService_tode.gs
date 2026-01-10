@@ -4,9 +4,9 @@
 #		./installRowanClassService_tode.gs -I <path-to-topazini> -L
 # 
 # as SystemUser
-login
+#login
 
-set INPUTPAUSEONERROR on
+#set INPUTPAUSEONERROR on
 
 #
 # overwrite of RowanProjectService method that will need to change for JfPwoR
@@ -16,7 +16,7 @@ set INPUTPAUSEONERROR on
 category: 'Rowan3 stub'
 method: RowanProjectService
 changes
-    | jadeServer projectNames loadedProject |
+    | jadeServer loadedProject |
     jadeServer := Rowan jadeServerClassNamed: #'JadeServer'.
     changes := Array new.
     loadedProject := Rowan image loadedProjectNamed: self name.
@@ -35,6 +35,13 @@ changes
               alternateName: nil
               packageName: packageName) ] ]
 %
+
+category: 'Rowan3 stub'
+method: RowanProjectService
+defaultSymbolDictionaryFromLoadSpec
+	^ 'UserGlobals'
+%
+
 commit
 
 ## end of RowanClassService_tode.gs

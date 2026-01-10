@@ -4,9 +4,9 @@
 #		./installRowanClassService_tode.gs -I <path-to-topazini> -L
 # 
 # as SystemUser
-login
+#login
 
-set INPUTPAUSEONERROR on
+#set INPUTPAUSEONERROR on
 
 #
 # overwrite of RowanProjectService methods that will need to change for JfPwoR
@@ -38,8 +38,6 @@ changes
 category:'Rowan3 stub'
 method: RowanProjectService
 defaultSymbolDictionaryFromLoadSpec
-
-
 	^ 'UserGlobals'
 %
 

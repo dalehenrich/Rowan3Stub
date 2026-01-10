@@ -1,6 +1,5 @@
 # 
 # overwrite of RowanClassService method that will need to change for JfPwoR
-# when run against extent0.dbf (non-Seaside)
 #
 category: 'Rowan3 stub'
 method: RowanClassService
