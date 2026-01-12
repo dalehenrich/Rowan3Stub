@@ -32,6 +32,9 @@ Rowan3SeasideLoadedProjectStub >> packageGroupNames [
 Rowan3SeasideLoadedProjectStub >> packageNames [
 	self name = self class monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' self name ].
-	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc packageName ]) sort
+	^ (Rowan globalNamed: 'MCWorkingCopy')
+			ifNil: [ #() ]
+			ifNotNil: [:wc |
+				(wc allManagers collect: [ :wc | wc packageName ]) sort ]
+
 ]

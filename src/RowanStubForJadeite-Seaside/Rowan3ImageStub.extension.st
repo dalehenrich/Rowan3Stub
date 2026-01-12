@@ -17,10 +17,13 @@ Rowan3ImageStub >> loadedProjects [
 
 { #category : 'querying' }
 Rowan3ImageStub >> packageNamesForLoadedProjectNamed: projectName [
-	projectName = Rowan3SeasideLoadedProjectStub monticelloProjectName
+		projectName = Rowan3SeasideLoadedProjectStub monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' projectName ].
-	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
-		collect: [ :wc | wc packageName ]) sort
+	^ (Rowan globalNamed: 'MCWorkingCopy') 
+			ifNil: [ #() ]
+			ifNotNil: 
+				[:wc | 
+					(wc allManagers collect: [ :mgr | mgr packageName ]) sort ]
 ]
 
 { #category : 'accessing' }

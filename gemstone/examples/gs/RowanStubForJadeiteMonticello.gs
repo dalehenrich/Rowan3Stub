@@ -182,6 +182,5 @@ method: RowanStubForJadeite
 projectNamed: projectName ifPresent: ifPresentBlock ifAbsent: ifAbsentBlock
  
     ^self image loadedProjectNamed: projectName ifPresent: ifPresentBlock ifAbsent: ifAbsentBlock.
- 
 %
 
