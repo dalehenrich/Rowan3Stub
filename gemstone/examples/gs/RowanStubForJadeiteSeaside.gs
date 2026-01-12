@@ -3,7 +3,7 @@
 
 doit
 (Rowan3LoadedPackageStub
-	subclass: 'Rowan3MonticelloLoadedPackageStub'
+	subclass: 'Rowan3SeasideLoadedPackageStub'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -16,12 +16,12 @@ doit
 true.
 %
 
-removeallmethods Rowan3MonticelloLoadedPackageStub
-removeallclassmethods Rowan3MonticelloLoadedPackageStub
+removeallmethods Rowan3SeasideLoadedPackageStub
+removeallclassmethods Rowan3SeasideLoadedPackageStub
 
 doit
 (Rowan3LoadedProjectStub
-	subclass: 'Rowan3MonticelloLoadedProjectStub'
+	subclass: 'Rowan3SeasideLoadedProjectStub'
 	instVarNames: #()
 	classVars: #()
 	classInstVars: #()
@@ -34,21 +34,21 @@ doit
 true.
 %
 
-removeallmethods Rowan3MonticelloLoadedProjectStub
-removeallclassmethods Rowan3MonticelloLoadedProjectStub
+removeallmethods Rowan3SeasideLoadedProjectStub
+removeallclassmethods Rowan3SeasideLoadedProjectStub
 
-! Class implementation for 'Rowan3MonticelloLoadedPackageStub'
+! Class implementation for 'Rowan3SeasideLoadedPackageStub'
 
-!		Instance methods for 'Rowan3MonticelloLoadedPackageStub'
+!		Instance methods for 'Rowan3SeasideLoadedPackageStub'
 
 category: 'accessing'
-method: Rowan3MonticelloLoadedPackageStub
+method: Rowan3SeasideLoadedPackageStub
 gs_symbolDictionary
 	^ #'UserGlobals'
 %
 
 category: 'accessing'
-method: Rowan3MonticelloLoadedPackageStub
+method: Rowan3SeasideLoadedPackageStub
 loadedClasses
 	| theLoadedClasses classes organizer |
 	theLoadedClasses := KeyValueDictionary new.
@@ -66,7 +66,7 @@ loadedClasses
 %
 
 category: 'accessing'
-method: Rowan3MonticelloLoadedPackageStub
+method: Rowan3SeasideLoadedPackageStub
 loadedClassExtensions
 	| theExtendedClasses packageInfo extensionClasses |
 	theExtendedClasses := KeyValueDictionary new.
@@ -83,47 +83,47 @@ loadedClassExtensions
 %
 
 category: 'accessing'
-method: Rowan3MonticelloLoadedPackageStub
+method: Rowan3SeasideLoadedPackageStub
 projectName
-	^ Rowan3MonticelloLoadedProjectStub monticelloProjectName
+	^ Rowan3SeasideLoadedProjectStub monticelloProjectName
 %
 
-! Class implementation for 'Rowan3MonticelloLoadedProjectStub'
+! Class implementation for 'Rowan3SeasideLoadedProjectStub'
 
-!		Class methods for 'Rowan3MonticelloLoadedProjectStub'
+!		Class methods for 'Rowan3SeasideLoadedProjectStub'
 
 category: 'accessing'
-classmethod: Rowan3MonticelloLoadedProjectStub
+classmethod: Rowan3SeasideLoadedProjectStub
 monticelloProjectName
-	^ 'Monticello'
+	^ 'Seaside'
 %
 
-!		Instance methods for 'Rowan3MonticelloLoadedProjectStub'
+!		Instance methods for 'Rowan3SeasideLoadedProjectStub'
 
 category: 'accessing'
-method: Rowan3MonticelloLoadedProjectStub
+method: Rowan3SeasideLoadedProjectStub
 loadedPackageNamed: aName ifAbsent: absentBlock
 	(self packageNames includes: aName)
 		ifFalse: absentBlock.
-	^ Rowan3MonticelloLoadedPackageStub new
+	^ Rowan3SeasideLoadedPackageStub new
 		name: aName;
 		yourself
 %
 
 category: 'accessing'
-method: Rowan3MonticelloLoadedProjectStub
+method: Rowan3SeasideLoadedProjectStub
 packageConvention
 	^ 'Monticello'
 %
 
 category: 'accessing'
-method: Rowan3MonticelloLoadedProjectStub
+method: Rowan3SeasideLoadedProjectStub
 packageGroupNames
 	^ #()
 %
 
 category: 'accessing'
-method: Rowan3MonticelloLoadedProjectStub
+method: Rowan3SeasideLoadedProjectStub
 packageNames
 	self name = self class monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' self name ].
@@ -146,15 +146,15 @@ loadedProjects
 				put:
 					(IdentitySet
 						with:
-							(Rowan3MonticelloLoadedProjectStub new
-								name: Rowan3MonticelloLoadedProjectStub monticelloProjectName;
+							(Rowan3SeasideLoadedProjectStub new
+								name: Rowan3SeasideLoadedProjectStub monticelloProjectName;
 								yourself)) ]
 %
 
 category: 'querying'
 method: Rowan3ImageStub
 packageNamesForLoadedProjectNamed: projectName
-	projectName = Rowan3MonticelloLoadedProjectStub monticelloProjectName
+	projectName = Rowan3SeasideLoadedProjectStub monticelloProjectName
 		ifFalse: [ self error: 'unexpected projectName: ' projectName ].
 	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers
 		collect: [ :wc | wc packageName ]) sort

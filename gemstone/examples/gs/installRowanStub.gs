@@ -144,7 +144,7 @@ extentType = 'base'
 	ifFalse: [
 		extentType = 'seaside'
 			ifTrue: [
-				filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteMonticello.gs' asFileReference pathString.
+				filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteSeaside.gs' asFileReference pathString.
 				GsFileIn fromServerPath: filePath ]
 			ifFalse: [
 				extentType = 'metacello'

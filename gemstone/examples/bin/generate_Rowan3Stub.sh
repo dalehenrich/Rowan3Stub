@@ -39,6 +39,9 @@ $projectDir/RowanV3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$project
 $projectDir/RowanV3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$projectDir/RowanStubForJadeite/rowan/specs/RowanStubForJadeite_monticello.ston \
 	--projectsHome=$projectDir --fileName=$targetDir/RowanStubForJadeiteMonticello.gs RowanStubForJadeite-Monticello --includeClassInitializers --includeRemoveAllMethods $*
 
+$projectDir/RowanV3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$projectDir/RowanStubForJadeite/rowan/specs/RowanStubForJadeite_seaside.ston \
+	--projectsHome=$projectDir --fileName=$targetDir/RowanStubForJadeiteSeaside.gs RowanStubForJadeite-Seaside --includeClassInitializers --includeRemoveAllMethods $*
+
 $projectDir/RowanV3/bin/exportRowanPackagesAsTopaz.solo --loadSpec=file:$projectDir/RowanStubForJadeite/rowan/specs/RowanStubForJadeite_metacello.ston \
 	--projectsHome=$projectDir --fileName=$targetDir/RowanStubForJadeiteMetacello.gs RowanStubForJadeite-Monticello RowanStubForJadeite-Metacello --includeClassInitializers --includeRemoveAllMethods $*
 

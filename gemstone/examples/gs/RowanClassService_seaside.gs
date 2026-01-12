@@ -77,7 +77,7 @@ category: 'Rowan3 stub'
 method: RowanPackageService
 rowanDirty
 
-	^ (MCWorkingCopy allManagers 
+	^ ((Rowan globalNamed: 'MCWorkingCopy') allManagers 
 		detect: [:wc | wc packageName = name ] 
 		ifNone: [ ^false ]) modified
 %
@@ -105,7 +105,7 @@ changes
 	"provide changes for all modified packages"
 	| jadeServer modifiedMCPackages |
 	jadeServer := Rowan jadeServerClassNamed: #'JadeServer'.	
-	modifiedMCPackages := MCWorkingCopy allManagers select: [:wc | wc modified ].
+	modifiedMCPackages := (Rowan globalNamed: 'MCWorkingCopy') allManagers select: [:wc | wc modified ].
 	changes := Array new.	
 	modifiedMCPackages
 		collect: [ :wc | | patch packageName |

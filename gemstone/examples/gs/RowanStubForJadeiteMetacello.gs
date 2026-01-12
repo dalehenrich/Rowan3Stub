@@ -215,15 +215,6 @@ projectNamed: projectName
 	^ self loadedProjectNamed: projectName
 %
 
-
-category: 'accessing'
-method: RowanStubForJadeite
-projectNamed: projectName ifPresent: ifPresentBlock ifAbsent: ifAbsentBlock
-
-	^self image loadedProjectNamed: projectName ifPresent: ifPresentBlock ifAbsent: ifAbsentBlock.
-
-%
-
 ! Class extensions for 'RowanStubForJadeite'
 
 !		Instance methods for 'RowanStubForJadeite'
@@ -232,5 +223,13 @@ category: 'accessing'
 method: RowanStubForJadeite
 projectNamed: projectName
 	^ self image loadedProjectNamed: projectName
+%
+
+category: 'accessing'
+method: RowanStubForJadeite
+projectNamed: projectName ifPresent: ifPresentBlock ifAbsent: ifAbsentBlock
+ 
+    ^self image loadedProjectNamed: projectName ifPresent: ifPresentBlock ifAbsent: ifAbsentBlock.
+ 
 %
 

@@ -1,0 +1,11 @@
+RwLoadComponent {
+	#name : 'Seaside',
+	#projectNames : [ ],
+	#componentNames : [
+		'Core'
+	],
+	#packageNames : [
+		'RowanStubForJadeite-Seaside'
+	],
+	#comment : ''
+}
