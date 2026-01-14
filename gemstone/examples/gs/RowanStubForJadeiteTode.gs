@@ -21,7 +21,7 @@ removeallclassmethods Rowan3MetacelloLoadedPackageStub
 
 doit
 (Rowan3LoadedProjectStub
-	subclass: 'Rowan3MetacelloLoadedProjectStub'
+	subclass: 'Rowan3TodeLoadedProjectStub'
 	instVarNames: #(projectRegistration)
 	classVars: #()
 	classInstVars: #()
@@ -34,8 +34,8 @@ doit
 true.
 %
 
-removeallmethods Rowan3MetacelloLoadedProjectStub
-removeallclassmethods Rowan3MetacelloLoadedProjectStub
+removeallmethods Rowan3TodeLoadedProjectStub
+removeallclassmethods Rowan3TodeLoadedProjectStub
 
 ! Class implementation for 'Rowan3MetacelloLoadedPackageStub'
 
@@ -112,12 +112,12 @@ workingCopy: aMCWorkingCopy
 	workingCopy := aMCWorkingCopy
 %
 
-! Class implementation for 'Rowan3MetacelloLoadedProjectStub'
+! Class implementation for 'Rowan3TodeLoadedProjectStub'
 
-!		Class methods for 'Rowan3MetacelloLoadedProjectStub'
+!		Class methods for 'Rowan3TodeLoadedProjectStub'
 
 category: 'accessing'
-classmethod: Rowan3MetacelloLoadedProjectStub
+classmethod: Rowan3TodeLoadedProjectStub
 metacelloProjectRegistrations
 
 	(Rowan globalNamed: 'MetacelloProjectRegistration')
@@ -129,13 +129,13 @@ metacelloProjectRegistrations
       			(Rowan globalNamed: 'MetacelloProjectRegistration')
         			registrationForProjectSpec: projectSpec
         			ifAbsent: [ self error: 'registration for projectSpec: ' projectSpec name , ' not found' ]
-        			ifPresent: [ :registration :ignored |  registration ] ]) ]
+        			ifPresent: [ :registration :ignored | (Rowan globalNamed: 'TDMetacelloRegistrationDefinition') registration: registration ] ]) ]
 %
 
-!		Instance methods for 'Rowan3MetacelloLoadedProjectStub'
+!		Instance methods for 'Rowan3TodeLoadedProjectStub'
 
 category: 'accessing'
-method: Rowan3MetacelloLoadedProjectStub
+method: Rowan3TodeLoadedProjectStub
 loadedPackageNamed: aPackageName ifAbsent: absentBlock
 	| wc |
 	(self packageNames includes: aPackageName)
@@ -151,34 +151,31 @@ loadedPackageNamed: aPackageName ifAbsent: absentBlock
 %
 
 category: 'accessing'
-method: Rowan3MetacelloLoadedProjectStub
+method: Rowan3TodeLoadedProjectStub
 packageConvention
 	^ 'Monticello'
 %
 
 category: 'accessing'
-method: Rowan3MetacelloLoadedProjectStub
+method: Rowan3TodeLoadedProjectStub
 packageGroupNames
 	^ #()
 %
 
 category: 'accessing'
-method: Rowan3MetacelloLoadedProjectStub
+method: Rowan3TodeLoadedProjectStub
 packageNames
-	| pr mcVersion |
-	pr := self projectRegistration.
-	mcVersion := pr configurationProjectSpec project map at: pr configurationProjectSpec versionString.
-	^ mcVersion packages collect: [:each | each name ]
+	^ self projectRegistration workingCopies collect: [:each | each packageName ]
 %
 
 category: 'accessing'
-method: Rowan3MetacelloLoadedProjectStub
+method: Rowan3TodeLoadedProjectStub
 projectRegistration
 	^ projectRegistration
 %
 
 category: 'accessing'
-method: Rowan3MetacelloLoadedProjectStub
+method: Rowan3TodeLoadedProjectStub
 projectRegistration: aTDMetacelloRegistrationDefinition
 	projectRegistration := aTDMetacelloRegistrationDefinition
 %
@@ -195,8 +192,8 @@ loadedProjects
 		ifAbsent: [ 
 			| loadedProjects |
 			loadedProjects := IdentitySet new.
-			Rowan3MetacelloLoadedProjectStub metacelloProjectRegistrations do: [:projectRegistration |
-				loadedProjects add: (Rowan3MetacelloLoadedProjectStub new
+			Rowan3TodeLoadedProjectStub metacelloProjectRegistrations do: [:projectRegistration |
+				loadedProjects add: (Rowan3TodeLoadedProjectStub new
 								name: projectRegistration projectName;
 								projectRegistration: projectRegistration; 
 								yourself) ].

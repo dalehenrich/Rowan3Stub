@@ -149,11 +149,12 @@ extentType = 'base'
 			ifFalse: [
 				extentType = 'metacello'
 					ifTrue: [
-						self error: 'metacello extent type not supported' ]
+						filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
+						GsFileIn fromServerPath: filePath ]
 					ifFalse: [ 
 						extentType = 'tode'
 							ifTrue: [
-								filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
+								filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteTode.gs' asFileReference pathString.
 								GsFileIn fromServerPath: filePath ]
 							ifFalse: [ self error: 'Unknown extent type: ', extentType printString ] ] ] ].
 

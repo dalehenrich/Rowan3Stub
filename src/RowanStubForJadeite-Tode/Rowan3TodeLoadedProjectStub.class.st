@@ -1,5 +1,5 @@
 Class {
-	#name : 'Rowan3MetacelloLoadedProjectStub',
+	#name : 'Rowan3TodeLoadedProjectStub',
 	#superclass : 'Rowan3LoadedProjectStub',
 	#instVars : [
 		'projectRegistration'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'accessing' }
-Rowan3MetacelloLoadedProjectStub class >> metacelloProjectRegistrations [
+Rowan3TodeLoadedProjectStub class >> metacelloProjectRegistrations [
 
 	(Rowan globalNamed: 'MetacelloProjectRegistration')
 		ifNil: [ ^ #() ]
@@ -19,11 +19,11 @@ Rowan3MetacelloLoadedProjectStub class >> metacelloProjectRegistrations [
       			(Rowan globalNamed: 'MetacelloProjectRegistration')
         			registrationForProjectSpec: projectSpec
         			ifAbsent: [ self error: 'registration for projectSpec: ' projectSpec name , ' not found' ]
-        			ifPresent: [ :registration :ignored |  registration ] ]) ]
+        			ifPresent: [ :registration :ignored | (Rowan globalNamed: 'TDMetacelloRegistrationDefinition') registration: registration ] ]) ]
 ]
 
 { #category : 'accessing' }
-Rowan3MetacelloLoadedProjectStub >> loadedPackageNamed: aPackageName ifAbsent: absentBlock [
+Rowan3TodeLoadedProjectStub >> loadedPackageNamed: aPackageName ifAbsent: absentBlock [
 	| wc |
 	(self packageNames includes: aPackageName)
 		ifFalse: absentBlock.
@@ -38,29 +38,26 @@ Rowan3MetacelloLoadedProjectStub >> loadedPackageNamed: aPackageName ifAbsent: a
 ]
 
 { #category : 'accessing' }
-Rowan3MetacelloLoadedProjectStub >> packageConvention [
+Rowan3TodeLoadedProjectStub >> packageConvention [
 	^ 'Monticello'
 ]
 
 { #category : 'accessing' }
-Rowan3MetacelloLoadedProjectStub >> packageGroupNames [
+Rowan3TodeLoadedProjectStub >> packageGroupNames [
 	^ #()
 ]
 
 { #category : 'accessing' }
-Rowan3MetacelloLoadedProjectStub >> packageNames [
-	| pr mcVersion |
-	pr := self projectRegistration.
-	mcVersion := pr configurationProjectSpec project map at: pr configurationProjectSpec versionString.
-	^ mcVersion packages collect: [:each | each name ]
+Rowan3TodeLoadedProjectStub >> packageNames [
+	^ self projectRegistration workingCopies collect: [:each | each packageName ]
 ]
 
 { #category : 'accessing' }
-Rowan3MetacelloLoadedProjectStub >> projectRegistration [
+Rowan3TodeLoadedProjectStub >> projectRegistration [
 	^ projectRegistration
 ]
 
 { #category : 'accessing' }
-Rowan3MetacelloLoadedProjectStub >> projectRegistration: aTDMetacelloRegistrationDefinition [
+Rowan3TodeLoadedProjectStub >> projectRegistration: aTDMetacelloRegistrationDefinition [
 	projectRegistration := aTDMetacelloRegistrationDefinition
 ]

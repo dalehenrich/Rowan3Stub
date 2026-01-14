@@ -16,7 +16,7 @@
 category: 'Rowan3 stub'
 method: RowanProjectService
 changes
-    | jadeServer projectNames loadedProject |
+    | jadeServer loadedProject |
     jadeServer := Rowan jadeServerClassNamed: #'JadeServer'.
     changes := Array new.
     loadedProject := Rowan image loadedProjectNamed: self name.
@@ -35,7 +35,8 @@ changes
               alternateName: nil
               packageName: packageName) ] ]
 %
-category:'Rowan3 stub'
+
+category: 'Rowan3 stub'
 method: RowanProjectService
 defaultSymbolDictionaryFromLoadSpec
 	^ 'UserGlobals'

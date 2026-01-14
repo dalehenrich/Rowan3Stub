@@ -1,0 +1,63 @@
+#!/usr/bin/env superdoit_topaz
+
+set u SystemUser p swordfish
+login
+set class RowanService	
+method
+setDebugActionBlock
+	Processor activeProcess
+		breakpointLevel: 1;
+		debugActionBlock: [ :ex | 
+					| debuggerResult suspendedProcess |
+					ex class = RowanServiceShouldExit
+						ifTrue: [ ex resume ].
+					_connection isOpen
+						ifFalse: [ 
+							GsFile gciLogServer: ex printString.
+							GsFile gciLogServer: 'connection not open'.	"can't return"
+							Processor activeProcess terminate ].
+					GsFile
+						gciLogServer:
+							DateTime now asStringMs , ' {'
+								, Processor activeProcess identityHash printString , '} '
+								, ex printString.
+					suspendedProcess := Processor activeProcess.
+					ex class = CompileError
+						ifTrue: [ 
+							| compileErrorService |
+							self postCommandExecution.
+							compileErrorService := RowanCompileErrorServiceServer new.
+							compileErrorService
+								gsArguments: ex errorDetails;
+								messageText: ex messageText.
+							updates := Array with: compileErrorService.
+							RowanServiceShouldExit signal ].
+System waitForDebug.
+					[ 
+					RowanDebuggerService new saveProcessOop: suspendedProcess asOop.
+					debuggerResult := (RowanProcessServiceServer
+						existingProcessServiceFor: suspendedProcess)
+						ifNil: [ 
+							RowanProcessServiceServer
+								openDebuggerOn: suspendedProcess
+								exception: ex
+								connection: _connection ]
+						ifNotNil: [ :processService | processService updateClient ].
+					ex isResumable
+						ifFalse: [ debuggerResult := #'terminate' ].
+					debuggerResult = #'terminate'
+						ifTrue: [ 
+							RowanProcessServiceServer removeProcessServiceFor: suspendedProcess.
+							suspendedProcess resume	"let the exception handler block return nil" ]
+						ifFalse: [ self resume: suspendedProcess orStep: debuggerResult ] ] fork.
+					suspendedProcess ifNotNil: [ :proc | proc suspend ].
+					debuggerResult = #'terminate'
+						ifTrue: [ 
+							self postCommandExecution.
+							RowanBrowserService new unsetSecretBreakpoint.
+							ex tag: #'rsrProcessTerminated'.
+							RsrUnhandledException signal: ex	"stop processing the exception but let rsr return" ].
+					ex resume ].
+%
+commit
+

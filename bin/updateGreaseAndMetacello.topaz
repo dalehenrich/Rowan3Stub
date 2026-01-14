@@ -1,0 +1,27 @@
+#!/usr/bin/env superdoit_topaz
+#
+#	Update an extent0.seaside.dbf stone to use the latest version of Metacello on GitHub 
+#	and enable support for FileTree ti repositories. Thus producing a 'metacello' extentType
+#	stone.
+#
+# simply execute a topaz script: 
+#		- using current $GEMSTONE and .topazini supplied on command line
+#				simple.topaz -I ./.topazini -L
+#		- using current $GS_HOME, stone name and topaz args supplied on command line
+#				simple.topaz gs_361 -L
+
+set u DataCurator p swordfish
+login
+
+# Update Metacello to support filetree repos and github
+
+run
+Gofer new
+  package: 'GsUpgrader-Core';
+  url: 'http://ss3.gemtalksystems.com/ss/gsUpgrader';
+  load.
+(Smalltalk at: #GsUpgrader) upgradeGrease.
+true
+%
+
+commit

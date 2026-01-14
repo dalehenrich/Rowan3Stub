@@ -1,0 +1,15 @@
+RwLoadSpecificationV2 {
+	#projectName : 'RowanStubForJadeite',
+	#projectSpecFile : 'rowan/project.ston',
+	#componentNames : [
+		'Tode'
+	],
+	#platformProperties : {
+		'gemstone' : {
+			'allusers' : {
+				#defaultSymbolDictName : 'Globals'
+			}
+		}
+	},
+	#comment : ''
+}

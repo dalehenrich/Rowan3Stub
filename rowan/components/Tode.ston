@@ -1,0 +1,11 @@
+RwLoadComponent {
+	#name : 'Tode',
+	#projectNames : [ ],
+	#componentNames : [
+		'Core'
+	],
+	#packageNames : [
+		'RowanStubForJadeite-Tode'
+	],
+	#comment : ''
+}
