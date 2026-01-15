@@ -178,6 +178,14 @@ projectNamed: projectName
 
 category: 'accessing'
 method: RowanStubForJadeite
+extentType
+    "Create a new initialized instance of the receiver."
+ 
+    ^ 'seaside'
+%
+
+category: 'accessing'
+method: RowanStubForJadeite
 projectNamed: projectName
 	^ self image loadedProjectNamed: projectName
 %

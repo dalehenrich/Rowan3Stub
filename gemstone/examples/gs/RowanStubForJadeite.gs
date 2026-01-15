@@ -799,6 +799,14 @@ commandResultClass
 
 category: 'accessing'
 method: RowanStubForJadeite
+extentType
+    "Create a new initialized instance of the receiver."
+ 
+    ^ 'base'
+%
+
+category: 'accessing'
+method: RowanStubForJadeite
 gemstoneTools
 	^ UserGlobals 
 		at: #RowanStubForJadeite_gemstoneTools

@@ -22,6 +22,13 @@ RowanStubForJadeite >> commandResultClass [
 ]
 
 { #category : 'accessing' }
+RowanStubForJadeite >> extentType [
+    "Create a new initialized instance of the receiver."
+ 
+    ^ 'base'
+]
+
+{ #category : 'accessing' }
 RowanStubForJadeite >> gemstoneTools [
 	^ UserGlobals 
 		at: #RowanStubForJadeite_gemstoneTools

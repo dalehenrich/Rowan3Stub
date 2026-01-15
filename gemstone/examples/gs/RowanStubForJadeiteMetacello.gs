@@ -137,6 +137,18 @@ metacelloProjectRegistrations
 category: 'accessing'
 method: Rowan3MetacelloLoadedProjectStub
 loadedPackageNamed: aPackageName ifAbsent: absentBlock
+	| pr mcVersion wc |
+	pr := self projectRegistration.
+	mcVersion := pr configurationProjectSpec project map at: pr configurationProjectSpec versionString.
+	wc := mcVersion packages detect: [:each | each name = aPackageName ]
+		ifNone: absentBlock.
+	^ Rowan3MetacelloLoadedPackageStub new
+		name: aPackageName;
+		loadedProject: self;
+		workingCopy: wc;
+		yourself
+"
+
 	| wc |
 	(self packageNames includes: aPackageName)
 		ifFalse: absentBlock.
@@ -148,6 +160,7 @@ loadedPackageNamed: aPackageName ifAbsent: absentBlock
 		loadedProject: self;
 		workingCopy: wc;
 		yourself
+"
 %
 
 category: 'accessing'
@@ -221,6 +234,14 @@ projectNamed: projectName
 ! Class extensions for 'RowanStubForJadeite'
 
 !		Instance methods for 'RowanStubForJadeite'
+
+category: 'accessing'
+method: RowanStubForJadeite
+extentType
+	"Create a new initialized instance of the receiver."
+
+	^ 'metacello'
+%
 
 category: 'accessing'
 method: RowanStubForJadeite

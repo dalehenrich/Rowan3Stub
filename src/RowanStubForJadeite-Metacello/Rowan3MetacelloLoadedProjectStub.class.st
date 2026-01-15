@@ -24,6 +24,18 @@ Rowan3MetacelloLoadedProjectStub class >> metacelloProjectRegistrations [
 
 { #category : 'accessing' }
 Rowan3MetacelloLoadedProjectStub >> loadedPackageNamed: aPackageName ifAbsent: absentBlock [
+	| pr mcVersion wc |
+	pr := self projectRegistration.
+	mcVersion := pr configurationProjectSpec project map at: pr configurationProjectSpec versionString.
+	wc := mcVersion packages detect: [:each | each name = aPackageName ]
+		ifNone: absentBlock.
+	^ Rowan3MetacelloLoadedPackageStub new
+		name: aPackageName;
+		loadedProject: self;
+		workingCopy: wc;
+		yourself
+"
+
 	| wc |
 	(self packageNames includes: aPackageName)
 		ifFalse: absentBlock.
@@ -35,6 +47,7 @@ Rowan3MetacelloLoadedProjectStub >> loadedPackageNamed: aPackageName ifAbsent: a
 		loadedProject: self;
 		workingCopy: wc;
 		yourself
+"
 ]
 
 { #category : 'accessing' }
