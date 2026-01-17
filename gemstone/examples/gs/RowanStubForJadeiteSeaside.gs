@@ -95,7 +95,7 @@ projectName
 category: 'accessing'
 classmethod: Rowan3SeasideLoadedProjectStub
 monticelloProjectName
-	^ 'Seaside'
+	^ 'LOOSE PACKAGES'
 %
 
 !		Instance methods for 'Rowan3SeasideLoadedProjectStub'

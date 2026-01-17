@@ -42,6 +42,14 @@ defaultSymbolDictionaryFromLoadSpec
 	^ 'UserGlobals'
 %
 
+category: 'Rowan3 stub'
+classmethod: RowanService
+isRowanStub
+	"use standard project and package browsers"
+
+	^ false
+%
+
 commit
 
 ## end of RowanClassService_tode.gs

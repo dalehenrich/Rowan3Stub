@@ -23,5 +23,12 @@ compileMethod: methodString behavior: aBehavior symbolList: aSymbolList inCatego
 		on: Error
 		do: [:ex | ex return: method -> warnings]
 %
+category: 'Rowan3 stub'
+classmethod: RowanService class
+isRowanStub
+	"use Dictionary browser ... no projects in base extent"
+
+	^ true
+%
 commit
 ## end of RowanClassService_base.gs

@@ -56,4 +56,8 @@ fi
 
 export ROWAN_STUB_EXTENT_TYPE=$extentType
 
-$GEMSTONE/examples/jadeite/bin/installRowanStub.topaz $topazCommandLine
+if [ "$ROWAN_STUB_BIN_DIRECTORY" = "" ]; then
+	export ROWAN_STUB_BIN_DIRECTORY=$GEMSTONE/examples/jadeite/bin
+fi
+
+$ROWAN_STUB_BIN_DIRECTORY/installRowanStub.topaz $topazCommandLine

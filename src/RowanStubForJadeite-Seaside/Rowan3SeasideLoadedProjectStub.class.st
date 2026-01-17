@@ -6,7 +6,7 @@ Class {
 
 { #category : 'accessing' }
 Rowan3SeasideLoadedProjectStub class >> monticelloProjectName [
-	^ 'Seaside'
+	^ 'LOOSE PACKAGES'
 ]
 
 { #category : 'accessing' }
