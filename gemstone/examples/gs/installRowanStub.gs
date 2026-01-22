@@ -162,8 +162,6 @@ Published at: #Rowan put: RowanStubForJadeite new.
 Published at: #STON put: (RowanKernel_tonel at: #STON).
 %
 
-# checkpoint 1 after extentType specific methods installed
-lookup RowanService class>>isRowanStub
 
 # the following 4 methods cannot be packaged, since they conflict with the Rowan implementation
 method: Behavior
@@ -313,8 +311,6 @@ run
 input $ROWAN_STUB_GS_DIRECTORY/RowanClientServicesV3.gs
 input $ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteServices.gs
 
-# checkpoint 2 after RowanClienServicesV# installed
-lookup RowanService class >> isRowanStub
 
 #
 # overwrites of RowanClassService methods that will need to change for JfPwoR
@@ -547,8 +543,6 @@ extentType = 'base'
 							ifFalse: [ self error: 'Unknown extent type: ', extentType printString ] ] ] ].
 %
 
-# checkpoint 3 at ENDlookup RowanService class>>isRowanStub
-lookup RowanService class>>isRowanStub
 
 commit
 ## end of installRowanStub.gs
