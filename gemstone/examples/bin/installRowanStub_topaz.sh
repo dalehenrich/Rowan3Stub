@@ -16,6 +16,7 @@ set -ex
 # Additional topaz command line arguments are not required, but may be optionally specified
 #
 
+echo "installRowanStub_topaz.sh"
 if [ "$GEMSTONE" = "" ]; then
 	echo "ERROR: \$GEMSTONE env var expected to be set before running this script" 
 	exit 1
@@ -31,5 +32,10 @@ else
 	topazCommandLine="$*"
 fi
 
+if [ "$ROWAN_STUB_BIN_DIRECTORY"x = "x" ]; then
+	# if script overrides for $GEMSTONE/examples/jadeite/bin are needed, define ROWAN_STUB_BIN_DIRECTORY 
+	# to point to alternate directory
+	export ROWAN_STUB_BIN_DIRECTORY=$GEMSTONE/examples/jadeite/bin
+fi
 export ROWAN_STUB_EXTENT_TYPE=base
-$GEMSTONE/examples/jadeite/bin/installRowanStub.topaz $topazCommandLine
+$ROWAN_STUB_BIN_DIRECTORY/installRowanStub.topaz $topazCommandLine

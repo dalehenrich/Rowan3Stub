@@ -153,7 +153,12 @@ method: RowanProjectService
 defaultSymbolDictionaryFromLoadSpec
 	^ #UserGlobals
 %
+category: 'Rowan3 stub'
+classmethod: RowanService
+isRowanStub
 
+	^false
+%
 
 commit
 

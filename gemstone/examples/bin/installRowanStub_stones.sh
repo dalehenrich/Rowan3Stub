@@ -54,6 +54,12 @@ else
 	echo "existing extent in $stoneName will be updated with JfPwoR support"
 fi
 
+if [ "$ROWAN_STUB_BIN_DIRECTORY"x = "x" ]; then
+	# if script overrides for $GEMSTONE/examples/jadeite/bin are needed, define ROWAN_STUB_BIN_DIRECTORY 
+	# to point to alternate directory
+	export ROWAN_STUB_BIN_DIRECTORY=$GEMSTONE/examples/jadeite/bin
+fi
+
 export ROWAN_STUB_EXTENT_TYPE=base
 
 $GEMSTONE/examples/jadeite/bin/installRowanStub.topaz $topazCommandLine
