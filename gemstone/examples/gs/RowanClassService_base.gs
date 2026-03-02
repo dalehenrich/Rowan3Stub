@@ -1,3 +1,4 @@
+! Copyright (C) GemTalk Systems 1986-2026.  All Rights Reserved.
 # 
 # overwrite of RowanClassService method that will need to change for JfPwoR
 # when run against extent0.dbf (non-Seaside)

@@ -1,4 +1,5 @@
 #!/usr/bin/env superdoit_topaz
+! Copyright (C) GemTalk Systems 1986-2026.  All Rights Reserved.
 #
 # to run as superdoit script with $GEMSTONE set :
 #		./installRowanClassService_seaside.gs -I <path-to-topazini> -L

@@ -1,5 +1,4 @@
-#
-
+! Copyright (C) GemTalk Systems 1986-2026.  All Rights Reserved.
 #
 #	these 4 methods should be in GemStone-Interactions-Kernel package in Rowan 3 and should
 #		be when we hit masterV3.3

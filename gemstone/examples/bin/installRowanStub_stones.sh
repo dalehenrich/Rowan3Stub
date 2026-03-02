@@ -1,3 +1,4 @@
+# Copyright (C) GemTalk Systems 1986-2026.  All Rights Reserved.
 set -ex
 #
 # To run:

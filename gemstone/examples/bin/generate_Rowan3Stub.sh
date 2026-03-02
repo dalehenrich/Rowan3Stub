@@ -1,3 +1,4 @@
+# Copyright (C) GemTalk Systems 1986-2026.  All Rights Reserved.
 #
 # generate_Rowan3Stub.sh <target-directory> <project-directory> [ -D ]
 #
