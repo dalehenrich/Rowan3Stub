@@ -39,6 +39,10 @@ Rowan3PlatformStub >> serviceClasses [
 		add: RowanLoggingService;
 		add: RowanMethodService;
 		add: RowanMethodDefinitionService; 
+		add: RowanMonticelloPackageService;
+		add: RowanMonticelloRepositoryGroupService;
+		add: RowanMonticelloRepositoryService;
+		add: RowanMonticelloService;
 		add: RowanPackageService;
 		add: RowanPackageDefinitionService;
 		add: RowanPackageGroupService;
@@ -72,6 +76,10 @@ Rowan3PlatformStub >> serviceClasses [
 		"add: RowanLoggingServiceServer;"
 		add: RowanMethodServiceServer;
 		"add: RowanMethodDefinitionServiceServer; "
+		add: RowanMonticelloPackageServiceServer;
+		add: RowanMonticelloRepositoryGroupServiceServer;
+		add: RowanMonticelloRepositoryServiceServer;
+		add: RowanMonticelloServiceServer;
 		add: RowanPackageServiceServer;
 		add: RowanPackageDefinitionServiceServer;
 		"add: RowanPackageGroupServiceServer;"
