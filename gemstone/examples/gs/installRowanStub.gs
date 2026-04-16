@@ -138,12 +138,12 @@ run
 extentType := System gemEnvironmentVariable: 'ROWAN_STUB_EXTENT_TYPE'.
 extentType = 'base'
 	ifTrue: [
- 		filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteBase.gs' asFileReference pathString.
+ 		filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteBase.gs' asFileReference pathString.
 		GsFileIn fromServerPath: filePath ]
 	ifFalse: [
 		extentType = 'seaside'
 			ifTrue: [
-				filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMonticello.gs' asFileReference pathString.
+				filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteMonticello.gs' asFileReference pathString.
 				GsFileIn fromServerPath: filePath ]
 			ifFalse: [
 				extentType = 'metacello'
@@ -152,7 +152,7 @@ extentType = 'base'
 					ifFalse: [ 
 						extentType = 'tode'
 							ifTrue: [
-								filePath := '$GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
+								filePath := '$ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteMetacello.gs' asFileReference pathString.
 								GsFileIn fromServerPath: filePath ]
 							ifFalse: [ self error: 'Unknown extent type: ', extentType printString ] ] ] ].
 
@@ -305,8 +305,8 @@ run
 			Globals at: symbolName put: (RwGsDummy named: symbolName) ].
 %
 
-input $GEMSTONE/examples/jadeite/gs/RowanClientServicesV3.gs
-input $GEMSTONE/examples/jadeite/gs/RowanStubForJadeiteServices.gs
+input $ROWAN_STUB_GS_DIRECTORY/RowanClientServicesV3.gs
+input $ROWAN_STUB_GS_DIRECTORY/RowanStubForJadeiteServices.gs
 
 #
 # overwrites of RowanClassService methods that will need to change for JfPwoR

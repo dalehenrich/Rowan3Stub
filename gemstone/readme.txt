@@ -44,13 +44,23 @@ To install JfPwoR into an standard GemStone extent using GsDevKit_stones
 $GEMSTONE/examples/jadeite/bin/installRowanStub_stones.sh <stone-name> <registry-name> base
 
 -----------------------------------------------------------
-To reinstall JfPwoR support  
+To reinstall JfPwoR support in a 3.7.5 stone, where JfPwoR has already been installed.
 -----------------------------------------------------------
 
-  The above scripts normally do not allow reinstallation. You can enable reinstalltaion by
-  setting the environment variable ROWAN_STUB_GS_DIRECTORY to a directory containing the
-  JfPwoR support files, as are provided in $GEMSTONE/examples/jadeite/gs. 
+	To reinstall JFPwoR support to pick up bug fixes that may have been published. Cross reference the branch 
+	name/SHA with $GEMSTONE/externals.sha.txt:
+	1. Create a ROWAN_PROJECTS_HOME project clone the following projects into the directory:
+			a. git clone --branch masterV3.5 git@git.gemtalksystems.com:Rowan RowanV3
+			b. git clone --branch main375 git@github.com:GemTalk/RowanStubForJadeite.git
+			c. git clone --branch main-v2 git@github.com:GemTalk/RemoteServiceReplication.git
+			d. git clone --branch main375_bugfix git@github.com:GemTalk/RowanClientServices.git RowanClientServicesV3
+			e. git clone --branch main git@github.com:GemTalk/Announcements.git 
+	2. copy the files in $GEMSTONE/examples/gs into a directory that you will use as the target directory for 
+			$GEMSTONE/examples/bin/generate_Rowan3Stub.sh. Define ROWAN_STUB_GS_DIRECTORY to point to this directory. 
+			Make all of the files in the directory writable by you.
+	3. run `$GEMSTONE/examples/bin/generate_Rowan3Stub.sh <target-directory> ROWAN_PROJECTS_HOME` to update the
+				files in $ROWAN_STUB_GS_DIRECTORY.
+	4. run `$GEMSTONE/examples/jadeite/bin/installRowanStub_stones.sh <stone-name> <registry-name> base`
 
-  This is designed to allow distribution of updates for JfPwoR support without the need to 
-  modify any files in the GemStone distribution. 
+
 
