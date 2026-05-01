@@ -58,5 +58,7 @@ $projectDir/RowanV3/bin/exportRowanProjectAsTopaz.solo file:$projectDir/RowanCli
 $projectDir/RowanV3/bin/exportRowanProjectAsTopaz.solo file:$projectDir/Announcements/rowan/specs/Announcements.ston \
 	--projectsHome=$projectDir $targetDir/Announcements.gs --includeClassInitializers --includeRemoveAllMethods $*
 
-
+# record the SHAs for each of the projects in a .gs file so that the correct SHAs can be displayed in Jadeite
+/$projectDir/RowanStubForJadeite/bin/generateProjectSHAs.rw3_solo RowanStubForJadeite RowanV3 RemoteServiceReplication RowanClientServicesV3 Announcements \
+	--projectsHome=$projectDir --targetDir=$targetDir
 

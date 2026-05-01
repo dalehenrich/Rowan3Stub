@@ -1,0 +1,85 @@
+#!/usr/bin/env superdoit_rowan3_solo
+# Example options section
+#
+#options
+#{
+#	SuperDoitOptionalOptionWithNoArg long: 'noarg'.
+#	SuperDoitOptionalOptionWithNoArg long: 'noarg' short: 'n'.
+#
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' default: 'default'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o'.
+#	SuperDoitOptionalOptionWithRequiredArg long: 'optional' short: 'o' default: 'default'.
+#
+#	SuperDoitRequiredOptionWithRequiredArg long: 'required'.
+#	SuperDoitRequiredOptionWithRequiredArg long: 'required' short: 'r'.
+#}
+#%
+#
+options
+{
+  SuperDoitRequiredOptionWithRequiredArg long: 'projectsHome'.
+  SuperDoitRequiredOptionWithRequiredArg long: 'targetDir'.
+}
+%
+usage
+-----
+USAGE $basename [--help | -h] [--debug | -D] [--debugGem] <project-names> \
+                --projectsHome=<parent-directory-of-git-clones> \
+                --targetDir=<parent-directory-of-rowanStub_project_shas.json>
+
+DESCRIPTION
+	Record the SHAs of the RowahStubForJadeite projects in <targetDir>/rowanStub_project_shas.gs file.
+
+  The following git clones should be present in the directory specified byt the --projectsHome option:
+		RowanStubForJadeite
+		RemoteServiceReplication
+		RowanClientServicesV3
+		Announcements
+		RowanV3
+
+	This script is run as part of $GEMSTONE/examples/jadeite/bin/generate_Rowan3Stub.sh.
+
+OPTIONS
+  -h, --help      display usage message
+  -D, --debug     bring up topaz debugger in the event of a script error
+  --debugGem      If terminal is connected to stdout, bring up debugger. If not,
+                  dump stack to stdout and wait for topaz to attach using topaz
+                  DEBUGGEM command.
+  --projectsHome=<parent-directory-of-git-clones>
+                  Path to the directory where the git clones are located.
+  --targetDir=<parent-directory-of-rowanStub-gs-files>
+                  Path to the directory where rowanStub_project_shas.gs will be written,
+									
+
+EXAMPLES
+  $basename --help
+  $basename -D
+  $basename --debugGem
+  $basename  
+  $basename RowanStubForJadeite RowanV3 RemoteServiceReplication RowanClientServicesV3 \
+            Announcements --projectsHome=/bosch1/users/dhenrich/_stones/37x/g_37x_externals_st \
+            --targetDir=$GEMSTON/examples/jadeite/gs
+-----
+%
+doit
+	| projectDir targetDir gitTool shaArray |
+	projectDir := self projectsHome.
+	projectDir asFileReference exists
+		ifFalse: [ self error: 'The projectHome directory: ', projectDir, ' does not exist.' ].
+	targetDir := self targetDir.
+	targetDir asFileReference exists
+		ifFalse: [ self error: 'The targetDir directory', targetDir, ' does not exist.' ].
+	shaArray := Array new.
+	gitTool := Rowan gitTools.
+	self positionalArgs do: [: projectName |	
+		| sha |
+		sha := gitTool gitcommitShaIn:  projectDir, '/', projectName.
+		shaArray add: { projectName . sha } ].
+	(targetDir asFileReference / 'rowanStub_project_shas.gs') writeStreamDo: [:stream |
+		stream truncate.
+		STON 
+			put: shaArray asJsonOnStreamPretty: stream.
+		stream lf ].
+	^ true
+%
