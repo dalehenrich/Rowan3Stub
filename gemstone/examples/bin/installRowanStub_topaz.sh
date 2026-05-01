@@ -32,7 +32,7 @@ else
 	topazCommandLine="$*"
 fi
 
-echo "this doesn't work, because the topaz command line is part of the command line!!!"
+echo "cannot pass in an extentType argument on command line, because the $topazCommandLine is part of the command line!!!"
 exit 1
 extentType=$1
 if [ "$extentType"x = "x" ]; then

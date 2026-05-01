@@ -63,7 +63,7 @@ EXAMPLES
 -----
 %
 doit
-	| projectDir targetDir gitTool shaArray |
+	| projectDir targetDir gitTool shaArray gsFileName |
 	projectDir := self projectsHome.
 	projectDir asFileReference exists
 		ifFalse: [ self error: 'The projectHome directory: ', projectDir, ' does not exist.' ].
@@ -76,10 +76,33 @@ doit
 		| sha |
 		sha := gitTool gitcommitShaIn:  projectDir, '/', projectName.
 		shaArray add: { projectName . sha } ].
-	(targetDir asFileReference / 'rowanStub_project_shas.gs') writeStreamDo: [:stream |
+	gsFileName := 'rowanStub_project_shas.gs'.
+	(targetDir asFileReference / gsFileName) writeStreamDo: [:stream |
 		stream truncate.
-		STON 
-			put: shaArray asJsonOnStreamPretty: stream.
-		stream lf ].
+		stream
+			nextPutAll: 'category: ''accessing''';
+			lf;
+			nextPutAll: 'method: RowanStubForJadeite';
+			lf;
+			nextPutAll: '  "list of projects and the SHA used to create the .gs files for that project"' ;
+			lf;
+			nextPutAll: '  ^ {';
+			lf.
+    1 to: shaArray size do: [:projectArrayIndex |
+			"projectArray is projectName and sha"
+			| projectArray |
+			projectArray := shaArray at: projectArrayIndex.
+			stream 
+				nextPutAll: '      { ', (projectArray at: 1) printString "asString", ' . ', (projectArray at: 2) printString "asString", ' }'.
+			shaArray size = projectArrayIndex 
+				ifFalse: [
+					stream nextPutAll: ' . '; lf ].
+			].
+		stream 
+			lf; nextPutAll: '  }';
+			lf; nextPutAll: '%';
+			lf; nextPutAll: '## end of ', gsFileName;
+			lf
+	].
 	^ true
 %
