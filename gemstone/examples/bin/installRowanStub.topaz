@@ -22,10 +22,12 @@ run
     ifNotNil: [ :location | 
       GsFile gciLogServer: 'RowanStub project .gs files will be loaded from a non-standard location: ', location.
       System gemEnvironmentVariable: 'ROWAN_STUB_INTENTIONAL_OVERRIDE' put: 'true'. ]
-    ifNil: [ 
-      System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY' put: '$GEMSTONE/examples/jadeite/gs'.
+    ifNil: [
+			| gemstone |
+			gemstone := System gemEnvironmentVariable: 'GEMSTONE'.
+      System gemEnvironmentVariable: 'ROWAN_STUB_GS_DIRECTORY' put: gemstone , '/examples/jadeite/gs'.
       System gemEnvironmentVariable: 'ROWAN_STUB_INTENTIONAL_OVERRIDE' put: 'false'.
-      GsFile gciLogServer: 'RowanStub project .gs files will be loaded from the standard location: ', '$GEMSTONE/examples/jadeite/gs' ].
+      GsFile gciLogServer: 'RowanStub project .gs files will be loaded from the standard location: ', gemstone, '/examples/jadeite/gs' ].
 %
 
 input $ROWAN_STUB_GS_DIRECTORY/installRowanStub.gs

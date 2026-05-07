@@ -32,13 +32,5 @@ else
 	topazCommandLine="$*"
 fi
 
-echo "cannot pass in an extentType argument on command line, because the $topazCommandLine is part of the command line!!!"
-exit 1
-extentType=$1
-if [ "$extentType"x = "x" ]; then
-	export ROWAN_STUB_EXTENT_TYPE=base
-else
-	export ROWAN_STUB_EXTENT_TYPE=$extentType
-fi
-
+export ROWAN_STUB_EXTENT_TYPE=base
 $GEMSTONE/examples/jadeite/bin/installRowanStub.topaz $topazCommandLine

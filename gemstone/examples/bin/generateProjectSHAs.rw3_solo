@@ -84,6 +84,8 @@ doit
 			lf;
 			nextPutAll: 'method: RowanStubForJadeite';
 			lf;
+			nextPutAll: 'rowanStubShas';
+			lf;
 			nextPutAll: '  "list of projects and the SHA used to create the .gs files for that project"' ;
 			lf;
 			nextPutAll: '  ^ {';

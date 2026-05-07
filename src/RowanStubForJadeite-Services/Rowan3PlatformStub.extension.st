@@ -17,7 +17,8 @@ Rowan3PlatformStub >> serviceClasses [
 	that users other than SystemUser have visibility. Visibility in Rowan
 	is determined at compile time. See STONReader>>lookupClass:"
 
-	| array |
+	| array currentSession |
+	currentSession := GsCurrentSession currentSession.
 	array := Array with: RowanService.
 	array
 		add: RowanAnsweringService;
@@ -39,10 +40,6 @@ Rowan3PlatformStub >> serviceClasses [
 		add: RowanLoggingService;
 		add: RowanMethodService;
 		add: RowanMethodDefinitionService; 
-		add: RowanMonticelloPackageService;
-		add: RowanMonticelloRepositoryGroupService;
-		add: RowanMonticelloRepositoryService;
-		add: RowanMonticelloService;
 		add: RowanPackageService;
 		add: RowanPackageDefinitionService;
 		add: RowanPackageGroupService;
@@ -76,10 +73,6 @@ Rowan3PlatformStub >> serviceClasses [
 		"add: RowanLoggingServiceServer;"
 		add: RowanMethodServiceServer;
 		"add: RowanMethodDefinitionServiceServer; "
-		add: RowanMonticelloPackageServiceServer;
-		add: RowanMonticelloRepositoryGroupServiceServer;
-		add: RowanMonticelloRepositoryServiceServer;
-		add: RowanMonticelloServiceServer;
 		add: RowanPackageServiceServer;
 		add: RowanPackageDefinitionServiceServer;
 		"add: RowanPackageGroupServiceServer;"
@@ -94,5 +87,19 @@ Rowan3PlatformStub >> serviceClasses [
 		add: RowanTestServiceServer;
 		add: RowanVariableServiceServer;
 		add: RowanCommandResult.	"temporary measure"
+
+		(currentSession objectNamed: 'RowanMonticelloPackageService')
+			ifNotNil: [
+				"These classes may or not be present (3.7.5), but if one is present they are all present (3.7.6)"
+				array
+					add: (currentSession objectNamed: 'RowanMonticelloPackageService');
+					add: (currentSession objectNamed: 'RowanMonticelloRepositoryGroupService');
+					add: (currentSession objectNamed: 'RowanMonticelloRepositoryService');
+					add: (currentSession objectNamed: 'RowanMonticelloService');
+					add: (currentSession objectNamed: 'RowanMonticelloPackageServiceServer');
+					add: (currentSession objectNamed: 'RowanMonticelloRepositoryGroupServiceServer');
+					add: (currentSession objectNamed: 'RowanMonticelloRepositoryServiceServer');
+					add: (currentSession objectNamed: 'RowanMonticelloServiceServer') ].
 	^ array
+
 ]
